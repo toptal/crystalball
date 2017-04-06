@@ -1,15 +1,15 @@
 # Crystalball
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/crystalball`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Crystalball is a Ruby library which implements [Regression Test Selection mechanism](https://tenderlovemaking.com/2015/02/13/predicting-test-failues.html) originally published by Aaron Patterson. Its main purpose is to select a subset of your test suite which should be run to ensure your changes didn't break anything.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'crystalball'
+group :test do
+  gem 'crystalball'
+end
 ```
 
 And then execute:
@@ -22,7 +22,24 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+1. Add `Crystalball::MapGenerator.start!` to your `spec_helper` before you loaded any file of your app.
+1. Run your test suite on clean branch with green build. This step will create file `execution_map.yml` in your project root
+1. Make some changes to your app code
+1. Call `Crystalball.foresee` to see list of tests which might fail because of your changes.
+
+## Under the hood
+
+TODO: Write good description for anyone who wants to customize behavior
+
+## Plans
+
+1. 100% spec coverage
+1. Different strategies for source diff
+1. Different strategies for failure predictor
+1. Different strategies for execution map
+1. Guard replacement
+1. integration for git hook
+
 
 ## Development
 
