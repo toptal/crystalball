@@ -10,11 +10,11 @@ module Crystalball
         generator = build(config)
 
         RSpec.configure do |c|
-          c.before(:suite) { generator.load_map }
+          c.before(:suite) { generator.start! }
 
           c.around(:each) { |e| generator.refresh_for_case(e) }
 
-          c.after(:suite) { generator.dump_map }
+          c.after(:suite) { generator.finalize! }
         end
       end
 
@@ -25,15 +25,20 @@ module Crystalball
       def default_config
         {
           execution_detector: ExecutionDetector.new(Dir.pwd),
+          map_class: StandardMap,
           map_storage: MapStorage::YAMLStorage.new('execution_map.yml')
         }
       end
     end
 
-
-    def initialize(execution_detector:, map_storage:)
+    def initialize(execution_detector:, map_class:, map_storage:)
       @execution_detector = execution_detector
       @map_storage = map_storage
+      @map = map_class.new(map_storage)
+    end
+
+    def start!
+      map_storage.clear!
     end
 
     def refresh_for_case(example)
@@ -41,24 +46,15 @@ module Crystalball
       example.run
       after = Coverage.peek_result
 
-      stash(CaseMap.new(example, execution_detector.detect(before, after)))
+      map.stash(CaseMap.new(example, execution_detector.detect(before, after)))
     end
 
-    def dump_map
-      map_storage.dump @stash
-    end
-
-    def load_map
-      @stash = map_storage.load
+    def finalize!
+      map.dump
     end
 
     private
 
-    attr_reader :execution_detector, :map_storage
-
-    def stash(case_map)
-      @stash ||= {}
-      @stash[case_map.case_uid] = case_map.coverage
-    end
+    attr_reader :execution_detector, :map, :map_storage
   end
 end

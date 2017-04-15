@@ -1,0 +1,5 @@
+AllCops:
+  DisplayCopNames: true
+  TargetRubyVersion: 2.3
+Style/GuardClause:
+  Enabled: false

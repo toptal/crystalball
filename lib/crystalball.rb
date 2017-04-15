@@ -4,6 +4,8 @@ require 'crystalball/source_diff'
 require 'crystalball/predictor'
 require 'crystalball/execution_detector'
 require 'crystalball/case_map'
+require 'crystalball/map_generator/simple_map'
+require 'crystalball/map_generator/standard_map'
 require 'crystalball/map_generator'
 require 'crystalball/version'
 
