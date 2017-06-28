@@ -5,8 +5,6 @@ module Crystalball
   class MapGenerator
     class << self
       def start!(config = default_config)
-        Coverage.start
-
         generator = build(config)
 
         RSpec.configure do |c|
@@ -32,6 +30,7 @@ module Crystalball
     end
 
     def initialize(execution_detector:, map_class:, map_storage:)
+      Coverage.start
       @execution_detector = execution_detector
       @map_storage = map_storage
       @map = map_class.new(map_storage)
