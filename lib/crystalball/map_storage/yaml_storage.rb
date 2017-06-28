@@ -18,7 +18,7 @@ module Crystalball
       end
 
       def dump(map)
-        File.open(path, 'a') { |f| f.write YAML.dump(map) }
+        File.open(path, 'a') { |f| f.write YAML.dump(map)[4..-1] }
       end
     end
   end
