@@ -1,6 +1,8 @@
 module Crystalball
   class MapGenerator
     class SimpleMap
+      attr_reader :raw_map
+
       def initialize(storage)
         @storage = storage
         @raw_map = {}
@@ -24,7 +26,8 @@ module Crystalball
 
       private
 
-      attr_accessor :raw_map, :storage
+      attr_accessor :storage
+      attr_writer :raw_map
     end
   end
 end
