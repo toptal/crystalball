@@ -9,10 +9,6 @@ module Crystalball
         @path = path
       end
 
-      def clear!
-        File.delete(path) if File.exists?(path)
-      end
-
       def load
         YAML.safe_load(File.read(path)) if File.exists?(path)
       end
