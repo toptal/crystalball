@@ -4,8 +4,8 @@ require 'coverage'
 module Crystalball
   class MapGenerator
     class << self
-      def start!(config = default_config)
-        Coverage.start
+      def start!(**config)
+        config = build_default_config(config)
 
         generator = build(config)
 
@@ -22,16 +22,17 @@ module Crystalball
         new(config)
       end
 
-      def default_config
-        {
-          execution_detector: ExecutionDetector.new(Dir.pwd),
-          map_class: StandardMap,
-          map_storage: MapStorage::YAMLStorage.new('execution_map.yml')
-        }
+      def build_default_config(**config)
+        file_name = config.delete(:yaml_file_name) || 'execution_map.yml'
+        config[:execution_detector] ||= ExecutionDetector.new(Dir.pwd)
+        config[:map_class] ||= StandardMap
+        config[:map_storage] ||= MapStorage::YAMLStorage.new(file_name)
+        config
       end
     end
 
     def initialize(execution_detector:, map_class:, map_storage:)
+      Coverage.start
       @execution_detector = execution_detector
       @map_storage = map_storage
       @map = map_class.new(map_storage)
