@@ -4,17 +4,13 @@ require 'coverage'
 module Crystalball
   class MapGenerator
     class << self
-      def start!(config = default_config)
-        Coverage.start
+      def start!(**config)
+        config = build_default_config(config)
 
         generator = build(config)
 
         RSpec.configure do |c|
-          c.before(:suite) { generator.start! }
-
           c.around(:each) { |e| generator.refresh_for_case(e) }
-
-          c.after(:suite) { generator.finalize! }
         end
       end
 
@@ -22,23 +18,23 @@ module Crystalball
         new(config)
       end
 
-      def default_config
-        {
-          execution_detector: ExecutionDetector.new(Dir.pwd),
-          map_class: StandardMap,
-          map_storage: MapStorage::YAMLStorage.new('execution_map.yml')
-        }
+      def build_default_config(**config)
+        project_root = config.delete(:project_root) || Dir.pwd
+        file_name = config.delete(:yaml_file_name) || 'execution_map.yml'
+        flush_threshold = config.delete(:flush_threshold)
+        map_class = config.delete(:map_class) || PersistedMap
+        map_options = {}
+        map_options[:flush_threshold] = flush_threshold if flush_threshold
+        config[:execution_detector] ||= ExecutionDetector.new(project_root)
+        config[:map] ||= map_class.new(MapStorage::YAMLStorage.new(file_name), map_options)
+        config
       end
     end
 
-    def initialize(execution_detector:, map_class:, map_storage:)
+    def initialize(execution_detector:, map:)
+      Coverage.start
       @execution_detector = execution_detector
-      @map_storage = map_storage
-      @map = map_class.new(map_storage)
-    end
-
-    def start!
-      map_storage.clear!
+      @map = map
     end
 
     def refresh_for_case(example)
@@ -49,12 +45,8 @@ module Crystalball
       map.stash(CaseMap.new(example, execution_detector.detect(before, after)))
     end
 
-    def finalize!
-      map.dump
-    end
-
     private
 
-    attr_reader :execution_detector, :map, :map_storage
+    attr_reader :execution_detector, :map
   end
 end
