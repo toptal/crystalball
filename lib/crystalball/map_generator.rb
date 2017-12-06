@@ -26,7 +26,7 @@ module Crystalball
         {
           execution_detector: ExecutionDetector.new(Dir.pwd),
           map_class: StandardMap,
-          map_storage: MapStorage::YAMLStorage.new('execution_map.yml')
+          map_storage: MapStorage::YAMLStorage.new(Pathname('execution_map.yml'))
         }
       end
     end

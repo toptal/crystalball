@@ -12,7 +12,7 @@ require 'crystalball/version'
 module Crystalball
   def self.foresee(workdir = '.', map_path = 'execution_map.yml')
     Predictor.new(
-      MapStorage::YAMLStorage.new(map_path).load,
+      MapStorage::YAMLStorage.new(Pathname(map_path)).load,
       SourceDiff.new(workdir)
     ).cases
   end
