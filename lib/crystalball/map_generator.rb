@@ -1,7 +1,10 @@
+# frozen_string_literal: true
+
 require 'singleton'
 require 'coverage'
 
 module Crystalball
+  # Class for generating execution map during RSpec build execution
   class MapGenerator
     class << self
       def start!(config = default_config)

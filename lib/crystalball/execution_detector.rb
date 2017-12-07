@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 module Crystalball
+  # Class for detecting code execution path based on coverage information diff
   class ExecutionDetector
     attr_reader :root_path
 

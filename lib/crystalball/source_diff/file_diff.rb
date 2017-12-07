@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 module Crystalball
   class SourceDiff
+    # Data object for single file in Git repo diff
     class FileDiff
       def initialize(git_repo, git_diff)
         @git_repo = git_repo
@@ -27,7 +30,11 @@ module Crystalball
       end
 
       def method_missing(method, *args, &block)
-        git_diff.public_send(method, *args, &block)
+        git_diff.public_send(method, *args, &block) || super
+      end
+
+      def respond_to_missing?(method, include_private = false)
+        git_diff.respond_to?(method, false) || super
       end
 
       private
