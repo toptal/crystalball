@@ -11,7 +11,7 @@ describe Crystalball::SourceDiff::FileDiff do
 
   %i[modified deleted new].each do |type|
     context "##{type}?" do
-      subject { super().send("#{type}?") }
+      subject { file_diff.send("#{type}?") }
 
       it { is_expected.to be_falsey }
 
@@ -24,12 +24,12 @@ describe Crystalball::SourceDiff::FileDiff do
   end
 
   describe '#relative_path' do
-    subject { super().relative_path }
+    subject { file_diff.relative_path }
     it { is_expected.to eq('lib/crystalball.rb') }
   end
 
   describe '#full_path' do
-    subject { super().full_path }
+    subject { file_diff.full_path }
     before { allow(repository).to receive(:dir) { Git::WorkingDirectory.new('/projects', false) } }
     it { is_expected.to eq('/projects/lib/crystalball.rb') }
   end
