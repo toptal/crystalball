@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Crystalball::MapStorage::YAMLStorage do
@@ -30,7 +32,7 @@ describe Crystalball::MapStorage::YAMLStorage do
 
     it 'loads yaml from file if it exists' do
       expect_path_exists(true)
-      expect(path).to receive(:read).with(no_args).and_return({'hello' => 'world'}.to_yaml)
+      expect(path).to receive(:read).with(no_args).and_return({ 'hello' => 'world' }.to_yaml)
       expect(subject.load).to eq('hello' => 'world')
     end
   end

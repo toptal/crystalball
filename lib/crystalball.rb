@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'crystalball/map_storage/yaml_storage'
 require 'crystalball/source_diff/file_diff'
 require 'crystalball/source_diff'
@@ -9,6 +11,7 @@ require 'crystalball/map_generator/standard_map'
 require 'crystalball/map_generator'
 require 'crystalball/version'
 
+# Main module for the library
 module Crystalball
   def self.foresee(workdir = '.', map_path = 'execution_map.yml')
     Predictor.new(

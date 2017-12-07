@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 module Crystalball
+  # Class that predicts test failures with given execution map and sources diff
   class Predictor
     attr_reader :map, :diff
 

@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 module Crystalball
   class MapGenerator
+    # Simple map storing object with threshold for dumping to persistent storage
     class StandardMap < SimpleMap
       def initialize(storage, dump_threshold: 100)
         super(storage)
@@ -8,10 +11,10 @@ module Crystalball
 
       def stash(case_map)
         super
-        if raw_map.size >= dump_threshold
-          dump
-          clear!
-        end
+        return if raw_map.size < dump_threshold
+
+        dump
+        clear!
       end
 
       private

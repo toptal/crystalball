@@ -1,5 +1,9 @@
 AllCops:
   DisplayCopNames: true
   TargetRubyVersion: 2.3
-Style/GuardClause:
+Style/StringLiterals:
+  Enabled: false
+Metrics/LineLength:
+  Enabled: false
+Metrics/BlockLength:
   Enabled: false

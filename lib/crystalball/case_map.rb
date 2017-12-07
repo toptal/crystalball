@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 module Crystalball
+  # Data object for execution map for given example
   class CaseMap
     attr_reader :case_uid, :coverage
 

@@ -1,7 +1,10 @@
+# frozen_string_literal: true
+
 require 'crystalball/source_diff/file_diff'
 require 'git'
 
 module Crystalball
+  # Class representing Git source diff for given repo
   class SourceDiff
     include Enumerable
 

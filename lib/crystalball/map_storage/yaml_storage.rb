@@ -1,7 +1,10 @@
+# frozen_string_literal: true
+
 require 'yaml'
 
 module Crystalball
   class MapStorage
+    # YAML persistence adapter for execution map storage
     class YAMLStorage
       attr_reader :path
 

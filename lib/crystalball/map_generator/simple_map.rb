@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 module Crystalball
   class MapGenerator
+    # Basic map object for storing execution maps to storage
     class SimpleMap
       def initialize(storage)
         @storage = storage
