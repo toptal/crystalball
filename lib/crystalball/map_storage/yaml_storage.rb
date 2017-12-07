@@ -10,15 +10,15 @@ module Crystalball
       end
 
       def clear!
-        File.delete(path) if File.exists?(path)
+        path.delete if path.exist?
       end
 
       def load
-        YAML.safe_load(File.read(path)) if File.exists?(path)
+        YAML.safe_load(path.read) if path.exist?
       end
 
       def dump(map)
-        File.open(path, 'a') { |f| f.write YAML.dump(map) }
+        path.open('a') { |f| f.write YAML.dump(map) }
       end
     end
   end
