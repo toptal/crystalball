@@ -7,3 +7,5 @@ Metrics/LineLength:
   Enabled: false
 Metrics/BlockLength:
   Enabled: false
+Layout/SpaceInsideHashLiteralBraces:
+  EnforcedStyle: no_space

@@ -12,7 +12,7 @@ module Crystalball
 
     def cases
       map.map do |case_uid, case_map|
-        case_uid if diff.any? { |file| file.relative_path.in?(case_map) }
+        case_uid if diff.any? { |file| case_map.include?(file.relative_path) }
       end.compact
     end
   end
