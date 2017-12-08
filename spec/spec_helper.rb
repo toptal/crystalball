@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 require "bundler/setup"
+require 'simplecov'
+SimpleCov.start
+
 require "crystalball"
 
 RSpec.configure do |config|
