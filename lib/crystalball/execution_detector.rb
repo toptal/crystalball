@@ -10,14 +10,8 @@ module Crystalball
     end
 
     def detect(before, after)
-      result = []
-      after.each do |file_name, after_coverage|
-        next unless file_name =~  /^#{root_path}.*/
-        next if before[file_name] == after_coverage
-
-        result << file_name.sub("#{root_path}/", '')
-      end
-      result
+      after.select { |file_name, after_coverage| file_name.start_with?(root_path) && before[file_name] != after_coverage }
+           .map { |file_name, _| file_name.sub("#{root_path}/", '') }
     end
   end
 end
