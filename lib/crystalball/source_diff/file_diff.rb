@@ -33,7 +33,7 @@ module Crystalball
         git_diff.public_send(method, *args, &block) || super
       end
 
-      def respond_to_missing?(method, include_private = false)
+      def respond_to_missing?(method, *)
         git_diff.respond_to?(method, false) || super
       end
 

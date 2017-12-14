@@ -33,4 +33,11 @@ describe Crystalball::SourceDiff::FileDiff do
     before { allow(repository).to receive(:dir) { Git::WorkingDirectory.new('/projects', false) } }
     it { is_expected.to eq('/projects/lib/crystalball.rb') }
   end
+
+  describe '#method_missing' do
+    it 'delegates missing methods to DiffFile' do
+      expect(file_diff.path).to eq('lib/crystalball.rb')
+      expect(file_diff.method(:path).call).to eq('lib/crystalball.rb')
+    end
+  end
 end

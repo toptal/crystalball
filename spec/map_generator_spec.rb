@@ -31,6 +31,41 @@ describe Crystalball::MapGenerator do
     end
   end
 
+  describe '.start' do
+    subject { described_class.start! }
+    let(:generator) { instance_double(described_class) }
+    let(:rspec_configuration) { spy }
+
+    before do
+      allow(Coverage).to receive(:start)
+      allow(described_class).to receive(:build).and_return(generator)
+      allow(RSpec).to receive(:configure).and_yield(rspec_configuration)
+    end
+
+    it 'starts code coverage' do
+      subject
+      expect(Coverage).to have_received(:start)
+    end
+
+    it 'sets before suite callback' do
+      expect(generator).to receive(:start!)
+      expect(rspec_configuration).to receive(:before).with(:suite).and_yield
+      subject
+    end
+
+    it 'sets around example callback' do
+      expect(generator).to receive(:refresh_for_case).with(example = double)
+      expect(rspec_configuration).to receive(:around).with(:each).and_yield(example)
+      subject
+    end
+
+    it 'sets after suite callback' do
+      expect(generator).to receive(:finalize!)
+      expect(rspec_configuration).to receive(:after).with(:suite).and_yield
+      subject
+    end
+  end
+
   subject do
     described_class.new(execution_detector: detector,
                         map_class: Crystalball::MapGenerator::StandardMap,

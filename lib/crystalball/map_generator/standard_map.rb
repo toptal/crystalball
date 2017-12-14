@@ -4,8 +4,8 @@ module Crystalball
   class MapGenerator
     # Simple map storing object with threshold for dumping to persistent storage
     class StandardMap < SimpleMap
-      def initialize(storage, dump_threshold: 100)
-        super(storage)
+      def initialize(*args, dump_threshold: 100)
+        super(*args)
         @dump_threshold = dump_threshold
       end
 
