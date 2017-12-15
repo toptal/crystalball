@@ -75,8 +75,9 @@ describe Crystalball::MapGenerator do
   let(:storage) { instance_double('Crystalball::MapStorage::YAMLStorage') }
 
   describe '#start!' do
-    it 'clears map storage' do
+    it 'clears map & storage' do
       expect(storage).to receive :clear!
+      expect(subject.map).to receive :clear!
       subject.start!
     end
   end

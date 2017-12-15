@@ -34,6 +34,8 @@ module Crystalball
       end
     end
 
+    attr_reader :map
+
     def initialize(execution_detector:, map_class:, map_storage:)
       @execution_detector = execution_detector
       @map_storage = map_storage
@@ -41,6 +43,7 @@ module Crystalball
     end
 
     def start!
+      map.clear!
       map_storage.clear!
     end
 
@@ -58,6 +61,6 @@ module Crystalball
 
     private
 
-    attr_reader :execution_detector, :map, :map_storage
+    attr_reader :execution_detector, :map_storage
   end
 end

@@ -2,18 +2,18 @@
 
 require 'spec_helper'
 
+require 'crystalball/source_diff'
+
 describe Crystalball::SourceDiff do
-  subject { described_class.new(path) }
-  let(:path) { '/projects' }
-  let(:repository) { Git::Base.new }
-  let(:diff) { Git::Diff.new(repository) }
-  let(:diff_file1) { Git::Diff::DiffFile.new(repository, path: 'file1.rb') }
-  let(:diff_file2) { Git::Diff::DiffFile.new(repository, path: 'file2.rb') }
+  subject { described_class.new(repo) }
+  let(:repo) { Crystalball::GitRepo.new('.') }
+  let(:diff) { Git::Diff.new(repo) }
+  let(:diff_file1) { Git::Diff::DiffFile.new(repo, path: 'file1.rb') }
+  let(:diff_file2) { Git::Diff::DiffFile.new(repo, path: 'file2.rb') }
 
   describe '#each' do
     before do
-      allow(Git).to receive(:open).with(path) { repository }
-      allow(repository).to receive(:diff).with(no_args) { diff }
+      allow(repo).to receive(:diff).with(no_args) { diff }
       allow(diff).to receive(:each).with(no_args).and_yield(diff_file1).and_yield(diff_file2)
     end
 
