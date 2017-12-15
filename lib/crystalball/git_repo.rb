@@ -16,6 +16,10 @@ module Crystalball
       @source_diff ||= SourceDiff.new(self)
     end
 
+    def pristine?
+      source_diff.empty?
+    end
+
     def method_missing(method, *args, &block)
       repo.public_send(method, *args, &block) || super
     end

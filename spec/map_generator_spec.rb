@@ -72,19 +72,32 @@ describe Crystalball::MapGenerator do
                         map_storage: storage)
   end
   let(:detector) { instance_double('Crystalball::ExecutionDetector') }
-  let(:storage) { instance_double('Crystalball::MapStorage::YAMLStorage') }
+  let(:storage) { instance_double('Crystalball::MapStorage::YAMLStorage', clear!: true) }
 
   describe '#start!' do
-    it 'clears map & storage' do
+    before do
+      allow_any_instance_of(Crystalball::GitRepo).to receive(:pristine?).and_return(true)
+    end
+
+    it 'wipes the map and clears storage' do
+      allow_any_instance_of(Git::Base).to receive(:object).with('HEAD').and_return(double(sha: 'abc'))
+
       expect(storage).to receive :clear!
-      expect(subject.map).to receive :clear!
-      subject.start!
+      expect do
+        subject.start!
+      end.to(change { subject.map.object_id })
+    end
+
+    it 'fails if repo is not pristine' do
+      allow_any_instance_of(Crystalball::GitRepo).to receive(:pristine?).and_return(false)
+
+      expect { subject.start! }.to raise_error(StandardError, 'Repository is not pristine! Please stash all your changes')
     end
   end
 
   describe '#finalize!' do
     it 'dumps the map' do
-      expect_any_instance_of(Crystalball::MapGenerator::StandardMap).to receive(:dump)
+      expect(subject.map).to receive(:dump)
       subject.finalize!
     end
   end
@@ -104,7 +117,7 @@ describe Crystalball::MapGenerator do
     end
 
     it 'stashes execution map for given case' do
-      expect_any_instance_of(Crystalball::MapGenerator::StandardMap).to receive(:stash).with(case_map)
+      expect(subject.map).to receive(:stash).with(case_map)
       subject.refresh_for_case(rspec_example)
     end
   end

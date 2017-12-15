@@ -17,11 +17,19 @@ module Crystalball
       end
 
       def load
-        YAML.safe_load(path.read) if path.exist?
+        metadata, *cases = path.read.split("---\n").reject(&:empty?).map do |yaml|
+          YAML.safe_load(yaml, [Symbol])
+        end
+        cases = cases.inject(&:merge!)
+
+        Object.const_get(metadata[:type]).new(self, metadata: metadata, cases: cases)
       end
 
-      def dump(map)
-        path.open('a') { |f| f.write YAML.dump(map) }
+      def dump(map, exclude_metadata: false)
+        path.open('a') do |f|
+          f.write YAML.dump(map.to_h[:metadata]) unless exclude_metadata
+          f.write YAML.dump(map.to_h[:cases])
+        end
       end
     end
   end

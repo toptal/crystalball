@@ -13,12 +13,23 @@ describe Crystalball::MapGenerator::StandardMap do
 
   describe '#stash' do
     it 'dumps to storage every time threshold is met' do
+      expect(subject).to receive(:dump).once
       subject.stash(case_map(1))
-      expect(storage).to receive(:dump).with('file_spec.rb:1' => coverage, 'file_spec.rb:2' => coverage)
       subject.stash(case_map(2))
-
       subject.stash(case_map(3))
-      expect(storage).to receive(:dump).with('file_spec.rb:3' => coverage)
+    end
+  end
+
+  describe '#dump' do
+    it 'dumps to storage with metadata for the first time' do
+      expect(storage).to receive(:dump).with(subject, exclude_metadata: false).once
+      subject.dump
+    end
+
+    it 'dumps to storage without metadata for second+ time' do
+      expect(storage).to receive(:dump).with(subject, exclude_metadata: false).once
+      expect(storage).to receive(:dump).with(subject, exclude_metadata: true).once
+      subject.dump
       subject.dump
     end
   end

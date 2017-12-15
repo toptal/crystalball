@@ -4,8 +4,8 @@ require 'spec_helper'
 
 describe Crystalball do
   describe '.foresee' do
-    let(:map_data) { double('map_data') }
-    let(:storage) { instance_double(Crystalball::MapStorage::YAMLStorage, load: map_data) }
+    let(:map) { instance_double(Crystalball::MapGenerator::StandardMap) }
+    let(:storage) { instance_double(Crystalball::MapStorage::YAMLStorage, load: map) }
     let(:repo) { instance_double(Crystalball::GitRepo, source_diff: source_diff) }
     let(:source_diff) { instance_double(Crystalball::SourceDiff) }
     let(:predictor) { instance_double(Crystalball::Predictor, cases: double) }
@@ -16,7 +16,7 @@ describe Crystalball do
     end
 
     it 'initializes predictor and returns cases' do
-      allow(Crystalball::Predictor).to receive(:new).with(map_data, source_diff).and_return(predictor)
+      allow(Crystalball::Predictor).to receive(:new).with(map, source_diff).and_return(predictor)
       expected_result = double
       expect(predictor).to receive(:cases).and_return(expected_result)
 

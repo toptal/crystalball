@@ -8,7 +8,8 @@ describe Crystalball::Predictor::ModifiedExecutionPaths do
   let(:path1) { 'file1.rb' }
   let(:file_diff1) { Crystalball::SourceDiff::FileDiff.new(repository, Git::Diff::DiffFile.new(repository, path: path1)) }
   let(:diff) { [file_diff1] }
-  let(:map) { {spec_file: [path1]} }
+  let(:map) { instance_double('Crystalball::MapGenerator::StandardMap', cases: cases) }
+  let(:cases) { {spec_file: [path1]} }
 
   describe '#call' do
     subject { predictor.call(diff, map) }
@@ -16,13 +17,13 @@ describe Crystalball::Predictor::ModifiedExecutionPaths do
     it { is_expected.to eq([:spec_file]) }
 
     context 'when no files match diff' do
-      let(:map) { {spec_file: %w[file2.rb]} }
+      let(:cases) { {spec_file: %w[file2.rb]} }
 
       it { is_expected.to eq([]) }
     end
 
     context 'when some files match diff' do
-      let(:map) { {spec_file: %w[file2.rb file1.rb]} }
+      let(:cases) { {spec_file: %w[file2.rb file1.rb]} }
 
       it { is_expected.to eq([:spec_file]) }
     end

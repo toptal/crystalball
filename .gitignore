@@ -11,6 +11,7 @@
 # rspec failure tracking
 .rspec_status
 
+.DS_Store
 /.idea
 .ruby-version
 .ruby-gemset

@@ -17,6 +17,10 @@ module Crystalball
       changeset.each { |file| yield file }
     end
 
+    def empty?
+      changeset.none?
+    end
+
     private
 
     # TODO: Include untracked to changeset

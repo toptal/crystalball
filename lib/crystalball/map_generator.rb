@@ -34,16 +34,16 @@ module Crystalball
       end
     end
 
-    attr_reader :map
-
     def initialize(execution_detector:, map_class:, map_storage:)
       @execution_detector = execution_detector
       @map_storage = map_storage
-      @map = map_class.new(map_storage)
+      @map_class = map_class
     end
 
     def start!
-      map.clear!
+      raise 'Repository is not pristine! Please stash all your changes' unless repo.pristine?
+
+      self.map = nil
       map_storage.clear!
     end
 
@@ -59,8 +59,17 @@ module Crystalball
       map.dump
     end
 
+    def map
+      @map ||= map_class.new(map_storage, metadata: {commit: repo.object('HEAD').sha})
+    end
+
     private
 
-    attr_reader :execution_detector, :map_storage
+    attr_reader :execution_detector, :map_storage, :map_class
+    attr_writer :map
+
+    def repo
+      @repo ||= GitRepo.new('.')
+    end
   end
 end
