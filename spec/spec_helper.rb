@@ -4,6 +4,8 @@ require "bundler/setup"
 require 'simplecov'
 SimpleCov.start
 
+Dir[Pathname(__dir__).join('support', '**', '*.rb')].each { |f| require f }
+
 require "crystalball"
 
 RSpec.configure do |config|
