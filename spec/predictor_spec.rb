@@ -5,32 +5,26 @@ require 'spec_helper'
 describe Crystalball::Predictor do
   subject(:predictor) { described_class.new(map, diff) }
   let(:repository) { Git::Base.new }
-  let(:file_diff1) { Crystalball::SourceDiff::FileDiff.new(repository, Git::Diff::DiffFile.new(repository, path: 'file1.rb')) }
+  let(:path1) { 'file1.rb' }
+  let(:file_diff1) { Crystalball::SourceDiff::FileDiff.new(repository, Git::Diff::DiffFile.new(repository, path: path1)) }
   let(:diff) { [file_diff1] }
-  let(:map) { {spec_file: %w[file1.rb]} }
+  let(:map) { {spec_file: [path1]} }
 
   describe '#cases' do
     subject { predictor.cases }
 
-    it { is_expected.to eq([:spec_file]) }
+    it { is_expected.to eq([]) }
 
-    context 'when no files match diff' do
-      let(:map) { {spec_file: %w[file2.rb]} }
-
-      it { is_expected.to eq([]) }
-    end
-
-    context 'when some files match diff' do
-      let(:map) { {spec_file: %w[file2.rb file1.rb]} }
+    context 'with predictor' do
+      before { predictor.use ->(diff, map) { map.keys unless diff.empty? } }
 
       it { is_expected.to eq([:spec_file]) }
-    end
 
-    context 'when diff contains other unrelated files' do
-      let(:file_diff2) { Crystalball::SourceDiff::FileDiff.new(repository, Git::Diff::DiffFile.new(repository, path: 'file2.rb')) }
-      let(:diff) { [file_diff1, file_diff2] }
+      context 'when diff is not present' do
+        let(:diff) { [] }
 
-      it { is_expected.to eq([:spec_file]) }
+        it { is_expected.to eq([nil]) }
+      end
     end
   end
 end

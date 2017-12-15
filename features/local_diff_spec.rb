@@ -3,7 +3,11 @@
 require_relative '../spec/spec_helper'
 
 describe 'local diff' do
-  subject(:forecast) { Crystalball.foresee(workdir: root, map_path: root.join('execution_map.yml')) }
+  subject(:forecast) do
+    Crystalball.foresee(workdir: root, map_path: root.join('execution_map.yml')) do |predictor|
+      predictor.use Crystalball::Predictor::ModifiedExecutionPaths.new
+    end
+  end
   include_context 'simple git repository'
 
   it 'generates map if Class1 is changed' do

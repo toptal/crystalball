@@ -13,10 +13,14 @@ require 'crystalball/version'
 
 # Main module for the library
 module Crystalball
-  def self.foresee(workdir = '.', map_path = 'execution_map.yml')
-    Predictor.new(
+  def self.foresee(workdir: '.', map_path: 'execution_map.yml')
+    predictor = Predictor.new(
       MapStorage::YAMLStorage.new(Pathname(map_path)).load,
       SourceDiff.new(workdir)
-    ).cases
+    )
+
+    yield predictor
+
+    predictor.cases
   end
 end
