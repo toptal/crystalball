@@ -1,36 +1,31 @@
 # frozen_string_literal: true
 
 require 'crystalball/source_diff/file_diff'
-require 'git'
 
 module Crystalball
   # Class representing Git source diff for given repo
   class SourceDiff
     include Enumerable
 
-    attr_reader :repo_path
-
-    def initialize(repo_path)
-      @repo_path = repo_path
+    def initialize(git_diff)
+      @git_diff = git_diff
     end
 
     def each
       changeset.each { |file| yield file }
     end
 
-    private
-
-    def changeset
-      unless defined? @changeset
-        @changeset = repo.diff.map do |file_diff|
-          FileDiff.new(repo, file_diff)
-        end
-      end
-      @changeset
+    def empty?
+      changeset.none?
     end
 
-    def repo
-      @repo ||= Git.open(repo_path)
+    private
+
+    attr_reader :git_diff
+
+    # TODO: Include untracked to changeset
+    def changeset
+      @changeset ||= git_diff.map { |file_diff| FileDiff.new(file_diff) }
     end
   end
 end

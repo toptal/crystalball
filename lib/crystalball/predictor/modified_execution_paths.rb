@@ -7,7 +7,7 @@ module Crystalball
     # was generated.
     class ModifiedExecutionPaths
       def call(diff, map)
-        map.map do |case_uid, case_map|
+        map.cases.map do |case_uid, case_map|
           case_uid if diff.any? { |file| case_map.include?(file.relative_path) }
         end.compact
       end

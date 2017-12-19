@@ -4,8 +4,7 @@ module Crystalball
   class SourceDiff
     # Data object for single file in Git repo diff
     class FileDiff
-      def initialize(git_repo, git_diff)
-        @git_repo = git_repo
+      def initialize(git_diff)
         @git_diff = git_diff
       end
 
@@ -25,10 +24,6 @@ module Crystalball
         git_diff.path
       end
 
-      def full_path
-        File.join(git_repo.dir.path, git_diff.path)
-      end
-
       def method_missing(method, *args, &block)
         git_diff.public_send(method, *args, &block) || super
       end
@@ -39,7 +34,7 @@ module Crystalball
 
       private
 
-      attr_reader :git_diff, :git_repo
+      attr_reader :git_diff
     end
   end
 end

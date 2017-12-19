@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 require 'crystalball/map_storage/yaml_storage'
-require 'crystalball/source_diff/file_diff'
-require 'crystalball/source_diff'
+require 'crystalball/git_repo'
 require 'crystalball/predictor'
+# TODO: remove redundant requires
 require 'crystalball/execution_detector'
 require 'crystalball/case_map'
 require 'crystalball/map_generator/simple_map'
@@ -16,7 +16,7 @@ module Crystalball
   def self.foresee(workdir: '.', map_path: 'execution_map.yml')
     predictor = Predictor.new(
       MapStorage::YAMLStorage.new(Pathname(map_path)).load,
-      SourceDiff.new(workdir)
+      GitRepo.new(workdir).diff
     )
 
     yield predictor

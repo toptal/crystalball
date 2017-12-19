@@ -4,30 +4,52 @@ module Crystalball
   class MapGenerator
     # Basic map object for storing execution maps to storage
     class SimpleMap
-      def initialize(storage)
-        @storage = storage
-        @raw_map = {}
+      extend Forwardable
+
+      # Simple data object for map metadata
+      class Metadata
+        attr_accessor :commit, :type
+
+        def initialize(commit: nil, type: nil)
+          @commit = commit
+          @type = type
+        end
+
+        def to_h
+          {type: type, commit: commit}
+        end
       end
 
-      def load
-        self.raw_map = storage.load
+      attr_reader :cases, :metadata
+
+      delegate %i[commit commit=] => :metadata
+
+      def initialize(storage, metadata: {}, cases: {})
+        @storage = storage
+        @cases = cases
+        @metadata = Metadata.new(type: self.class.name, **metadata)
       end
 
       def stash(case_map)
-        raw_map[case_map.case_uid] = case_map.coverage
+        cases[case_map.case_uid] = case_map.coverage
       end
 
       def dump
-        storage.dump raw_map
+        storage.dump self
       end
 
-      def clear!
-        self.raw_map = {}
+      def to_h
+        {cases: cases, metadata: metadata.to_h}
       end
 
       private
 
-      attr_accessor :raw_map, :storage
+      def clear!
+        self.cases = {}
+      end
+
+      attr_writer :cases, :metadata
+      attr_reader :storage
     end
   end
 end

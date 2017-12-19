@@ -4,23 +4,26 @@ require 'spec_helper'
 
 describe Crystalball do
   describe '.foresee' do
-    let(:map_data) { double('map_data') }
-    let(:storage) { instance_double(Crystalball::MapStorage::YAMLStorage, load: map_data) }
+    let(:map) { instance_double(Crystalball::MapGenerator::StandardMap) }
+    let(:storage) { instance_double(Crystalball::MapStorage::YAMLStorage, load: map) }
+    let(:repo) { instance_double(Crystalball::GitRepo, diff: source_diff) }
     let(:source_diff) { instance_double(Crystalball::SourceDiff) }
-    let(:predictor) { instance_double(Crystalball::Predictor) }
+    let(:predictor) { instance_double(Crystalball::Predictor, cases: double) }
 
     before do
       allow(Crystalball::MapStorage::YAMLStorage).to receive(:new).with(Pathname('execution_map.yml')).and_return(storage)
-      allow(Crystalball::SourceDiff).to receive(:new).with('.').and_return(source_diff)
+      allow(Crystalball::GitRepo).to receive(:new).with('.').and_return(repo)
     end
 
     it 'initializes predictor and returns cases' do
-      expect(Crystalball::Predictor).to receive(:new).with(map_data, source_diff).and_return(predictor)
-      expect(predictor).to receive(:cases)
+      allow(Crystalball::Predictor).to receive(:new).with(map, source_diff).and_return(predictor)
+      expected_result = double
+      expect(predictor).to receive(:cases).and_return(expected_result)
 
-      described_class.foresee do |p|
+      result = described_class.foresee do |p|
         expect(p).to eq(predictor)
       end
+      expect(result).to eq expected_result
     end
   end
 end
