@@ -29,7 +29,13 @@ Or install it yourself as:
 1. Add `Crystalball::MapGenerator.start!` to your `spec_helper` before you loaded any file of your app.
 1. Run your test suite on clean branch with green build. This step will create file `execution_map.yml` in your project root
 1. Make some changes to your app code
-1. Call `Crystalball.foresee` to see list of tests which might fail because of your changes.
+1. To see list of tests which might fail because of your changes, call:
+```ruby
+Crystalball.foresee do |predictor|
+  predictor.use Crystalball::Predictor::ModifiedExecutionPaths.new
+  predictor.use Crystalball::Predictor::ModifiedSpecs.new
+end
+```
 
 ## Under the hood
 
