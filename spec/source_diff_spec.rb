@@ -2,8 +2,6 @@
 
 require 'spec_helper'
 
-require 'crystalball/source_diff'
-
 describe Crystalball::SourceDiff do
   subject { described_class.new(diff) }
   let(:diff) { Git::Diff.new(repo) }

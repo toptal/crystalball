@@ -28,16 +28,16 @@ module Crystalball
       def default_config
         {
           execution_detector: ExecutionDetector.new(Dir.pwd),
-          map_class: StandardMap,
-          map_storage: MapStorage::YAMLStorage.new(Pathname('execution_map.yml'))
+          map_storage: MapStorage::YAMLStorage.new(Pathname('execution_map.yml')),
+          dump_threshold: 100
         }
       end
     end
 
-    def initialize(execution_detector:, map_class:, map_storage:)
+    def initialize(execution_detector:, map_storage:, dump_threshold:)
       @execution_detector = execution_detector
       @map_storage = map_storage
-      @map_class = map_class
+      @dump_threshold = dump_threshold.to_i
     end
 
     def start!
@@ -45,6 +45,7 @@ module Crystalball
 
       self.map = nil
       map_storage.clear!
+      map_storage.dump(map.metadata.to_h)
     end
 
     def refresh_for_case(example)
@@ -52,24 +53,33 @@ module Crystalball
       example.run
       after = Coverage.peek_result
 
-      map.stash(CaseMap.new(example, execution_detector.detect(before, after)))
+      map << CaseMap.new(example, execution_detector.detect(before, after))
+
+      check_dump_threshold
     end
 
     def finalize!
-      map.dump
+      map_storage.dump(map.cases) if map.size.positive?
     end
 
     def map
-      @map ||= map_class.new(map_storage, metadata: {commit: repo.object('HEAD').sha})
+      @map ||= ExecutionMap.new(metadata: {commit: repo.object('HEAD').sha})
     end
 
     private
 
-    attr_reader :execution_detector, :map_storage, :map_class
+    attr_reader :execution_detector, :map_storage, :dump_threshold
     attr_writer :map
 
     def repo
       @repo ||= GitRepo.new('.')
+    end
+
+    def check_dump_threshold
+      return unless dump_threshold.positive? && map.size >= dump_threshold
+
+      map_storage.dump(map.cases)
+      map.clear!
     end
   end
 end

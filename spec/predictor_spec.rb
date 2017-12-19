@@ -3,7 +3,8 @@
 require 'spec_helper'
 
 describe Crystalball::Predictor do
-  subject(:predictor) { described_class.new(map, diff) }
+  subject(:predictor) { described_class.new(instance_double('Crystalball::ExecutionMap', cases: cases), diff) }
+  let(:cases) { {spec_file: %w[file1.rb]} }
   let(:repository) { Git::Base.new }
   let(:path1) { 'file1.rb' }
   let(:file_diff1) { Crystalball::SourceDiff::FileDiff.new(Git::Diff::DiffFile.new(repository, path: path1)) }

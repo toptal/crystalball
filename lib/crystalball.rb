@@ -1,14 +1,12 @@
 # frozen_string_literal: true
 
-require 'crystalball/map_storage/yaml_storage'
 require 'crystalball/git_repo'
 require 'crystalball/predictor'
-# TODO: remove redundant requires
 require 'crystalball/execution_detector'
 require 'crystalball/case_map'
-require 'crystalball/map_generator/simple_map'
-require 'crystalball/map_generator/standard_map'
+require 'crystalball/execution_map'
 require 'crystalball/map_generator'
+require 'crystalball/map_storage/yaml_storage'
 require 'crystalball/version'
 
 # Main module for the library
