@@ -6,7 +6,7 @@ describe Crystalball do
   describe '.foresee' do
     let(:map) { instance_double(Crystalball::MapGenerator::StandardMap) }
     let(:storage) { instance_double(Crystalball::MapStorage::YAMLStorage, load: map) }
-    let(:repo) { instance_double(Crystalball::GitRepo, source_diff: source_diff) }
+    let(:repo) { instance_double(Crystalball::GitRepo, diff: source_diff) }
     let(:source_diff) { instance_double(Crystalball::SourceDiff) }
     let(:predictor) { instance_double(Crystalball::Predictor, cases: double) }
 

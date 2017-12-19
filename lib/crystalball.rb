@@ -16,7 +16,7 @@ module Crystalball
   def self.foresee(workdir: '.', map_path: 'execution_map.yml')
     predictor = Predictor.new(
       MapStorage::YAMLStorage.new(Pathname(map_path)).load,
-      GitRepo.new(workdir).source_diff
+      GitRepo.new(workdir).diff
     )
 
     yield predictor

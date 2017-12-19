@@ -5,14 +5,13 @@ require 'spec_helper'
 require 'crystalball/source_diff'
 
 describe Crystalball::SourceDiff do
-  subject { described_class.new(repo) }
-  let(:repo) { Crystalball::GitRepo.new('.') }
+  subject { described_class.new(diff) }
   let(:diff) { Git::Diff.new(repo) }
+  let(:repo) { Crystalball::GitRepo.new('.') }
   let(:diff_file1) { Git::Diff::DiffFile.new(repo, path: 'file1.rb') }
   let(:diff_file2) { Git::Diff::DiffFile.new(repo, path: 'file2.rb') }
 
   before do
-    allow(repo).to receive(:diff).with(no_args).and_return(diff)
     allow(diff).to receive(:each).with(no_args).and_yield(diff_file1).and_yield(diff_file2)
   end
 
@@ -30,9 +29,7 @@ describe Crystalball::SourceDiff do
     end
 
     context 'when there is an empty changeset' do
-      before do
-        allow(repo).to receive(:diff).with(no_args).and_return([])
-      end
+      let(:diff) { [] }
       it { is_expected.to be_empty }
     end
   end

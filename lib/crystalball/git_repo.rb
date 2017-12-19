@@ -12,12 +12,8 @@ module Crystalball
       @repo_path = repo_path
     end
 
-    def source_diff
-      @source_diff ||= SourceDiff.new(self)
-    end
-
     def pristine?
-      source_diff.empty?
+      diff.empty?
     end
 
     def method_missing(method, *args, &block)
@@ -26,6 +22,10 @@ module Crystalball
 
     def respond_to_missing?(method, *)
       repo.respond_to?(method, false) || super
+    end
+
+    def diff(*args)
+      SourceDiff.new(repo.diff(*args))
     end
 
     private

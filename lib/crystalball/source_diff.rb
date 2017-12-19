@@ -7,10 +7,8 @@ module Crystalball
   class SourceDiff
     include Enumerable
 
-    attr_reader :repo
-
-    def initialize(repo)
-      @repo = repo
+    def initialize(git_diff)
+      @git_diff = git_diff
     end
 
     def each
@@ -23,14 +21,11 @@ module Crystalball
 
     private
 
+    attr_reader :git_diff
+
     # TODO: Include untracked to changeset
     def changeset
-      unless defined? @changeset
-        @changeset = repo.diff.map do |file_diff|
-          FileDiff.new(repo, file_diff)
-        end
-      end
-      @changeset
+      @changeset ||= git_diff.map { |file_diff| FileDiff.new(file_diff) }
     end
   end
 end
