@@ -6,6 +6,7 @@ require 'crystalball/execution_detector'
 require 'crystalball/case_map'
 require 'crystalball/execution_map'
 require 'crystalball/map_generator'
+require 'crystalball/map_generator/configuration'
 require 'crystalball/map_storage/yaml_storage'
 require 'crystalball/version'
 
