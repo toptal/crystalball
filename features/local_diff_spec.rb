@@ -26,4 +26,15 @@ describe 'local diff' do
 
     is_expected.to eq(%w[./spec/file_spec.rb:8])
   end
+
+  it 'generated diff if changes were committed' do
+    class1_path.open('w') { |f| f.write <<~RUBY }
+      class Class1
+      end
+    RUBY
+    git.add class1_path.to_s
+    git.commit 'Second commit'
+
+    is_expected.to eq(%w[./spec/file_spec.rb:6])
+  end
 end
