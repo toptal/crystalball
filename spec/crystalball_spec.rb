@@ -4,7 +4,7 @@ require 'spec_helper'
 
 describe Crystalball do
   describe '.foresee' do
-    let(:map) { instance_double(Crystalball::MapGenerator::StandardMap) }
+    let(:map) { instance_double(Crystalball::ExecutionMap) }
     let(:storage) { instance_double(Crystalball::MapStorage::YAMLStorage, load: map) }
     let(:repo) { instance_double(Crystalball::GitRepo, diff: source_diff) }
     let(:source_diff) { instance_double(Crystalball::SourceDiff) }

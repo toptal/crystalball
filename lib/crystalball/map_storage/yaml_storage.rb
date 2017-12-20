@@ -22,14 +22,11 @@ module Crystalball
         end
         cases = cases.inject(&:merge!)
 
-        Object.const_get(metadata[:type]).new(self, metadata: metadata, cases: cases)
+        Object.const_get(metadata[:type]).new(metadata: metadata, cases: cases)
       end
 
-      def dump(map, exclude_metadata: false)
-        path.open('a') do |f|
-          f.write YAML.dump(map.to_h[:metadata]) unless exclude_metadata
-          f.write YAML.dump(map.to_h[:cases])
-        end
+      def dump(data)
+        path.open('a') { |f| f.write YAML.dump(data) }
       end
     end
   end

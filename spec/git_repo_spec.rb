@@ -2,8 +2,6 @@
 
 require 'spec_helper'
 
-require 'crystalball/git_repo'
-
 describe Crystalball::GitRepo do
   subject(:git_repo) { described_class.new('.') }
 
