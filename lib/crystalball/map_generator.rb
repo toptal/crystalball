@@ -6,11 +6,17 @@ require 'coverage'
 module Crystalball
   # Class for generating execution map during RSpec build execution
   class MapGenerator
+    extend Forwardable
+
+    attr_reader :configuration
+    delegate %i[map_storage execution_detector dump_threshold] => :configuration
+
     class << self
-      def start!(config = default_config)
+      def start!
         Coverage.start
 
-        generator = build(config)
+        generator = new
+        yield generator.configuration if block_given?
 
         RSpec.configure do |c|
           c.before(:suite) { generator.start! }
@@ -20,24 +26,10 @@ module Crystalball
           c.after(:suite) { generator.finalize! }
         end
       end
-
-      def build(config)
-        new(config)
-      end
-
-      def default_config
-        {
-          execution_detector: ExecutionDetector.new(Dir.pwd),
-          map_storage: MapStorage::YAMLStorage.new(Pathname('execution_map.yml')),
-          dump_threshold: 100
-        }
-      end
     end
 
-    def initialize(execution_detector:, map_storage:, dump_threshold:)
-      @execution_detector = execution_detector
-      @map_storage = map_storage
-      @dump_threshold = dump_threshold.to_i
+    def initialize
+      @configuration = Configuration.new
     end
 
     def start!
@@ -68,7 +60,6 @@ module Crystalball
 
     private
 
-    attr_reader :execution_detector, :map_storage, :dump_threshold
     attr_writer :map
 
     def repo

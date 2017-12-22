@@ -3,48 +3,26 @@
 require 'spec_helper'
 
 describe Crystalball::MapGenerator do
-  describe '.build' do
-    it 'is alias to new' do
-      config = {execution_detector: nil, map_storage: nil, dump_threshold: 1}
-      expect(described_class).to receive(:new).with(config)
-
-      described_class.build(config)
-    end
-  end
-
-  describe '.default_config' do
-    subject { described_class.default_config }
-    let(:detector) { instance_double('Crystalball::ExecutionDetector') }
-    let(:storage) { instance_double('Crystalball::MapStorage::YAMLStorage') }
-
-    before do
-      allow(Crystalball::ExecutionDetector)
-        .to receive(:new).with(Dir.pwd).and_return detector
-      allow(Crystalball::MapStorage::YAMLStorage)
-        .to receive(:new).with(Pathname('execution_map.yml')).and_return storage
-    end
-
-    it do
-      is_expected.to eq(execution_detector: detector,
-                        map_storage: storage,
-                        dump_threshold: 100)
-    end
-  end
-
   describe '.start' do
     subject { described_class.start! }
-    let(:generator) { instance_double(described_class) }
+    let(:generator) { described_class.new }
     let(:rspec_configuration) { spy }
 
     before do
       allow(Coverage).to receive(:start)
-      allow(described_class).to receive(:build).and_return(generator)
+      allow(described_class).to receive(:new).and_return(generator)
       allow(RSpec).to receive(:configure).and_yield(rspec_configuration)
     end
 
     it 'starts code coverage' do
       subject
       expect(Coverage).to have_received(:start)
+    end
+
+    it 'yields configuration' do
+      yielded_args = nil
+      described_class.start! { |*args| yielded_args = args }
+      expect(yielded_args).to eq([generator.configuration])
     end
 
     it 'sets before suite callback' do
@@ -66,14 +44,17 @@ describe Crystalball::MapGenerator do
     end
   end
 
-  subject do
-    described_class.new(execution_detector: detector,
-                        map_storage: storage,
-                        dump_threshold: threshold)
-  end
+  subject(:generator) { described_class.new }
+  let(:configuration) { generator.configuration }
   let(:threshold) { 0 }
   let(:detector) { instance_double('Crystalball::ExecutionDetector') }
   let(:storage) { instance_double('Crystalball::MapStorage::YAMLStorage', clear!: true, dump: true) }
+
+  before do
+    configuration.dump_threshold = threshold
+    configuration.execution_detector = detector
+    configuration.map_storage = storage
+  end
 
   describe '#start!' do
     before do
