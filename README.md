@@ -43,7 +43,6 @@ TODO: Write good description for anyone who wants to customize behavior
 
 ## Plans
 
-1. 100% spec coverage
 1. Different strategies for source diff
 1. Different strategies for failure predictor
 1. Different strategies for execution map
