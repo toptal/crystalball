@@ -5,6 +5,46 @@ require 'spec_helper'
 describe Crystalball::GitRepo do
   subject(:git_repo) { described_class.new('.') }
 
+  describe 'open' do
+    subject { described_class.open('.') }
+
+    context 'when .git directory exist' do
+      before do
+        allow(Dir).to receive(:exist?).with('./.git').and_return true
+      end
+
+      it { is_expected.to be_a described_class }
+    end
+
+    context 'when .git directory does not exist' do
+      before do
+        allow(Dir).to receive(:exist?).with('./.git').and_return false
+      end
+
+      it { is_expected.to eq nil }
+    end
+  end
+
+  describe '.exists?' do
+    subject { described_class.exists?('.') }
+
+    context 'when .git directory exist' do
+      before do
+        allow(Dir).to receive(:exist?).with('./.git').and_return true
+      end
+
+      it { is_expected.to be_truthy }
+    end
+
+    context 'when .git directory does not exist' do
+      before do
+        allow(Dir).to receive(:exist?).with('./.git').and_return false
+      end
+
+      it { is_expected.to be_falsey }
+    end
+  end
+
   describe '#diff' do
     let(:diff) { Git::Diff.new(repo) }
     let(:repo) { Crystalball::GitRepo.new('.') }

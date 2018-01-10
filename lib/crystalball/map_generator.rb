@@ -30,10 +30,11 @@ module Crystalball
 
     def initialize
       @configuration = Configuration.new
+      @configuration.commit = repo.object('HEAD').sha if repo
     end
 
     def start!
-      raise 'Repository is not pristine! Please stash all your changes' unless repo.pristine?
+      raise 'Repository is not pristine! Please stash all your changes' if repo && !repo.pristine?
 
       self.map = nil
       map_storage.clear!
@@ -55,7 +56,7 @@ module Crystalball
     end
 
     def map
-      @map ||= ExecutionMap.new(metadata: {commit: repo.object('HEAD').sha})
+      @map ||= ExecutionMap.new(metadata: {commit: configuration.commit})
     end
 
     private
@@ -63,7 +64,8 @@ module Crystalball
     attr_writer :map
 
     def repo
-      @repo ||= GitRepo.new('.')
+      @repo = GitRepo.open('.') unless defined?(@repo)
+      @repo
     end
 
     def check_dump_threshold
