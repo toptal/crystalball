@@ -50,98 +50,118 @@ describe Crystalball::MapGenerator do
   let(:detector) { instance_double('Crystalball::ExecutionDetector') }
   let(:storage) { instance_double('Crystalball::MapStorage::YAMLStorage', clear!: true, dump: true) }
 
-  before do
-    configuration.dump_threshold = threshold
-    configuration.execution_detector = detector
-    configuration.map_storage = storage
+  describe '#configuration' do
+    describe '.commit' do
+      subject { configuration.commit }
+      it 'is git repo HEAD by default' do
+        allow_any_instance_of(Git::Base).to receive(:object).with('HEAD').and_return(double(sha: 'abc'))
+        expect(subject).to eq 'abc'
+      end
+
+      context 'when repo does not exist' do
+        before do
+          allow(Crystalball::GitRepo).to receive(:exists?).with('.').and_return(false)
+        end
+
+        it { is_expected.to be_nil }
+      end
+    end
   end
 
-  describe '#start!' do
+  context 'configured' do
     before do
-      allow_any_instance_of(Crystalball::GitRepo).to receive(:pristine?).and_return(true)
-      allow_any_instance_of(Git::Base).to receive(:object).with('HEAD').and_return(double(sha: 'abc'))
+      configuration.commit = 'abc'
+      configuration.dump_threshold = threshold
+      configuration.execution_detector = detector
+      configuration.map_storage = storage
     end
 
-    it 'wipes the map and clears storage' do
-      expect(storage).to receive :clear!
-      expect do
+    describe '#start!' do
+      before do
+        allow_any_instance_of(Crystalball::GitRepo).to receive(:pristine?).and_return(true)
+      end
+
+      it 'wipes the map and clears storage' do
+        expect(storage).to receive :clear!
+        expect do
+          subject.start!
+        end.to(change { subject.map.object_id })
+      end
+
+      it 'dump new map metadata to storage' do
+        expect(storage).to receive(:dump).with(type: 'Crystalball::ExecutionMap', commit: 'abc')
         subject.start!
-      end.to(change { subject.map.object_id })
+      end
+
+      it 'fails if repo is not pristine' do
+        allow_any_instance_of(Crystalball::GitRepo).to receive(:pristine?).and_return(false)
+
+        expect { subject.start! }.to raise_error(StandardError, 'Repository is not pristine! Please stash all your changes')
+      end
     end
 
-    it 'dump new map metadata to storage' do
-      expect(storage).to receive(:dump).with(type: 'Crystalball::ExecutionMap', commit: 'abc')
-      subject.start!
+    describe '#map' do
+      it 'sets proper commit SHA for the map' do
+        allow_any_instance_of(Git::Base).to receive(:object).with('HEAD').and_return(double(sha: 'abc'))
+
+        expect(subject.map.commit).to eq 'abc'
+      end
     end
 
-    it 'fails if repo is not pristine' do
-      allow_any_instance_of(Crystalball::GitRepo).to receive(:pristine?).and_return(false)
+    describe '#finalize!' do
+      context 'with empty map' do
+        it 'does nothing' do
+          expect(storage).not_to receive(:dump)
+          subject.finalize!
+        end
+      end
 
-      expect { subject.start! }.to raise_error(StandardError, 'Repository is not pristine! Please stash all your changes')
-    end
-  end
-
-  describe '#map' do
-    it 'sets proper commit SHA for the map' do
-      allow_any_instance_of(Git::Base).to receive(:object).with('HEAD').and_return(double(sha: 'abc'))
-
-      expect(subject.map.commit).to eq 'abc'
-    end
-  end
-
-  describe '#finalize!' do
-    context 'with empty map' do
-      it 'does nothing' do
-        expect(storage).not_to receive(:dump)
+      it 'dumps the map' do
+        allow_any_instance_of(Crystalball::ExecutionMap).to receive(:size).and_return(10)
+        expect(storage).to receive(:dump).with({})
         subject.finalize!
       end
     end
 
-    it 'dumps the map' do
-      allow_any_instance_of(Crystalball::ExecutionMap).to receive(:size).and_return(10)
-      expect(storage).to receive(:dump).with({})
-      subject.finalize!
-    end
-  end
-
-  describe '#refresh_for_case' do
-    def rspec_example(uid = '1')
-      double(run: true, location_rerun_argument: uid)
-    end
-
-    let(:example_map) { {} }
-
-    before do
-      before = double
-      after = double
-      allow(Coverage).to receive(:peek_result).and_return(before, after)
-      allow(detector).to receive(:detect).with(before, after).and_return(example_map)
-    end
-
-    it 'adds execution map for given case' do
-      rspec_case = rspec_example
-      allow(Crystalball::CaseMap)
-        .to receive(:new)
-        .with(rspec_case, example_map)
-        .and_return(instance_double('Crystalball::CaseMap', case_uid: '5', coverage: []))
-      expect do
-        subject.refresh_for_case(rspec_case)
-      end.to change { subject.map.size }.by(1)
-    end
-
-    context 'with threshold' do
-      let(:threshold) { 2 }
-
-      before do
-        allow(detector).to receive(:detect).and_return(example_map)
+    describe '#refresh_for_case' do
+      def rspec_example(uid = '1')
+        double(run: true, location_rerun_argument: uid)
       end
 
-      it 'dumps map cases and clears the map if map size is over threshold' do
-        expect(storage).to receive(:dump).with('1' => {}, '2' => {}).once
-        expect_any_instance_of(Crystalball::ExecutionMap).to receive(:clear!).once.and_call_original
-        subject.refresh_for_case(rspec_example('1'))
-        subject.refresh_for_case(rspec_example('2'))
-        subject.refresh_for_case(rspec_example('3'))
+      let(:example_map) { {} }
+
+      before do
+        before = double
+        after = double
+        allow(Coverage).to receive(:peek_result).and_return(before, after)
+        allow(detector).to receive(:detect).with(before, after).and_return(example_map)
+      end
+
+      it 'adds execution map for given case' do
+        rspec_case = rspec_example
+        allow(Crystalball::CaseMap)
+          .to receive(:new)
+          .with(rspec_case, example_map)
+          .and_return(instance_double('Crystalball::CaseMap', case_uid: '5', coverage: []))
+        expect do
+          subject.refresh_for_case(rspec_case)
+        end.to change { subject.map.size }.by(1)
+      end
+
+      context 'with threshold' do
+        let(:threshold) { 2 }
+
+        before do
+          allow(detector).to receive(:detect).and_return(example_map)
+        end
+
+        it 'dumps map cases and clears the map if map size is over threshold' do
+          expect(storage).to receive(:dump).with('1' => {}, '2' => {}).once
+          expect_any_instance_of(Crystalball::ExecutionMap).to receive(:clear!).once.and_call_original
+          subject.refresh_for_case(rspec_example('1'))
+          subject.refresh_for_case(rspec_example('2'))
+          subject.refresh_for_case(rspec_example('3'))
+        end
       end
     end
   end

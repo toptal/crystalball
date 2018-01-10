@@ -6,6 +6,7 @@ module Crystalball
     # `Crystalball::MapGenerator.start! { |config| config } block.
     class Configuration
       attr_writer :execution_detector, :map_storage
+      attr_accessor :commit
 
       def execution_detector
         @execution_detector ||= ExecutionDetector.new(Dir.pwd)

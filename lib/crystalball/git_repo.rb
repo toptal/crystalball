@@ -8,6 +8,16 @@ module Crystalball
   class GitRepo
     attr_reader :repo_path
 
+    class << self
+      def open(repo_path)
+        new(repo_path) if exists?(repo_path)
+      end
+
+      def exists?(repo_path)
+        Dir.exist?("#{repo_path}/.git")
+      end
+    end
+
     def initialize(repo_path)
       @repo_path = repo_path
     end
