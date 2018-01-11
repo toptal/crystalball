@@ -125,7 +125,7 @@ describe Crystalball::MapGenerator do
 
     describe '#refresh_for_case' do
       def rspec_example(uid = '1')
-        double(run: true, location_rerun_argument: uid)
+        double(run: true, id: uid)
       end
 
       let(:example_map) { {} }
@@ -142,7 +142,7 @@ describe Crystalball::MapGenerator do
         allow(Crystalball::CaseMap)
           .to receive(:new)
           .with(rspec_case, example_map)
-          .and_return(instance_double('Crystalball::CaseMap', case_uid: '5', coverage: []))
+          .and_return(instance_double('Crystalball::CaseMap', uid: '5', coverage: []))
         expect do
           subject.refresh_for_case(rspec_case)
         end.to change { subject.map.size }.by(1)

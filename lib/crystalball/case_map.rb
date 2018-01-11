@@ -3,17 +3,17 @@
 module Crystalball
   # Data object for execution map for given example
   class CaseMap
-    attr_reader :case_uid, :coverage
+    attr_reader :uid, :coverage
 
     def initialize(example, coverage)
-      @case_uid = uid(example)
+      @uid = build_uid(example)
       @coverage = coverage
     end
 
     private
 
-    def uid(example)
-      example.location_rerun_argument
+    def build_uid(example)
+      example.id
     end
   end
 end

@@ -4,11 +4,11 @@ require 'spec_helper'
 
 describe Crystalball::CaseMap do
   subject(:case_map) { described_class.new(example, coverage) }
-  let(:example) { double(location_rerun_argument: 'file_spec.rb:5') }
+  let(:example) { double(id: 'file_spec.rb:5') }
   let(:coverage) { double }
 
-  describe '#case_uid' do
-    subject { case_map.case_uid }
+  describe '#uid' do
+    subject { case_map.uid }
     it { is_expected.to eq('file_spec.rb:5') }
   end
 
