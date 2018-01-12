@@ -14,6 +14,6 @@ describe 'rename diff' do
     move_path = lib_path.join('my_class.rb')
     git.lib.mv(class1_path, move_path)
 
-    is_expected.to eq(%w[./spec/file_spec.rb:6])
+    is_expected.to eq(['./spec/file_spec.rb[1:1]'])
   end
 end

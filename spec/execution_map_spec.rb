@@ -5,7 +5,7 @@ require 'spec_helper'
 describe Crystalball::ExecutionMap do
   subject { described_class.new }
   let(:coverage) { double }
-  let(:case_map) { instance_double(Crystalball::CaseMap, case_uid: 'file_spec.rb:1', coverage: coverage) }
+  let(:case_map) { instance_double(Crystalball::CaseMap, uid: 'file_spec.rb:1', coverage: coverage) }
 
   describe '#<<' do
     it 'adds case to data' do

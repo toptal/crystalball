@@ -16,7 +16,7 @@ describe 'local diff' do
       end
     RUBY
 
-    is_expected.to eq(%w[./spec/file_spec.rb:6])
+    is_expected.to eq(['./spec/file_spec.rb[1:1]'])
   end
 
   it 'generates map if Class2 is changed' do
@@ -24,7 +24,7 @@ describe 'local diff' do
       Class2.__send__(:attr_reader, :var)
     RUBY
 
-    is_expected.to eq(%w[./spec/file_spec.rb:8])
+    is_expected.to eq(['./spec/file_spec.rb[1:2]'])
   end
 
   it 'generated diff if changes were committed' do
@@ -35,6 +35,6 @@ describe 'local diff' do
     git.add class1_path.to_s
     git.commit 'Second commit'
 
-    is_expected.to eq(%w[./spec/file_spec.rb:6])
+    is_expected.to eq(['./spec/file_spec.rb[1:1]'])
   end
 end
