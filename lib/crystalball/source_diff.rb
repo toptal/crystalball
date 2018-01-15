@@ -6,6 +6,9 @@ module Crystalball
   # Class representing Git source diff for given repo
   class SourceDiff
     include Enumerable
+    extend Forwardable
+
+    delegate %i[stats size lines] => :git_diff
 
     def initialize(git_diff)
       @git_diff = git_diff

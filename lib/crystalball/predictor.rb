@@ -6,6 +6,8 @@ require 'crystalball/predictor/modified_specs'
 module Crystalball
   # Class that predicts test failures with given execution map and sources diff
   class Predictor
+    attr_reader :map, :diff, :predictors
+
     def initialize(map, source_diff)
       @map = map
       @diff = source_diff
@@ -20,9 +22,5 @@ module Crystalball
     def cases
       predictors.flat_map { |predictor| predictor.call(diff, map) }
     end
-
-    private
-
-    attr_reader :map, :diff, :predictors
   end
 end
