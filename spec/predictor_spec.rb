@@ -12,6 +12,14 @@ describe Crystalball::Predictor do
   let(:map) { instance_double('Crystalball::MapGenerator::StandardMap', cases: cases) }
   let(:cases) { {spec_file: %w[file1.rb]} }
 
+  describe '#initialize' do
+    it 'yields block with self' do
+      expect do |b|
+        described_class.new(double, diff, &b)
+      end.to yield_with_args(kind_of(Crystalball::Predictor))
+    end
+  end
+
   describe '#cases' do
     subject { predictor.cases }
 

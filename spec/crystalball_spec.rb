@@ -18,12 +18,9 @@ describe Crystalball do
     it 'initializes predictor and returns cases' do
       allow(Crystalball::Predictor).to receive(:new).with(map, source_diff).and_return(predictor)
       expected_result = double
-      expect(predictor).to receive(:cases).and_return(expected_result)
+      allow(predictor).to receive(:cases).and_return(expected_result)
 
-      result = described_class.foresee do |p|
-        expect(p).to eq(predictor)
-      end
-      expect(result).to eq expected_result
+      expect(described_class.foresee).to eq expected_result
     end
   end
 end

@@ -12,6 +12,7 @@ module Crystalball
       @map = map
       @diff = source_diff
       @predictors = []
+      yield self if block_given?
     end
 
     def use(predictor)
