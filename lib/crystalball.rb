@@ -12,12 +12,8 @@ require 'crystalball/version'
 
 # Main module for the library
 module Crystalball
-  def self.foresee(workdir: '.', map_path: 'execution_map.yml')
+  def self.foresee(workdir: '.', map_path: 'execution_map.yml', &block)
     map = MapStorage::YAMLStorage.load(Pathname(map_path))
-    predictor = Predictor.new(map, GitRepo.open(workdir).diff(map.commit))
-
-    yield predictor
-
-    predictor.cases
+    Predictor.new(map, GitRepo.open(workdir).diff(map.commit), &block).cases
   end
 end
