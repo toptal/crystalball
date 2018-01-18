@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require 'crystalball/predictor/modified_execution_paths'
-require 'crystalball/predictor/modified_specs'
-
 module Crystalball
   # Class that predicts test failures with given execution map and sources diff
   class PredictorEvaluator
@@ -23,6 +20,26 @@ module Crystalball
 
     def diff_size
       predictor.diff.lines
+    end
+
+    def prediction_to_diff_ratio
+      prediction_size.to_f / diff_size
+    end
+
+    def prediction_scale
+      prediction_size.to_f / map_size
+    end
+
+    def prediction_rate
+      actual_failures.empty? ? 1.0 : predicted_failures.size.to_f / actual_failures.size
+    end
+
+    def prediction_size
+      predictor.cases.size
+    end
+
+    def map_size
+      predictor.map.size
     end
 
     private
