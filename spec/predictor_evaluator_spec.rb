@@ -14,6 +14,14 @@ describe Crystalball::PredictorEvaluator do
     it 'returns all cases that present in actual failures and prediction' do
       expect(evaluator.predicted_failures).to eq %w[file1.rb[1:1]]
     end
+
+    context 'with prediction as full file' do
+      let(:prediction) { %w[file2.rb] }
+
+      it 'returns all cases matching that file' do
+        expect(evaluator.predicted_failures).to eq %w[file2.rb[1:2]]
+      end
+    end
   end
 
   describe '#unpredicted_failures' do

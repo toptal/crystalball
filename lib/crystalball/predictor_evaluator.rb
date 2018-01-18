@@ -11,7 +11,9 @@ module Crystalball
     end
 
     def predicted_failures
-      @predicted_failures ||= actual_failures & prediction
+      @predicted_failures ||= actual_failures.select do |failure|
+        prediction.any? { |p| failure.include?(p) }
+      end
     end
 
     def unpredicted_failures
