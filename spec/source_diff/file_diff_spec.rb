@@ -21,9 +21,35 @@ describe Crystalball::SourceDiff::FileDiff do
     end
   end
 
+  context '#moved?' do
+    subject { file_diff.send('moved?') }
+
+    it { is_expected.to be_falsey }
+
+    context 'with correct patch' do
+      let(:diff_file) { Git::Diff::DiffFile.new(Git::Base.new, type: 'modified', path: 'lib/crystalball.rb', patch: "rename from lib/crystalball.rb\nrename to lib/crystalball_new.rb") }
+
+      it { is_expected.to be_truthy }
+    end
+  end
+
   describe '#relative_path' do
     subject { file_diff.relative_path }
     it { is_expected.to eq('lib/crystalball.rb') }
+  end
+
+  describe '#new_relative_path' do
+    subject { file_diff.new_relative_path }
+
+    context 'when file not moved' do
+      it { is_expected.to eq('lib/crystalball.rb') }
+    end
+
+    context 'when file moved' do
+      let(:diff_file) { Git::Diff::DiffFile.new(Git::Base.new, type: 'modified', path: 'lib/crystalball.rb', patch: "rename from lib/crystalball.rb\nrename to lib/crystalball_new.rb") }
+
+      it { is_expected.to eq('lib/crystalball_new.rb') }
+    end
   end
 
   describe '#method_missing' do

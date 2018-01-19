@@ -22,6 +22,6 @@ describe 'new spec file' do
     RUBY
     git.add(new_spec_path.to_s)
 
-    is_expected.to eq(%w[spec/new_spec.rb])
+    is_expected.to match_array(%w[spec/new_spec.rb])
   end
 end
