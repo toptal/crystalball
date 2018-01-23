@@ -6,8 +6,6 @@ require_relative 'module1'
 class Class2
   include Module1
 
-  attr_reader :var
-
   def initialize(var = 2)
     @var = var
   end

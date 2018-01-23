@@ -2,6 +2,9 @@
 
 require 'crystalball/git_repo'
 require 'crystalball/predictor'
+require 'crystalball/predictor/modified_execution_paths'
+require 'crystalball/predictor/modified_specs'
+require 'crystalball/predictor/associated_specs'
 require 'crystalball/execution_detector'
 require 'crystalball/case_map'
 require 'crystalball/execution_map'

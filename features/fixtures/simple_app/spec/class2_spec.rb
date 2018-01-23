@@ -3,8 +3,6 @@
 require 'spec_helper'
 
 describe Class2 do
-  subject { Class2.new }
-
   include_examples 'module1'
 
   describe '#bar' do

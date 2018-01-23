@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require 'crystalball/predictor/modified_execution_paths'
-require 'crystalball/predictor/modified_specs'
-
 module Crystalball
   # Class that predicts test failures with given execution map and sources diff
   class Predictor
