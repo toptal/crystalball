@@ -8,8 +8,12 @@ module Crystalball
         @git_diff = git_diff
       end
 
+      def moved?
+        git_diff.patch =~ /rename from.*\nrename to/
+      end
+
       def modified?
-        git_diff.type == 'modified'
+        !moved? && git_diff.type == 'modified'
       end
 
       def deleted?
@@ -22,6 +26,12 @@ module Crystalball
 
       def relative_path
         git_diff.path
+      end
+
+      def new_relative_path
+        return relative_path unless moved?
+
+        git_diff.patch.match(/rename from.*\nrename to (.*)/)[1]
       end
 
       def method_missing(method, *args, &block)

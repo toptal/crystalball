@@ -10,7 +10,7 @@ module Crystalball
       end
 
       def call(diff, _)
-        diff.map(&:relative_path).grep(spec_pattern)
+        diff.reject(&:deleted?).map(&:new_relative_path).grep(spec_pattern)
       end
 
       private
