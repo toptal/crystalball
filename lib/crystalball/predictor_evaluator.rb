@@ -48,10 +48,6 @@ module Crystalball
 
     def prediction
       @prediction ||= predictor.cases
-
-      raise 'Prediction is empty!' if @prediction.empty?
-
-      @prediction
     end
   end
 end

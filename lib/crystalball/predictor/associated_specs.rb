@@ -23,7 +23,7 @@ module Crystalball
 
       def captures(file_path)
         match = file_path.match(from)
-        if match.names
+        if match.names.any?
           match.names.map(&:to_sym).zip(match.captures).to_h
         else
           match.captures
