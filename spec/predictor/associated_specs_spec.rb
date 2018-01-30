@@ -18,5 +18,12 @@ describe Crystalball::Predictor::AssociatedSpecs do
 
       it { is_expected.to eq([]) }
     end
+
+    context 'without named captures' do
+      let(:predictor) { described_class.new from: /Gemfile/, to: './spec' }
+      let(:path1) { 'Gemfile' }
+
+      it { is_expected.to eq ['./spec'] }
+    end
   end
 end
