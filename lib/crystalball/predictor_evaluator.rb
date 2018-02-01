@@ -37,8 +37,7 @@ module Crystalball
     end
 
     def prediction_size
-      # FIXME: doesn't work if contains folder prediction. need to expand folder to example to count it properly
-      predictor.cases.size
+      predictor.map.keys.select { |example| prediction.any? { |p| example.include?(p) } }.size
     end
 
     def map_size
