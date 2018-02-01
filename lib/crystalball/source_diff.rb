@@ -22,6 +22,18 @@ module Crystalball
       changeset.none?
     end
 
+    def repository
+      git_diff.instance_variable_get(:@base)
+    end
+
+    def from
+      git_diff.instance_variable_get(:@from)
+    end
+
+    def to
+      git_diff.instance_variable_get(:@to)
+    end
+
     private
 
     attr_reader :git_diff

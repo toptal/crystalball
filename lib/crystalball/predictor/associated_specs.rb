@@ -12,9 +12,8 @@ module Crystalball
       end
 
       def call(diff, _)
-        diff.map(&:relative_path).grep(from).map do |source_file_path|
-          to % captures(source_file_path)
-        end
+        diff.map(&:relative_path).grep(from)
+            .map { |source_file_path| to % captures(source_file_path) }
       end
 
       private

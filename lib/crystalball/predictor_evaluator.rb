@@ -37,7 +37,7 @@ module Crystalball
     end
 
     def prediction_size
-      predictor.cases.size
+      predictor.map.keys.select { |example| prediction.any? { |p| example.include?(p) } }.size
     end
 
     def map_size
