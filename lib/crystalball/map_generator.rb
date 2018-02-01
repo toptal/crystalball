@@ -1,22 +1,16 @@
 # frozen_string_literal: true
 
-require 'singleton'
-require 'coverage'
-
 module Crystalball
   # Class for generating execution map during RSpec build execution
   class MapGenerator
     extend Forwardable
 
     attr_reader :configuration
-    delegate %i[map_storage execution_detector dump_threshold] => :configuration
+    delegate %i[map_storage strategies dump_threshold] => :configuration
 
     class << self
-      def start!
-        Coverage.start
-
-        generator = new
-        yield generator.configuration if block_given?
+      def start!(&block)
+        generator = new(&block)
 
         RSpec.configure do |c|
           c.before(:suite) { generator.start! }
@@ -31,6 +25,7 @@ module Crystalball
     def initialize
       @configuration = Configuration.new
       @configuration.commit = repo.object('HEAD').sha if repo
+      yield @configuration if block_given?
     end
 
     def start!
@@ -39,19 +34,17 @@ module Crystalball
       self.map = nil
       map_storage.clear!
       map_storage.dump(map.metadata.to_h)
+
+      strategies.each(&:after_start)
     end
 
     def refresh_for_case(example)
-      before = Coverage.peek_result
-      example.run
-      after = Coverage.peek_result
-
-      map << CaseMap.new(example, execution_detector.detect(before, after))
-
+      map << strategies.run(CaseMap.new(example)) { example.run }
       check_dump_threshold
     end
 
     def finalize!
+      strategies.each(&:before_finalize)
       map_storage.dump(map.cases) if map.size.positive?
     end
 

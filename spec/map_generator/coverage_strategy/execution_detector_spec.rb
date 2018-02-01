@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe Crystalball::ExecutionDetector do
+describe Crystalball::MapGenerator::CoverageStrategy::ExecutionDetector do
   subject(:detector) { described_class.new(root) }
   let(:root) { '/tmp' }
   let(:before_map) { {path => [0, 2, nil]} }

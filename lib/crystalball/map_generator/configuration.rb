@@ -1,15 +1,19 @@
 # frozen_string_literal: true
 
+require 'crystalball/map_generator/strategies_collection'
+
 module Crystalball
   class MapGenerator
     # Configuration of map generator. Is can be accessed as a first argument inside
     # `Crystalball::MapGenerator.start! { |config| config } block.
     class Configuration
-      attr_writer :execution_detector, :map_storage
+      attr_writer :map_storage
       attr_accessor :commit
 
-      def execution_detector
-        @execution_detector ||= ExecutionDetector.new(Dir.pwd)
+      attr_reader :strategies
+
+      def initialize
+        @strategies = StrategiesCollection.new
       end
 
       def map_storage_path
@@ -30,6 +34,11 @@ module Crystalball
 
       def dump_threshold=(value)
         @dump_threshold = value.to_i
+      end
+
+      def register(strategy)
+        @strategies.push strategy
+        strategy.after_register
       end
     end
   end

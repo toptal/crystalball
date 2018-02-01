@@ -21,7 +21,7 @@ shared_context 'simple git repository' do
     git.add(all: true)
     git.commit('First commit')
 
-    system("cd #{root} && rspec spec") # Generate crystalball map
+    raise "Can't generate map" unless system("cd #{root} && rspec spec > /dev/null") # Generate crystalball map
   end
 
   after do

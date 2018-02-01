@@ -26,7 +26,12 @@ Or install it yourself as:
 
 ## Usage
 
-1. Add `Crystalball::MapGenerator.start!` to your `spec_helper` before you loaded any file of your app.
+1. Start MapGenerator in your `spec_helper` before you loaded any file of your app. E.g.
+```ruby
+Crystalball::MapGenerator.start! do |config|
+  config.register Crystalball::MapGenerator::CoverageStrategy.new
+end
+```
 1. Run your test suite on clean branch with green build. This step will create file `execution_map.yml` in your project root
 1. Make some changes to your app code
 1. To see list of tests which might fail because of your changes, call:

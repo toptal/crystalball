@@ -11,9 +11,4 @@ describe Crystalball::CaseMap do
     subject { case_map.uid }
     it { is_expected.to eq('file_spec.rb:5') }
   end
-
-  describe '#coverage' do
-    subject { case_map.coverage }
-    it { is_expected.to eq(coverage) }
-  end
 end

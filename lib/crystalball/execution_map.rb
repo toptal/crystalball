@@ -30,7 +30,7 @@ module Crystalball
     end
 
     def <<(case_map)
-      cases[case_map.uid] = case_map.coverage
+      cases[case_map.uid] = case_map.affected_files
     end
 
     def clear!
