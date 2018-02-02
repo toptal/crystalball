@@ -8,4 +8,10 @@ describe Model1 do
 
     it { is_expected.to eq 'model1' }
   end
+
+  describe '#field' do
+    subject { described_class.new('value').field }
+
+    it { is_expected.to eq 'value' }
+  end
 end

@@ -10,6 +10,7 @@ require 'crystalball/execution_map'
 require 'crystalball/map_generator'
 require 'crystalball/map_generator/configuration'
 require 'crystalball/map_generator/coverage_strategy'
+require 'crystalball/rails/map_generator/action_view_strategy'
 require 'crystalball/map_storage/yaml_storage'
 require 'crystalball/version'
 

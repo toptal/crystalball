@@ -1,0 +1,5 @@
+<div>
+  <% models.each do |model| %>
+    <%= render partial: 'item', locals: {model: model} %>
+  <% end %>
+</div>
