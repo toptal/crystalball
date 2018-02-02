@@ -14,17 +14,6 @@ describe Crystalball::MapGenerator do
       allow(RSpec).to receive(:configure).and_yield(rspec_configuration)
     end
 
-    it 'starts code coverage' do
-      subject
-      expect(Coverage).to have_received(:start)
-    end
-
-    it 'yields configuration' do
-      yielded_args = nil
-      described_class.start! { |*args| yielded_args = args }
-      expect(yielded_args).to eq([generator.configuration])
-    end
-
     it 'sets before suite callback' do
       expect(generator).to receive(:start!)
       expect(rspec_configuration).to receive(:before).with(:suite).and_yield
@@ -69,11 +58,19 @@ describe Crystalball::MapGenerator do
   end
 
   context 'configured' do
+    let(:dummy_strategy) do
+      double.as_null_object.tap do |s|
+        def s.call(case_map)
+          yield case_map
+        end
+      end
+    end
+
     before do
       configuration.commit = 'abc'
       configuration.dump_threshold = threshold
-      configuration.execution_detector = detector
       configuration.map_storage = storage
+      configuration.register dummy_strategy
     end
 
     describe '#start!' do
@@ -98,6 +95,11 @@ describe Crystalball::MapGenerator do
 
         expect { subject.start! }.to raise_error(StandardError, 'Repository is not pristine! Please stash all your changes')
       end
+
+      it 'calls after_start for each registered strategy' do
+        expect(dummy_strategy).to receive(:after_start).once
+        subject.start!
+      end
     end
 
     describe '#map' do
@@ -121,28 +123,32 @@ describe Crystalball::MapGenerator do
         expect(storage).to receive(:dump).with({})
         subject.finalize!
       end
+
+      it 'calls before_finalize for each registered strategy' do
+        expect(dummy_strategy).to receive(:before_finalize).once
+        subject.finalize!
+      end
     end
 
     describe '#refresh_for_case' do
-      def rspec_example(uid = '1')
-        double(run: true, id: uid)
+      def rspec_example(id = '1')
+        double(run: true, id: id)
       end
 
-      let(:example_map) { {} }
+      def example_map(uid)
+        instance_double('Crystalball::CaseMap', uid: uid, affected_files: [])
+      end
 
-      before do
-        before = double
-        after = double
-        allow(Coverage).to receive(:peek_result).and_return(before, after)
-        allow(detector).to receive(:detect).with(before, after).and_return(example_map)
+      it 'runs the example' do
+        allow(configuration.strategies).to receive(:run).and_call_original
+        ex = rspec_example
+        expect(ex).to receive(:run)
+        subject.refresh_for_case(ex)
       end
 
       it 'adds execution map for given case' do
+        allow(configuration.strategies).to receive(:run).with(kind_of(Crystalball::CaseMap)).and_return(example_map('1'))
         rspec_case = rspec_example
-        allow(Crystalball::CaseMap)
-          .to receive(:new)
-          .with(rspec_case, example_map)
-          .and_return(instance_double('Crystalball::CaseMap', uid: '5', coverage: []))
         expect do
           subject.refresh_for_case(rspec_case)
         end.to change { subject.map.size }.by(1)
@@ -151,12 +157,11 @@ describe Crystalball::MapGenerator do
       context 'with threshold' do
         let(:threshold) { 2 }
 
-        before do
-          allow(detector).to receive(:detect).and_return(example_map)
-        end
-
         it 'dumps map cases and clears the map if map size is over threshold' do
-          expect(storage).to receive(:dump).with('1' => {}, '2' => {}).once
+          allow(configuration.strategies).to receive(:run).with(kind_of(Crystalball::CaseMap))
+                                                          .and_return(example_map('1'), example_map('2'), example_map('3'))
+
+          expect(storage).to receive(:dump).with('1' => [], '2' => []).once
           expect_any_instance_of(Crystalball::ExecutionMap).to receive(:clear!).once.and_call_original
           subject.refresh_for_case(rspec_example('1'))
           subject.refresh_for_case(rspec_example('2'))

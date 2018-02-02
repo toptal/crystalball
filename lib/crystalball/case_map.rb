@@ -3,11 +3,14 @@
 module Crystalball
   # Data object for execution map for given example
   class CaseMap
-    attr_reader :uid, :coverage
+    attr_reader :uid, :affected_files
+    extend Forwardable
 
-    def initialize(example, coverage)
+    delegate %i[push] => :affected_files
+
+    def initialize(example, affected_files = [])
       @uid = build_uid(example)
-      @coverage = coverage
+      @affected_files = affected_files
     end
 
     private
