@@ -7,4 +7,10 @@ class Model1
   end
 
   self.table_name = 'model1'
+
+  def initialize(field)
+    self.field = field
+  end
+
+  attr_accessor :field
 end
