@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
 module Crystalball
-  # Class that predicts test failures with given execution map and sources diff
+  # Class to predict test failures with given execution map and sources diff
   class Predictor
     attr_reader :map, :diff, :predictors
 
+    # @param [Crystalball::ExecutionMap] execution map
+    # @param [Crystalball::SourceDiff] diff to build execution list for
     def initialize(map, source_diff)
       @map = map
       @diff = source_diff
@@ -12,11 +14,15 @@ module Crystalball
       yield self if block_given?
     end
 
+    # Adds additional predictor to use
+    #
+    # @param [Object]
     def use(predictor)
       predictors << predictor
     end
 
     # TODO: check if it would be better to call predictors with one case instead of passing the whole map.
+    # @return [Array<String>] list of examples which may fail
     def cases
       # TODO: minimize cases? like [./some/spec1, ./some/spec2, ./some/] -> [./some/]
       predictors

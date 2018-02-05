@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
 module Crystalball
-  # Class that predicts test failures with given execution map and sources diff
+  # Class to collect statistics about prediction quality
   class PredictorEvaluator
     attr_reader :predictor, :actual_failures
 
+    # @param [Crystalball::Predictor] configured predictor to fetch list of examples which might fail
+    # @param [Array<String>] list of actual failed examples
     def initialize(predictor, actual_failures:)
       @predictor = predictor
       @actual_failures = actual_failures

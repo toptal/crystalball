@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Crystalball
-  # Class for generating execution map during RSpec build execution
+  # Class to generate execution map during RSpec build execution
   class MapGenerator
     extend Forwardable
 
@@ -9,6 +9,9 @@ module Crystalball
     delegate %i[map_storage strategies dump_threshold] => :configuration
 
     class << self
+      # Registers Crystalball handlers to generate execution map during specs execution
+      #
+      # @param [Proc] block to configure MapGenerator and Register strategies
       def start!(&block)
         generator = new(&block)
 
@@ -28,6 +31,7 @@ module Crystalball
       yield @configuration if block_given?
     end
 
+    # Registers strategies and prepares metadata for execution map
     def start!
       raise 'Repository is not pristine! Please stash all your changes' if repo && !repo.pristine?
 
@@ -36,14 +40,19 @@ module Crystalball
       map_storage.dump(map.metadata.to_h)
 
       strategies.each(&:after_start)
+      self.started = true
     end
 
+    # Runs example and collects execution map for it
     def refresh_for_case(example)
       map << strategies.run(CaseMap.new(example)) { example.run }
       check_dump_threshold
     end
 
+    # Finalizes strategies and saves map
     def finalize!
+      return unless started
+
       strategies.each(&:before_finalize)
       map_storage.dump(map.cases) if map.size.positive?
     end
@@ -55,6 +64,7 @@ module Crystalball
     private
 
     attr_writer :map
+    attr_accessor :started
 
     def repo
       @repo = GitRepo.open('.') unless defined?(@repo)

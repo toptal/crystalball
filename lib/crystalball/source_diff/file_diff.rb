@@ -4,6 +4,7 @@ module Crystalball
   class SourceDiff
     # Data object for single file in Git repo diff
     class FileDiff
+      # @param [Git::DiffFile] raw diff for a single file made by ruby-git gem
       def initialize(git_diff)
         @git_diff = git_diff
       end
@@ -24,10 +25,12 @@ module Crystalball
         git_diff.type == 'new'
       end
 
+      # @return relative path to file
       def relative_path
         git_diff.path
       end
 
+      # @return new relative path to file if file was moved
       def new_relative_path
         return relative_path unless moved?
 
