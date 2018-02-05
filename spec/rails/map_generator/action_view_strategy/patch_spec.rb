@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require 'rails_helper'
 
 describe Crystalball::Rails::MapGenerator::ActionViewStrategy::Patch do
   subject(:instance) do
@@ -13,6 +13,16 @@ describe Crystalball::Rails::MapGenerator::ActionViewStrategy::Patch do
         'view'
       end
     end.new
+  end
+
+  context 'ActionView::Template patching' do
+    it 'changes and restores compile! method' do
+      original_compile = ::ActionView::Template.instance_method(:compile!)
+      described_class.apply!
+      expect(::ActionView::Template.instance_method(:compile!)).not_to eq original_compile
+      described_class.revert!
+      expect(::ActionView::Template.instance_method(:compile!)).to eq original_compile
+    end
   end
 
   describe '#new_compile!' do

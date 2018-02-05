@@ -4,6 +4,7 @@ require 'rspec'
 require 'action_view'
 
 require_relative '../../../../lib/crystalball'
+require_relative '../../../../lib/crystalball/rails'
 Crystalball::MapGenerator.start! do |c|
   c.register Crystalball::MapGenerator::CoverageStrategy.new
   c.register Crystalball::Rails::MapGenerator::ActionViewStrategy.new

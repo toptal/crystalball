@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require 'rails_helper'
 
 describe Crystalball::Rails::MapGenerator::ActionViewStrategy::ExecutionDetector do
   subject(:detector) { described_class.new(root) }

@@ -1,27 +1,28 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require 'rails_helper'
 
 describe Crystalball::Rails::MapGenerator::ActionViewStrategy do
-  subject { described_class.new(execution_detector) }
+  subject(:strategy) { described_class.new(execution_detector) }
   let(:execution_detector) { instance_double('Crystalball::Rails::MapGenerator::ActionViewStrategy::ExecutionDetector') }
 
   include_examples 'base strategy'
 
   describe '#after_start' do
-    it 'starts patches ::ActionView::Template#compile!' do
-      old_compile = ::ActionView::Template.instance_method(:compile!)
-      subject.after_start
-      expect(::ActionView::Template.instance_method(:compile!)).not_to eq old_compile
+    subject { strategy.after_start }
+
+    it do
+      expect(Crystalball::Rails::MapGenerator::ActionViewStrategy::Patch).to receive(:apply!)
+      subject
     end
   end
 
   describe '#before_finalize' do
-    it 'restore old ::ActionView::Template#compile!' do
-      old_compile = ::ActionView::Template.instance_method(:compile!)
-      subject.after_start
-      subject.before_finalize
-      expect(::ActionView::Template.instance_method(:compile!)).to eq old_compile
+    subject { strategy.before_finalize }
+
+    specify do
+      expect(Crystalball::Rails::MapGenerator::ActionViewStrategy::Patch).to receive(:revert!)
+      subject
     end
   end
 

@@ -4,7 +4,7 @@ module Crystalball
   module Rails
     class MapGenerator
       class ActionViewStrategy
-        # Class for detecting code execution path based on coverage information diff
+        # Class for detecting view relative paths
         class ExecutionDetector
           attr_reader :root_path
 
@@ -12,6 +12,10 @@ module Crystalball
             @root_path = root_path
           end
 
+          # Transforms absolute paths to relative. Exclude paths outside of project
+          #
+          # @param[Array<String>] list of paths to process
+          # @return [Array<String>]
           def detect(paths)
             paths
               .select { |file_name| file_name.start_with?(root_path) }

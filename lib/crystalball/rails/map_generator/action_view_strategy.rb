@@ -6,16 +6,19 @@ require 'crystalball/rails/map_generator/action_view_strategy/patch'
 
 module Crystalball
   module Rails
-    # Class for generating execution map during RSpec build execution
     class MapGenerator
       # Map generator strategy to build map of views affected by an example.
-      # It patches ActionView::Renderer.render to get original name of compiled views.
+      # It patches `ActionView::Template#compile!` to get original name of compiled views.
       class ActionViewStrategy
         include Crystalball::MapGenerator::BaseStrategy
 
         class << self
+          # List of views affected by current example
+          #
+          # @return [Array<String>]
           attr_reader :views
 
+          # Reset cached list of views
           def reset_views
             @views = []
           end
@@ -28,17 +31,11 @@ module Crystalball
         end
 
         def after_start
-          ::ActionView::Template.class_eval do
-            include Crystalball::Rails::MapGenerator::ActionViewStrategy::Patch
-            alias_method :old_compile!, :compile!
-            alias_method :compile!, :new_compile!
-          end
+          Patch.apply!
         end
 
         def before_finalize
-          ::ActionView::Template.class_eval do
-            alias_method :compile!, :old_compile! # rubocop:disable Lint/DuplicateMethods
-          end
+          Patch.revert!
         end
 
         def call(case_map)
