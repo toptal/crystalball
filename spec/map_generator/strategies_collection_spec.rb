@@ -21,6 +21,13 @@ describe Crystalball::MapGenerator::StrategiesCollection do
     end
   end
 
+  describe '#method_missing' do
+    it 'delegates to strategies array' do
+      expect(subject).to respond_to :empty?
+      expect(subject).to be_empty
+    end
+  end
+
   describe '#run' do
     before do
       subject.push(strategy1, strategy2)
@@ -30,7 +37,7 @@ describe Crystalball::MapGenerator::StrategiesCollection do
       result = []
       expect do
         subject.run(result) { |v| v.push('BLOCK') }
-      end.to change { result }.to(%w[1 2 BLOCK 2 1])
+      end.to change { result }.to(%w[2 1 BLOCK 1 2])
     end
   end
 end

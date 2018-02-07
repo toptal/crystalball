@@ -39,7 +39,7 @@ module Crystalball
       map_storage.clear!
       map_storage.dump(map.metadata.to_h)
 
-      strategies.each(&:after_start)
+      strategies.reverse.each(&:after_start)
       self.started = true
     end
 
