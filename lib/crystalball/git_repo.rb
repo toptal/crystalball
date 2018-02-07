@@ -44,8 +44,8 @@ module Crystalball
     # @param [String] to which commit to build a diff. Default: HEAD
     # @param [String] from which commit to build a diff. Default: nil, will build diff of uncommitted changes
     # @return [SourceDiff]
-    def diff(to = 'HEAD', from = nil)
-      SourceDiff.new(repo.diff(to, from))
+    def diff(from = 'HEAD', to = nil)
+      SourceDiff.new(repo.diff(from, to), self)
     end
 
     private

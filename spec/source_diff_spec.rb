@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 describe Crystalball::SourceDiff do
-  subject(:source_diff) { described_class.new(diff) }
+  subject(:source_diff) { described_class.new(diff, repo) }
   let(:diff) { Git::Diff.new(repo) }
   let(:repo) { Crystalball::GitRepo.new('.') }
   let(:diff_file1) { Git::Diff::DiffFile.new(repo, path: 'file1.rb') }

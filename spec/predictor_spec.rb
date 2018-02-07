@@ -4,11 +4,11 @@ require 'spec_helper'
 
 describe Crystalball::Predictor do
   subject(:predictor) { described_class.new(instance_double('Crystalball::ExecutionMap', cases: cases), source_diff) }
-  let(:cases) { {spec_file: %w[file1.rb]} }
-  let(:repository) { instance_double('Git::Base', dir: instance_double('Git::WorkingDirectory', path: Dir.pwd)) }
-  let(:source_diff) { instance_double('Crystalball::SourceDiff', repository: repository) }
+  let(:repository) { double('Crystalball::GitRepo', dir: instance_double('Git::WorkingDirectory', path: Dir.pwd)) }
+  let(:source_diff) { instance_double('Crystalball::SourceDiff', repository: repository, to: revision) }
+  let(:revision) { 'some_sha' }
   let(:map) { instance_double('Crystalball::MapGenerator::StandardMap', cases: cases) }
-  let(:cases) { {'spec_file' => %w[file1.rb]} }
+  let(:cases) { {'./spec_file[1:1]' => %w[file1.rb]} }
 
   describe '#initialize' do
     it 'yields block with self' do
@@ -24,18 +24,20 @@ describe Crystalball::Predictor do
     it { is_expected.to eq([]) }
 
     context 'with predictor' do
-      before { predictor.use ->(_source_diff, map) { map.cases.keys } }
+      before do
+        predictor.use ->(_source_diff, map) { map.cases.keys }
+        allow(source_diff).to receive(:path_exist?).with('spec_file') { path_present }
+      end
 
       context 'when file is present' do
-        before do
-          spec_path = File.join(repository.dir.path, 'spec_file')
-          allow(File).to receive(:exist?).with(spec_path) { true }
-        end
+        let(:path_present) { true }
 
-        it { is_expected.to eq(['spec_file']) }
+        it { is_expected.to eq(['./spec_file[1:1]']) }
       end
 
       context 'when diff is not present' do
+        let(:path_present) { false }
+
         it { is_expected.to eq([]) }
       end
     end
