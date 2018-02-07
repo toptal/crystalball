@@ -111,6 +111,10 @@ describe Crystalball::MapGenerator do
     end
 
     describe '#finalize!' do
+      let(:started) { true }
+
+      before { allow(subject).to receive(:started) { started } }
+
       context 'with empty map' do
         it 'does nothing' do
           expect(storage).not_to receive(:dump)
@@ -127,6 +131,16 @@ describe Crystalball::MapGenerator do
       it 'calls before_finalize for each registered strategy' do
         expect(dummy_strategy).to receive(:before_finalize).once
         subject.finalize!
+      end
+
+      context 'when generator not started' do
+        let(:started) { false }
+
+        it 'does nothing' do
+          expect(dummy_strategy).not_to receive(:before_finalize)
+          expect(storage).not_to receive(:dump)
+          subject.finalize!
+        end
       end
     end
 

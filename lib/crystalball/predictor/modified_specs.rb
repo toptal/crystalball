@@ -5,6 +5,7 @@ module Crystalball
     # Used with `predictor.use Crystalball::Predictor::ModifiedSpecs.new`. Will find files that match spec regexp and
     # return all new or modified files. You can specify spec regexp using first parameter to `#initialize`.
     class ModifiedSpecs
+      # @param [Regexp] regexp to filter specs files
       def initialize(spec_pattern = %r{\Aspec/.*_spec\.rb\z})
         @spec_pattern = spec_pattern
       end

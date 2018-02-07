@@ -3,17 +3,21 @@
 require 'crystalball/source_diff/file_diff'
 
 module Crystalball
-  # Class representing Git source diff for given repo
+  # Wrapper class representing Git source diff for given repo
   class SourceDiff
     include Enumerable
     extend Forwardable
 
     delegate %i[stats size lines] => :git_diff
 
+    # @param [Git::Diff] raw diff made by ruby-git gem
     def initialize(git_diff)
       @git_diff = git_diff
     end
 
+    # Iterates over each changed file of diff
+    #
+    # @param [Proc] block to yield for each change
     def each
       changeset.each { |file| yield file }
     end
@@ -22,14 +26,17 @@ module Crystalball
       changeset.none?
     end
 
+    # @return [Git::Repository] object which stores info about origin repo of diff
     def repository
       git_diff.instance_variable_get(:@base)
     end
 
+    # @return [String] SHA of commit diff build from
     def from
       git_diff.instance_variable_get(:@from)
     end
 
+    # @return [String] SHA of commit diff build to
     def to
       git_diff.instance_variable_get(:@to)
     end

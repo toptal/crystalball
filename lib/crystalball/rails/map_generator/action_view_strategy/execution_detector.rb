@@ -8,11 +8,12 @@ module Crystalball
         class ExecutionDetector
           attr_reader :root_path
 
+          # @param [String] absolute path to root folder of repository
           def initialize(root_path)
             @root_path = root_path
           end
 
-          # Transforms absolute paths to relative. Exclude paths outside of project
+          # Transforms absolute paths to relative. Exclude paths outside of repository
           #
           # @param[Array<String>] list of paths to process
           # @return [Array<String>]

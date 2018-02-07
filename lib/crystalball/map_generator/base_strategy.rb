@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module Crystalball
-  # Class for generating execution map during RSpec build execution
   class MapGenerator
     # Map generator strategy interface
     module BaseStrategy

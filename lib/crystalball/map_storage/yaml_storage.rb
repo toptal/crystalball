@@ -9,6 +9,10 @@ module Crystalball
       attr_reader :path
 
       class << self
+        # Loads map from given path
+        #
+        # @param [String] path to map
+        # @return [Crystalball::ExecutionMap]
         def load(path)
           meta, cases = *read_files(path).transpose
 
@@ -38,14 +42,19 @@ module Crystalball
         end
       end
 
+      # @param [String] path to store execution map
       def initialize(path)
         @path = path
       end
 
+      # Removes storage file
       def clear!
         path.delete if path.exist?
       end
 
+      # Writes data to storage file
+      #
+      # @param [Hash] data to write to storage file
       def dump(data)
         path.open('a') { |f| f.write YAML.dump(data) }
       end
