@@ -8,12 +8,17 @@ module Crystalball
     # `Crystalball::MapGenerator.start! { |config| config } block.
     class Configuration
       attr_writer :map_storage
+      attr_writer :map_class
       attr_accessor :commit
 
       attr_reader :strategies
 
       def initialize
         @strategies = StrategiesCollection.new
+      end
+
+      def map_class
+        @map_class ||= ExecutionMap
       end
 
       def map_storage_path
