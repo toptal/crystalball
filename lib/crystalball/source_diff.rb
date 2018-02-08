@@ -8,7 +8,7 @@ module Crystalball
     include Enumerable
     extend Forwardable
 
-    delegate %i[stats size lines] => :git_diff
+    delegate %i[stats size lines from to] => :git_diff
 
     # @param [Git::Diff] raw diff made by ruby-git gem
     def initialize(git_diff)
@@ -29,16 +29,6 @@ module Crystalball
     # @return [Git::Repository] object which stores info about origin repo of diff
     def repository
       git_diff.instance_variable_get(:@base)
-    end
-
-    # @return [String] SHA of commit diff build from
-    def from
-      git_diff.instance_variable_get(:@from)
-    end
-
-    # @return [String] SHA of commit diff build to
-    def to
-      git_diff.instance_variable_get(:@to)
     end
 
     private

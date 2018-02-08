@@ -37,22 +37,4 @@ describe Crystalball::SourceDiff do
 
     it { is_expected.to eq(repo) }
   end
-
-  describe '#from' do
-    subject { source_diff.from }
-
-    let(:diff) { Git::Diff.new(repo, from) }
-    let(:from) { 'some_sha' }
-
-    it { is_expected.to eq from }
-  end
-
-  describe '#to' do
-    subject { source_diff.to }
-
-    let(:diff) { Git::Diff.new(repo, '', to) }
-    let(:to) { 'some_sha' }
-
-    it { is_expected.to eq to }
-  end
 end
