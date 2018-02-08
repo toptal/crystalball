@@ -5,17 +5,22 @@ module Crystalball
     # Map generator strategy based on harvesting Coverage information during example execution
     class StrategiesCollection
       include Enumerable
-      extend Forwardable
-
-      delegate %i[each empty? push] => :_strategies
 
       def initialize(strategies = [])
         @strategies = strategies
       end
 
       def run(case_map, &block)
-        run_for_strategies(case_map, *_strategies, &block)
+        run_for_strategies(case_map, *_strategies.reverse, &block)
         case_map
+      end
+
+      def method_missing(method_name, *args, &block)
+        _strategies.public_send(method_name, *args, &block) || super
+      end
+
+      def respond_to_missing?(method_name, *_args)
+        _strategies.respond_to?(method_name, false) || super
       end
 
       private
