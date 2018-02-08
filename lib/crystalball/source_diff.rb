@@ -11,8 +11,9 @@ module Crystalball
     delegate %i[stats size lines] => :git_diff
 
     # @param [Git::Diff] raw diff made by ruby-git gem
-    def initialize(git_diff)
+    def initialize(git_diff, repository = nil)
       @git_diff = git_diff
+      @repository = repository
     end
 
     # Iterates over each changed file of diff
@@ -28,7 +29,7 @@ module Crystalball
 
     # @return [Git::Repository] object which stores info about origin repo of diff
     def repository
-      git_diff.instance_variable_get(:@base)
+      @repository ||= GitRepo.open(git_diff.instance_variable_get(:@base).dir.path)
     end
 
     # @return [String] SHA of commit diff build from
@@ -39,6 +40,14 @@ module Crystalball
     # @return [String] SHA of commit diff build to
     def to
       git_diff.instance_variable_get(:@to)
+    end
+
+    # Checks if path exists for a diff
+    #
+    # @param [String] path to check
+    def path_exist?(path)
+      command = `git --git-dir=#{repository.repo.path} --work-tree=#{repository.dir.path} cat-file -e #{to}:#{path} 2>&1`
+      command.empty?
     end
 
     private

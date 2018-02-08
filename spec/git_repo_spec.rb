@@ -46,13 +46,12 @@ describe Crystalball::GitRepo do
   end
 
   describe '#diff' do
-    let(:diff) { Git::Diff.new(repo) }
-    let(:repo) { Crystalball::GitRepo.new('.') }
+    let(:diff) { Git::Diff.new(subject) }
     let(:expected_source_diff) { instance_double('Crystalball::SourceDiff') }
 
     specify do
       allow_any_instance_of(Git::Base).to receive(:diff).and_return(diff)
-      allow(Crystalball::SourceDiff).to receive(:new).with(diff).and_return(expected_source_diff)
+      allow(Crystalball::SourceDiff).to receive(:new).with(diff, subject).and_return(expected_source_diff)
       expect(subject.diff).to eq expected_source_diff
     end
   end
