@@ -5,11 +5,14 @@ module Crystalball
   class Predictor
     attr_reader :map, :diff, :predictors
 
-    # @param [Crystalball::ExecutionMap] execution map
-    # @param [Crystalball::SourceDiff] diff to build execution list for
-    def initialize(map, source_diff)
+    # @param [Crystalball::ExecutionMap] map execution map
+    # @param [Crystalball::GitRepo] repo to build execution list on
+    # @param [String] from starting commit for diff. Default: HEAD
+    # @param [String] to ending commit for diff. Default: nil
+    def initialize(map, repo, from: 'HEAD', to: nil)
       @map = map
-      @diff = source_diff
+      @repo = repo
+      @diff = repo.diff(from, to)
       @predictors = []
       yield self if block_given?
     end
@@ -28,15 +31,16 @@ module Crystalball
       predictors
         .flat_map { |predictor| predictor.call(diff, map) }
         .compact
-        .select { |example| File.exist?(example_to_file_path(example)) }
+        .select { |example| example_to_file_path(example).exist? }
         .uniq
     end
 
     private
 
+    attr_reader :repo
+
     def example_to_file_path(example)
-      root = diff.repository.dir.path
-      File.join(root, example).split('[').first
+      repo.repo_path.join(example.split('[').first).expand_path
     end
   end
 end

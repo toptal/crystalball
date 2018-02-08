@@ -10,14 +10,13 @@ describe 'evaluate prediction' do
   include_context 'simple git repository'
 
   let(:predictor) do
-    Crystalball::Predictor.new(map, diff) do |predictor|
+    Crystalball::Predictor.new(map, Crystalball::GitRepo.open(git.dir.path)) do |predictor|
       predictor.use Crystalball::Predictor::AssociatedSpecs.new from: %r{models/(?<file>.*).rb},
                                                                 to: './spec/models/%<file>s_spec.rb'
     end
   end
 
   let(:map) { Crystalball::MapStorage::YAMLStorage.load(root.join('execution_map.yml')) }
-  let(:diff) { Crystalball::SourceDiff.new(git.diff) }
 
   let(:actual_failures) do
     %w[./spec/models/model1_spec.rb ./spec/class1_spec.rb]
@@ -30,12 +29,16 @@ describe 'evaluate prediction' do
     RUBY
   end
 
-  it { expect(evaluator.predicted_failures).to eq %w[./spec/models/model1_spec.rb] }
-  it { expect(evaluator.unpredicted_failures).to eq %w[./spec/class1_spec.rb] }
-  it { expect(evaluator.diff_size).to eq 14 }
-  it { expect(evaluator.prediction_to_diff_ratio).to eq 2.0 / 14.0 }
-  it { expect(evaluator.prediction_scale).to eq 2.0 / 18.0 }
-  it { expect(evaluator.prediction_rate).to eq 0.5 }
-  it { expect(evaluator.prediction_size).to eq 2 }
-  it { expect(evaluator.map_size).to eq 18 }
+  specify do
+    expect(evaluator).to have_attributes(
+      predicted_failures: %w[./spec/models/model1_spec.rb],
+      unpredicted_failures: %w[./spec/class1_spec.rb],
+      diff_size: 14,
+      prediction_to_diff_ratio: 2.0 / 14,
+      prediction_scale: 2.0 / 18,
+      prediction_rate: 0.5,
+      prediction_size: 2,
+      map_size: 18
+    )
+  end
 end

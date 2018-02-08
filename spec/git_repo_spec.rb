@@ -3,14 +3,14 @@
 require 'spec_helper'
 
 describe Crystalball::GitRepo do
-  subject(:git_repo) { described_class.new('.') }
+  subject(:git_repo) { described_class.new(Pathname('.')) }
 
   describe 'open' do
     subject { described_class.open('.') }
 
     context 'when .git directory exist' do
       before do
-        allow(Dir).to receive(:exist?).with('./.git').and_return true
+        allow(described_class).to receive(:exists?).with(Pathname('.')).and_return true
       end
 
       it { is_expected.to be_a described_class }
@@ -18,7 +18,7 @@ describe Crystalball::GitRepo do
 
     context 'when .git directory does not exist' do
       before do
-        allow(Dir).to receive(:exist?).with('./.git').and_return false
+        allow(described_class).to receive(:exists?).with(Pathname('.')).and_return false
       end
 
       it { is_expected.to eq nil }
@@ -26,11 +26,11 @@ describe Crystalball::GitRepo do
   end
 
   describe '.exists?' do
-    subject { described_class.exists?('.') }
+    subject { described_class.exists?(Pathname('.')) }
 
     context 'when .git directory exist' do
       before do
-        allow(Dir).to receive(:exist?).with('./.git').and_return true
+        allow_any_instance_of(Pathname).to receive(:directory?).and_return true
       end
 
       it { is_expected.to be_truthy }
@@ -38,7 +38,7 @@ describe Crystalball::GitRepo do
 
     context 'when .git directory does not exist' do
       before do
-        allow(Dir).to receive(:exist?).with('./.git').and_return false
+        allow_any_instance_of(Pathname).to receive(:directory?).and_return false
       end
 
       it { is_expected.to be_falsey }

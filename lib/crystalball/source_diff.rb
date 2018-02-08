@@ -10,25 +10,19 @@ module Crystalball
 
     delegate %i[stats size lines from to] => :git_diff
 
-    # @param [Git::Diff] raw diff made by ruby-git gem
+    # @param [Git::Diff] git_diff raw diff made by ruby-git gem
     def initialize(git_diff)
       @git_diff = git_diff
     end
 
     # Iterates over each changed file of diff
     #
-    # @param [Proc] block to yield for each change
     def each
       changeset.each { |file| yield file }
     end
 
     def empty?
       changeset.none?
-    end
-
-    # @return [Git::Repository] object which stores info about origin repo of diff
-    def repository
-      git_diff.instance_variable_get(:@base)
     end
 
     private

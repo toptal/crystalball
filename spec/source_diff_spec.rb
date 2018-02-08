@@ -31,10 +31,4 @@ describe Crystalball::SourceDiff do
       it { is_expected.to be_empty }
     end
   end
-
-  describe '#repository' do
-    subject { source_diff.repository }
-
-    it { is_expected.to eq(repo) }
-  end
 end
