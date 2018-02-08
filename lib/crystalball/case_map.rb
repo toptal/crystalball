@@ -3,7 +3,7 @@
 module Crystalball
   # Data object to store execution map for specific example
   class CaseMap
-    attr_reader :uid, :affected_files
+    attr_reader :uid, :file_path, :affected_files
     extend Forwardable
 
     delegate %i[push] => :affected_files
@@ -11,14 +11,9 @@ module Crystalball
     # @param [String] id of example
     # @param [Array<String>] list of files affected by example
     def initialize(example, affected_files = [])
-      @uid = build_uid(example)
+      @uid = example.id
+      @file_path = example.file_path
       @affected_files = affected_files
-    end
-
-    private
-
-    def build_uid(example)
-      example.id
     end
   end
 end

@@ -9,6 +9,7 @@ describe Crystalball::MapGenerator::Configuration do
     is_expected.to have_attributes(
       map_storage: an_instance_of(Crystalball::MapStorage::YAMLStorage).and(have_attributes(path: default_map_path)),
       map_storage_path: default_map_path,
+      map_class: Crystalball::ExecutionMap,
       dump_threshold: 100,
       strategies: an_instance_of(Crystalball::MapGenerator::StrategiesCollection)
     )

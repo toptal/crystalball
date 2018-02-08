@@ -6,7 +6,7 @@ module Crystalball
     extend Forwardable
 
     attr_reader :configuration
-    delegate %i[map_storage strategies dump_threshold] => :configuration
+    delegate %i[map_storage strategies dump_threshold map_class] => :configuration
 
     class << self
       # Registers Crystalball handlers to generate execution map during specs execution
@@ -58,7 +58,7 @@ module Crystalball
     end
 
     def map
-      @map ||= ExecutionMap.new(metadata: {commit: configuration.commit})
+      @map ||= map_class.new(metadata: {commit: configuration.commit})
     end
 
     private

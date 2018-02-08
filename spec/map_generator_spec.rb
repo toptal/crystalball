@@ -35,6 +35,7 @@ describe Crystalball::MapGenerator do
 
   subject(:generator) { described_class.new }
   let(:configuration) { generator.configuration }
+  let(:map_class) { configuration.map_class }
   let(:threshold) { 0 }
   let(:detector) { instance_double('Crystalball::ExecutionDetector') }
   let(:storage) { instance_double('Crystalball::MapStorage::YAMLStorage', clear!: true, dump: true) }
@@ -86,7 +87,7 @@ describe Crystalball::MapGenerator do
       end
 
       it 'dump new map metadata to storage' do
-        expect(storage).to receive(:dump).with(type: 'Crystalball::ExecutionMap', commit: 'abc')
+        expect(storage).to receive(:dump).with(type: map_class.to_s, commit: 'abc')
         subject.start!
       end
 
@@ -123,7 +124,7 @@ describe Crystalball::MapGenerator do
       end
 
       it 'dumps the map' do
-        allow_any_instance_of(Crystalball::ExecutionMap).to receive(:size).and_return(10)
+        allow_any_instance_of(map_class).to receive(:size).and_return(10)
         expect(storage).to receive(:dump).with({})
         subject.finalize!
       end
@@ -146,7 +147,7 @@ describe Crystalball::MapGenerator do
 
     describe '#refresh_for_case' do
       def rspec_example(id = '1')
-        double(run: true, id: id)
+        double(run: true, id: id, file_path: '1.rb')
       end
 
       def example_map(uid)
@@ -176,7 +177,7 @@ describe Crystalball::MapGenerator do
                                                           .and_return(example_map('1'), example_map('2'), example_map('3'))
 
           expect(storage).to receive(:dump).with('1' => [], '2' => []).once
-          expect_any_instance_of(Crystalball::ExecutionMap).to receive(:clear!).once.and_call_original
+          expect_any_instance_of(map_class).to receive(:clear!).once.and_call_original
           subject.refresh_for_case(rspec_example('1'))
           subject.refresh_for_case(rspec_example('2'))
           subject.refresh_for_case(rspec_example('3'))
