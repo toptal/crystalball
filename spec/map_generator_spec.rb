@@ -50,7 +50,7 @@ describe Crystalball::MapGenerator do
 
       context 'when repo does not exist' do
         before do
-          allow(Crystalball::GitRepo).to receive(:exists?).with('.').and_return(false)
+          allow(Crystalball::GitRepo).to receive(:exists?).with(Pathname('.')).and_return(false)
         end
 
         it { is_expected.to be_nil }

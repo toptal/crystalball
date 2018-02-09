@@ -28,6 +28,6 @@ module Crystalball
   #   end
   def self.foresee(workdir: '.', map_path: 'execution_map.yml', &block)
     map = MapStorage::YAMLStorage.load(Pathname(map_path))
-    Predictor.new(map, GitRepo.open(workdir).diff(map.commit), &block).cases
+    Predictor.new(map, GitRepo.open(Pathname(workdir)), from: map.commit, &block).cases
   end
 end

@@ -11,16 +11,17 @@ module Crystalball
     class << self
       # @return [Crystalball::GitRepo] instance for given path
       def open(repo_path)
-        new(repo_path) if exists?(repo_path)
+        path = Pathname(repo_path)
+        new(path) if exists?(path)
       end
 
       # Check if given path is under git control (contains .git folder)
-      def exists?(repo_path)
-        Dir.exist?("#{repo_path}/.git")
+      def exists?(path)
+        path.join('.git').directory?
       end
     end
 
-    # @param path to repository root folder
+    # @param [Pathname] repo_path path to repository root folder
     def initialize(repo_path)
       @repo_path = repo_path
     end
@@ -41,11 +42,11 @@ module Crystalball
 
     # Creates diff
     #
-    # @param [String] to which commit to build a diff. Default: HEAD
-    # @param [String] from which commit to build a diff. Default: nil, will build diff of uncommitted changes
+    # @param [String] from starting commit to build a diff. Default: HEAD
+    # @param [String] to ending commit to build a diff. Default: nil, will build diff of uncommitted changes
     # @return [SourceDiff]
-    def diff(to = 'HEAD', from = nil)
-      SourceDiff.new(repo.diff(to, from))
+    def diff(from = 'HEAD', to = nil)
+      SourceDiff.new(repo.diff(from, to))
     end
 
     private
