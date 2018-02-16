@@ -1,10 +1,14 @@
 # frozen_string_literal: true
 
+require_relative '../concerns/paths_filter'
+
 module Crystalball
   class MapGenerator
     class AllocatedObjectsStrategy
       # Class for detecting paths from objects
       class ExecutionDetector
+        include ::Crystalball::MapGenerator::Concerns::PathsFilter
+
         attr_reader :root_path
 
         # @param [String] absolute path to root folder of repository
@@ -33,9 +37,7 @@ module Crystalball
             end
           end.uniq
 
-          paths
-            .select { |file_name| file_name.start_with?(root_path) }
-            .map { |file_name| file_name.sub("#{root_path}/", '') }
+          filter paths
         end
       end
     end

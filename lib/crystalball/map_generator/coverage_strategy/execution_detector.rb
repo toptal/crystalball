@@ -1,10 +1,14 @@
 # frozen_string_literal: true
 
+require_relative '../concerns/paths_filter'
+
 module Crystalball
   class MapGenerator
     class CoverageStrategy
       # Class for detecting code execution path based on coverage information diff
       class ExecutionDetector
+        include ::Crystalball::MapGenerator::Concerns::PathsFilter
+
         attr_reader :root_path
 
         # @param [String] absolute path to root folder of repository
@@ -19,8 +23,7 @@ module Crystalball
         # @param[Array<String>] list of files affected after example execution
         # @return [Array<String>]
         def detect(before, after)
-          after.select { |file_name, after_coverage| file_name.start_with?(root_path) && before[file_name] != after_coverage }
-               .map { |file_name, _| file_name.sub("#{root_path}/", '') }
+          filter after.select { |file_name, after_coverage| before[file_name] != after_coverage }.keys
         end
       end
     end
