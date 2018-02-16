@@ -16,7 +16,7 @@ describe 'change files' do
       end
     RUBY
 
-    is_expected.to match_array(%w[
+    is_expected.to include(*%w[
                                  ./spec/class1_spec.rb[1:1:1]
                                  ./spec/class1_spec.rb[1:1:2:1]
                                  ./spec/class1_spec.rb[1:1:3:1]
@@ -32,7 +32,7 @@ describe 'change files' do
       Class2.__send__(:attr_reader, :var)
     RUBY
 
-    is_expected.to match_array(%w[
+    is_expected.to include(*%w[
                                  ./spec/class2_spec.rb[1:1:1]
                                  ./spec/class2_spec.rb[1:1:2:1]
                                  ./spec/class2_spec.rb[1:1:3:1]
@@ -49,7 +49,7 @@ describe 'change files' do
       end
     RUBY
 
-    is_expected.to match_array(%w[
+    is_expected.to include(*%w[
                                  ./spec/class1_spec.rb[1:1:1]
                                  ./spec/class1_spec.rb[1:1:2:1]
                                  ./spec/class1_spec.rb[1:1:3:1]
@@ -71,7 +71,7 @@ describe 'change files' do
     git.add class1_path.to_s
     git.commit 'Second commit'
 
-    is_expected.to match_array(%w[
+    is_expected.to include(*%w[
                                  ./spec/class1_spec.rb[1:1:1]
                                  ./spec/class1_spec.rb[1:1:2:1]
                                  ./spec/class1_spec.rb[1:1:3:1]
