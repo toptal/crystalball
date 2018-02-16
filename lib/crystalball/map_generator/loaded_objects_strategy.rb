@@ -1,63 +1,67 @@
 # frozen_string_literal: true
 
 require 'pry'
+require 'objspace'
 require 'crystalball/map_generator/base_strategy'
+require 'crystalball/map_generator/loaded_objects_strategy/execution_detector'
 
 module Crystalball
   class MapGenerator
     class LoadedObjectsStrategy
       include BaseStrategy
 
-      def initialize
+      attr_reader :execution_detector
+
+      def initialize(execution_detector = ExecutionDetector.new(Dir.pwd))
         @finalaized = []
+        @execution_detector = execution_detector
       end
 
       def call(case_map)
-        before = collect_objects
+        GC.start
+        GC.disable
+
+        self.existed_objects_ids = collect_objects_ids
+        ObjectSpace.trace_object_allocations_start
+
         yield case_map
-        after = collect_objects
-        case_map.push(*detect(before, after))
+        case_map.push(*execution_detector.detect(fetch_new_objects))
+
+        ObjectSpace.trace_object_allocations_stop
+        ObjectSpace.trace_object_allocations_clear
+        GC.enable
+        GC.start
       end
 
       private
 
       IGNORED_CLASSES = [NilClass, TrueClass, FalseClass, Numeric, Time, String, Range, Struct, Array, Hash, IO, Regexp].freeze
 
-      def collect_objects
-        objects = []
+      attr_accessor :existed_objects_ids
+
+      def collect_objects_ids
+        objects = {}
         ObjectSpace.each_object(Object) do |object|
-          objects.push(object) unless IGNORED_CLASSES.any? { |klass| object.is_a?(klass) }
+          next if IGNORED_CLASSES.include?(object.class)
+          objects[object.__id__/1000] ||= []
+          objects[object.__id__/1000] << object.__id__
         end
         objects
       end
 
-      def detect(before, after)
-        root_path = Dir.pwd
-        # More stable but much more slow. Complexity o(n*n)
-        diff = after.reject { |obj| before.find { |_obj| obj.object_id == _obj.object_id } }
+      def fetch_new_objects
+        new_objects = []
+        ObjectSpace.each_object.to_a.each do |object|
+          next if IGNORED_CLASSES.include?(object.class)
+          next if ObjectSpace.allocation_sourcefile(object).nil?
+          next if ObjectSpace.allocation_sourcefile(object) == __FILE__
+          next if existed_objects_ids[object.__id__ / 1000] &&
+            existed_objects_ids[object.__id__ / 1000].include?(object.__id__)
+          next if
 
-        # this approach doesnt work at all. problem with ids
-        # last = before.last.object_id
-        # index = after.index { |obj| obj.object_id == last }
-        # diff = after[index..-1]
-
-        classes = diff.map do |object|
-          object.is_a?(Class) ? object : object.class
-        end.uniq
-
-        wrapped_classes = classes.map { |klass| Pry::WrappedModule(klass) }
-
-        project_classes = wrapped_classes.select do |wrapped|
-          wrapped.source_file&.start_with?(root_path)
-        end.compact
-
-        files = project_classes.flat_map do |wrapped|
-          wrapped.candidates.flat_map do |candidate|
-            candidate.send(:first_method_source_location).first
-          end
-        end.uniq
-
-        files.select { |file| file.start_with?(root_path) }
+          new_objects << object
+        end
+        new_objects
       end
     end
   end
