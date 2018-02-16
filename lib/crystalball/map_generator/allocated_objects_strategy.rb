@@ -3,11 +3,11 @@
 require 'pry'
 require 'objspace'
 require 'crystalball/map_generator/base_strategy'
-require 'crystalball/map_generator/loaded_objects_strategy/execution_detector'
+require 'crystalball/map_generator/allocated_objects_strategy/execution_detector'
 
 module Crystalball
   class MapGenerator
-    class LoadedObjectsStrategy
+    class AllocatedObjectsStrategy
       include BaseStrategy
 
       attr_reader :execution_detector
@@ -22,13 +22,14 @@ module Crystalball
         GC.disable
 
         self.existed_objects_ids = collect_objects_ids
-        ObjectSpace.trace_object_allocations_start
 
-        yield case_map
-        case_map.push(*execution_detector.detect(fetch_new_objects))
+        ObjectSpace.trace_object_allocations do
+          yield case_map
+          case_map.push(*execution_detector.detect(fetch_new_objects))
+        end
 
-        ObjectSpace.trace_object_allocations_stop
         ObjectSpace.trace_object_allocations_clear
+
         GC.enable
         GC.start
       end

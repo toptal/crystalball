@@ -2,7 +2,7 @@
 
 module Crystalball
   class MapGenerator
-    class LoadedObjectsStrategy
+    class AllocatedObjectsStrategy
       # Class for detecting paths from objects
       class ExecutionDetector
         attr_reader :root_path
