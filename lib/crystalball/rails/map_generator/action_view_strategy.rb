@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'crystalball/map_generator/base_strategy'
-require 'crystalball/rails/map_generator/action_view_strategy/execution_detector'
+require 'crystalball/map_generator/execution_detector'
 require 'crystalball/rails/map_generator/action_view_strategy/patch'
 
 module Crystalball
@@ -26,7 +26,7 @@ module Crystalball
 
         attr_reader :execution_detector
 
-        def initialize(execution_detector = ExecutionDetector.new(Dir.pwd))
+        def initialize(execution_detector = ::Crystalball::MapGenerator::ExecutionDetector.new(Dir.pwd))
           @execution_detector = execution_detector
         end
 
