@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
-
-describe Crystalball::Rails::MapGenerator::ActionViewStrategy::ExecutionDetector do
+describe Crystalball::MapGenerator::ExecutionDetector do
   subject(:detector) { described_class.new(root) }
   let(:root) { '/tmp' }
   let(:paths) { ['/tmp/file.rb'] }
