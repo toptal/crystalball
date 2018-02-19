@@ -13,31 +13,31 @@ describe 'delete files' do
   it 'generates map if Class1 is deleted' do
     git.lib.remove class1_path
 
-    is_expected.to include(*%w[
-                                 ./spec/class1_spec.rb[1:1:1]
-                                 ./spec/class1_spec.rb[1:1:2:1]
-                                 ./spec/class1_spec.rb[1:1:3:1]
-                                 ./spec/class1_spec.rb[1:1:4:1]
-                                 ./spec/class1_spec.rb[1:2:1]
-                                 ./spec/class1_spec.rb[1:3:1]
-                                 ./spec/file_spec.rb[1:1]
-                               ])
+    is_expected.to include(
+      './spec/class1_spec.rb[1:1:1]',
+      './spec/class1_spec.rb[1:1:2:1]',
+      './spec/class1_spec.rb[1:1:3:1]',
+      './spec/class1_spec.rb[1:1:4:1]',
+      './spec/class1_spec.rb[1:2:1]',
+      './spec/class1_spec.rb[1:3:1]',
+      './spec/file_spec.rb[1:1]'
+    )
   end
 
   it 'generates map if Module1 is deleted' do
     git.lib.remove module1_path
 
-    is_expected.to include(*%w[
-                                 ./spec/class1_spec.rb[1:1:1]
-                                 ./spec/class1_spec.rb[1:1:2:1]
-                                 ./spec/class1_spec.rb[1:1:3:1]
-                                 ./spec/class1_spec.rb[1:1:4:1]
-                                 ./spec/class1_spec.rb[1:2:1]
-                                 ./spec/class2_spec.rb[1:1:1]
-                                 ./spec/class2_spec.rb[1:1:2:1]
-                                 ./spec/class2_spec.rb[1:1:3:1]
-                                 ./spec/class2_spec.rb[1:1:4:1]
-                                 ./spec/class2_spec.rb[1:2:1]
-                               ])
+    is_expected.to include(
+      './spec/class1_spec.rb[1:1:1]',
+      './spec/class1_spec.rb[1:1:2:1]',
+      './spec/class1_spec.rb[1:1:3:1]',
+      './spec/class1_spec.rb[1:1:4:1]',
+      './spec/class1_spec.rb[1:2:1]',
+      './spec/class2_spec.rb[1:1:1]',
+      './spec/class2_spec.rb[1:1:2:1]',
+      './spec/class2_spec.rb[1:1:3:1]',
+      './spec/class2_spec.rb[1:1:4:1]',
+      './spec/class2_spec.rb[1:2:1]'
+    )
   end
 end

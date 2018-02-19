@@ -3,6 +3,7 @@
 module Crystalball
   class MapGenerator
     module Concerns
+      # Concern to define helper methods to manage file paths
       module PathsFilter
         # Transforms absolute paths to relative. Exclude paths outside of root_path
         #

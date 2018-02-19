@@ -23,7 +23,7 @@ module Crystalball
         # @param[Array<String>] list of files affected after example execution
         # @return [Array<String>]
         def detect(before, after)
-          filter after.select { |file_name, after_coverage| before[file_name] != after_coverage }.keys
+          filter after.reject { |file_name, after_coverage| before[file_name] == after_coverage }.keys
         end
       end
     end

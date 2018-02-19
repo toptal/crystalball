@@ -7,6 +7,8 @@ require 'crystalball/map_generator/allocated_objects_strategy/execution_detector
 
 module Crystalball
   class MapGenerator
+    # Map generator strategy to collect all objects allocated during test example and
+    # get paths to files with defeniton of class and included modules.
     class AllocatedObjectsStrategy
       include BaseStrategy
 
@@ -21,7 +23,7 @@ module Crystalball
         GC.start
         GC.disable
 
-        self.existed_objects_ids = collect_objects_ids
+        collect_objects_ids
 
         ObjectSpace.trace_object_allocations do
           yield case_map
@@ -36,33 +38,49 @@ module Crystalball
 
       private
 
-      IGNORED_CLASSES = [NilClass, TrueClass, FalseClass, Numeric, Time, String, Range, Struct, Array, Hash, IO, Regexp].freeze
+      IGNORED_CLASSES = [
+        NilClass, TrueClass, FalseClass, Numeric,
+        Time, String, Range, Struct, Array, Hash, IO, Regexp
+      ].freeze
 
       attr_accessor :existed_objects_ids
 
       def collect_objects_ids
-        objects = {}
+        self.existed_objects_ids = {}
         ObjectSpace.each_object(Object) do |object|
-          next if IGNORED_CLASSES.include?(object.class)
-          objects[object.__id__/1000] ||= []
-          objects[object.__id__/1000] << object.__id__
+          next if ignore?(object)
+          allocated_before_example(object)
         end
-        objects
       end
 
       def fetch_new_objects
         new_objects = []
-        ObjectSpace.each_object.to_a.each do |object|
-          next if IGNORED_CLASSES.include?(object.class)
-          next if ObjectSpace.allocation_sourcefile(object).nil?
-          next if ObjectSpace.allocation_sourcefile(object) == __FILE__
-          next if existed_objects_ids[object.__id__ / 1000] &&
-            existed_objects_ids[object.__id__ / 1000].include?(object.__id__)
-          next if
+        ObjectSpace.each_object(Object) do |object|
+          next if ignore?(object) ||
+            allocated_not_in_project?(object) ||
+            allocated_before_example?(object)
 
           new_objects << object
         end
         new_objects
+      end
+
+      def ignore?(object)
+        IGNORED_CLASSES.include?(object.class)
+      end
+
+      def allocated_not_in_project?(object)
+        allocation_sourcefile = ObjectSpace.allocation_sourcefile(object)
+        allocation_sourcefile.nil? || allocation_sourcefile == __FILE__
+      end
+
+      def allocated_before_example(object)
+        existed_objects_ids[object.__id__ / 1000] ||= []
+        existed_objects_ids[object.__id__ / 1000] << object.__id__
+      end
+
+      def allocated_before_example?(object)
+        existed_objects_ids[object.__id__ / 1000]&.include?(object.__id__)
       end
     end
   end
