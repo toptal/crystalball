@@ -7,9 +7,10 @@ describe Crystalball::MapGenerator::AllocatedObjectsStrategy::ObjectLister do
 
   let(:ignored_types) { [] }
   let(:obj1) { double }
-  let(:obj2) { double(class: stub_const('Dummy', Class.new)) }
+  let(:obj2) { double(class: Dummy) }
 
   before do
+    stub_const('Dummy', Class.new)
     allow(ObjectSpace).to receive(:each_object).with(Object).and_yield(obj1).and_yield(obj2)
   end
 

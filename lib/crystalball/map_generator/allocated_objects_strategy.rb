@@ -4,6 +4,7 @@ require 'crystalball/map_generator/base_strategy'
 require 'crystalball/map_generator/execution_detector'
 require 'crystalball/map_generator/allocated_objects_strategy/object_lister'
 require 'crystalball/map_generator/allocated_objects_strategy/definition_tracer'
+require 'crystalball/map_generator/allocated_objects_strategy/hierarchy_lister'
 
 module Crystalball
   class MapGenerator
@@ -12,16 +13,18 @@ module Crystalball
     class AllocatedObjectsStrategy
       include BaseStrategy
 
-      attr_reader :execution_detector, :definition_tracer, :object_lister
+      attr_reader :execution_detector, :definition_tracer, :object_lister, :hierarchy_lister
 
       def initialize(
-        execution_detector = ExecutionDetector.new(Dir.pwd),
-        object_lister = ObjectLister.new,
-        definition_tracer = DefinitionTracer.new
+        execution_detector: ExecutionDetector.new(Dir.pwd),
+        object_lister: ObjectLister.new,
+        definition_tracer: DefinitionTracer.new,
+        hierarchy_lister: HierarchyLister.new
       )
         @execution_detector = execution_detector
         @object_lister = object_lister
         @definition_tracer = definition_tracer
+        @hierarchy_lister = hierarchy_lister
       end
 
       def after_register
@@ -40,7 +43,8 @@ module Crystalball
           yield case_map
         end
 
-        case_map.push(*execution_detector.detect(fetch_paths_for_objects(objects)))
+        paths = fetch_paths_for_objects(objects)
+        case_map.push(*execution_detector.detect(paths))
 
         GC.enable
       end
@@ -53,14 +57,10 @@ module Crystalball
         end.uniq
 
         classes.flat_map do |klass|
-          ancestors_for(klass).map { |ancestor| definition_tracer.constants_definition_paths[ancestor.name] }
+          hierarchy_lister.ancestors_for(klass).map do |ancestor|
+            definition_tracer.constants_definition_paths[ancestor.name]
+          end
         end.compact
-      end
-
-      def ancestors_for(klass)
-        ancestors = klass.ancestors
-        index = ancestors.index(Object) || ancestors.index(BasicObject)
-        ancestors[0...index]
       end
     end
   end

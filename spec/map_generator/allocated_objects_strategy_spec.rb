@@ -3,11 +3,12 @@
 require 'spec_helper'
 
 describe Crystalball::MapGenerator::AllocatedObjectsStrategy do
-  subject(:strategy) { described_class.new(execution_detector, object_lister, definition_tracer) }
+  subject(:strategy) { described_class.new(execution_detector: execution_detector, object_lister: object_lister, definition_tracer: definition_tracer, hierarchy_lister: hierarchy_lister) }
 
   let(:execution_detector) { instance_double('Crystalball::MapGenerator::ExecutionDetector') }
   let(:object_lister) { instance_double('Crystalball::MapGenerator::AllocatedObjectsStrategy::ObjectLister') }
-  let(:definition_tracer) { instance_double('Crystalball::MapGenerator::AllocatedObjectsStrategy::definition_tracer') }
+  let(:definition_tracer) { instance_double('Crystalball::MapGenerator::AllocatedObjectsStrategy::DefinitionTracer') }
+  let(:hierarchy_lister) { instance_double('Crystalball::MapGenerator::AllocatedObjectsStrategy::HierarchyLister') }
 
   include_examples 'base strategy'
 
@@ -56,9 +57,13 @@ describe Crystalball::MapGenerator::AllocatedObjectsStrategy do
 
     context 'with objects' do
       let(:files) { ['lib/dummy.rb'] }
-      let(:objects) { [double(class: stub_const('Dummy', Class.new))] }
+      let(:objects) { [double(class: Dummy)] }
 
-      before { allow(definition_tracer).to receive(:constants_definition_paths) { {'Dummy' => 'lib/dummy.rb'} } }
+      before do
+        stub_const('Dummy', Class.new)
+        allow(definition_tracer).to receive(:constants_definition_paths) { {'Dummy' => 'lib/dummy.rb'} }
+        allow(hierarchy_lister).to receive(:ancestors_for).with(Dummy) { [Dummy] }
+      end
 
       it 'pushes affected files detected by detector to case map' do
         expect do

@@ -7,14 +7,14 @@ module Crystalball
       class ObjectLister
         attr_reader :ignored_types
 
-        IGNORED_TYPES = [
+        DEFAULT_IGNORED_TYPES = [
           NilClass, TrueClass, FalseClass, Numeric, String, Regexp,
           Range, Array, Hash, Struct, Time, IO
         ].freeze
 
         # @param Array[Class] ignored_types classes which will be excluded from list
-        def initialize(ignored_types = [])
-          @ignored_types = IGNORED_TYPES + ignored_types
+        def initialize(ignored_types = DEFAULT_IGNORED_TYPES)
+          @ignored_types = ignored_types
         end
 
         # @return Set[Integer] object_id list of allocated objects except ignored
