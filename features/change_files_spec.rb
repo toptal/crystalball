@@ -63,8 +63,23 @@ describe 'change files' do
     )
   end
 
-  xit 'generates map if patch file is changed' do
-    class_eval_patch_path.open('w') { |f| f.write '' }
+  it 'generates map if Module2 is changed' do
+    module2_path.open('w') { |f| f.write <<~RUBY }
+      module Module2
+      end
+    RUBY
+
+    is_expected.to include(
+      './spec/class2_spec.rb[1:1:1]',
+      './spec/class2_spec.rb[1:1:2:1]',
+      './spec/class2_spec.rb[1:1:3:1]',
+      './spec/class2_spec.rb[1:1:4:1]',
+      './spec/class2_spec.rb[1:2:1]'
+    )
+  end
+
+  xit 'generates map if file with class_eval is changed' do
+    class2_eval_path.open('w') { |f| f.write '' }
 
     is_expected.to include(
       './spec/class2_spec.rb[1:1:1]',

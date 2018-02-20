@@ -26,7 +26,7 @@ module Crystalball
 
         attr_reader :execution_detector
 
-        def initialize(execution_detector = ::Crystalball::MapGenerator::ExecutionDetector.new(Dir.pwd))
+        def initialize(execution_detector = ::Crystalball::MapGenerator::ExecutionDetector.new)
           @execution_detector = execution_detector
         end
 

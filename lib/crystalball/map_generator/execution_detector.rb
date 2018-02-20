@@ -7,7 +7,7 @@ module Crystalball
       attr_reader :root_path
 
       # @param [String] absolute path to root folder of repository
-      def initialize(root_path)
+      def initialize(root_path = Dir.pwd)
         @root_path = root_path
       end
 

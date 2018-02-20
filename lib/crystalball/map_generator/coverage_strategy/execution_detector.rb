@@ -7,13 +7,6 @@ module Crystalball
     class CoverageStrategy
       # Class for detecting code execution path based on coverage information diff
       class ExecutionDetector < ::Crystalball::MapGenerator::ExecutionDetector
-        attr_reader :root_path
-
-        # @param [String] absolute path to root folder of repository
-        def initialize(root_path)
-          @root_path = root_path
-        end
-
         # Detects files affected during example execution. Transforms absolute paths to relative.
         # Exclude paths outside of repository
         #

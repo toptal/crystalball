@@ -8,7 +8,7 @@ require 'crystalball/map_generator/allocated_objects_strategy/hierarchy_lister'
 
 module Crystalball
   class MapGenerator
-    # Map generator strategy to get paths to files contains defenition for all objects and its
+    # Map generator strategy to get paths to files contains definition for all objects and its
     # ancestors allocated during test example.
     class AllocatedObjectsStrategy
       include BaseStrategy
@@ -16,7 +16,7 @@ module Crystalball
       attr_reader :execution_detector, :definition_tracer, :object_lister, :hierarchy_lister
 
       def initialize(
-        execution_detector: ExecutionDetector.new(Dir.pwd),
+        execution_detector: ExecutionDetector.new,
         object_lister: ObjectLister.new,
         definition_tracer: DefinitionTracer.new,
         hierarchy_lister: HierarchyLister.new

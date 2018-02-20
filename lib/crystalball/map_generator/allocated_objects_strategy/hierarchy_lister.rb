@@ -15,7 +15,7 @@ module Crystalball
         end
 
         # @param Class klass
-        # @return Array[Class] list of ancestors of a klass
+        # @return Array[Class] list of ancestors of klass
         def ancestors_for(klass)
           (pick_ancestors(klass) + pick_ancestors(klass.singleton_class)).uniq
         end
