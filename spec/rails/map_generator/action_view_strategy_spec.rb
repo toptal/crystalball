@@ -3,8 +3,7 @@
 require 'rails_helper'
 
 describe Crystalball::Rails::MapGenerator::ActionViewStrategy do
-  subject(:strategy) { described_class.new(execution_detector) }
-  let(:execution_detector) { instance_double('Crystalball::Rails::MapGenerator::ActionViewStrategy::ExecutionDetector') }
+  subject(:strategy) { described_class.new }
 
   include_examples 'base strategy'
 
@@ -30,7 +29,7 @@ describe Crystalball::Rails::MapGenerator::ActionViewStrategy do
     let(:case_map) { [] }
 
     it 'pushes affected files detected by detector to case map' do
-      allow(execution_detector).to receive(:detect).with(['view']).and_return([1, 2, 3])
+      allow(strategy).to receive(:filter).with(['view']).and_return([1, 2, 3])
 
       expect do
         subject.call(case_map) do
@@ -40,7 +39,7 @@ describe Crystalball::Rails::MapGenerator::ActionViewStrategy do
     end
 
     it 'yields case_map to a block' do
-      allow(execution_detector).to receive(:detect).with([]).and_return([])
+      allow(strategy).to receive(:filter).with([]).and_return([])
 
       expect do |b|
         subject.call(case_map, &b)
