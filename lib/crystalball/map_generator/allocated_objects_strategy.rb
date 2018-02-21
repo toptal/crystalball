@@ -1,10 +1,8 @@
 # frozen_string_literal: true
 
 require 'crystalball/map_generator/base_strategy'
-require 'crystalball/map_generator/execution_detector'
-require 'crystalball/map_generator/allocated_objects_strategy/object_lister'
-require 'crystalball/map_generator/allocated_objects_strategy/definition_tracer'
-require 'crystalball/map_generator/allocated_objects_strategy/hierarchy_lister'
+require 'crystalball/map_generator/allocated_objects_strategy/execution_detector'
+require 'crystalball/map_generator/allocated_objects_strategy/object_tracker'
 
 module Crystalball
   class MapGenerator
@@ -12,55 +10,31 @@ module Crystalball
     # ancestors allocated during test example.
     class AllocatedObjectsStrategy
       include BaseStrategy
+      extend Forwardable
 
-      attr_reader :execution_detector, :definition_tracer, :object_lister, :hierarchy_lister
+      attr_reader :execution_detector, :object_tracker
+
+      delegate %i[after_register before_finalize] => :execution_detector
 
       def initialize(
         execution_detector: ExecutionDetector.new,
-        object_lister: ObjectLister.new,
-        definition_tracer: DefinitionTracer.new,
-        hierarchy_lister: HierarchyLister.new
+        object_tracker: ObjectTracker.new
       )
+        @object_tracker = object_tracker
         @execution_detector = execution_detector
-        @object_lister = object_lister
-        @definition_tracer = definition_tracer
-        @hierarchy_lister = hierarchy_lister
-      end
-
-      def after_register
-        definition_tracer.start
-      end
-
-      def before_finalize
-        definition_tracer.stop
       end
 
       def call(case_map)
         GC.start
         GC.disable
 
-        objects = object_lister.created_during do
+        objects = object_tracker.created_during do
           yield case_map
         end
 
-        paths = fetch_paths_for_objects(objects)
-        case_map.push(*execution_detector.detect(paths))
+        case_map.push(*execution_detector.detect(objects))
 
         GC.enable
-      end
-
-      private
-
-      def fetch_paths_for_objects(objects)
-        classes = objects.map do |object|
-          object.is_a?(Class) ? object : object.class
-        end.uniq
-
-        classes.flat_map do |klass|
-          hierarchy_lister.ancestors_for(klass).flat_map do |ancestor|
-            definition_tracer.constants_definition_paths[ancestor.name]
-          end
-        end.compact
       end
     end
   end

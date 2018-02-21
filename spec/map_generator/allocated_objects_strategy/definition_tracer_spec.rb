@@ -15,7 +15,7 @@ describe Crystalball::MapGenerator::AllocatedObjectsStrategy::DefinitionTracer d
       subject
     end
 
-    context 'tracepoint block' do
+    context 'with block' do
       let(:trace_point) { instance_double('TracePoint', enable: nil, path: path, binding: binding) }
       let(:binding) { instance_double('Binding') }
 
@@ -24,7 +24,7 @@ describe Crystalball::MapGenerator::AllocatedObjectsStrategy::DefinitionTracer d
         allow(binding).to receive(:eval).with('name') { name }
       end
 
-      context 'stores constant with path and name' do
+      context 'which stores' do
         let(:path) { 'some/dummy.rb' }
         let(:name) { 'Dummy' }
         let(:another_trace_point) { instance_double('TracePoint', enable: nil, path: another_path, binding: binding) }
@@ -34,27 +34,27 @@ describe Crystalball::MapGenerator::AllocatedObjectsStrategy::DefinitionTracer d
           allow(TracePoint).to receive(:new).with(:class) { trace_point }.and_yield(trace_point).and_yield(another_trace_point)
         end
 
-        specify do
+        it 'constant with path and name' do
           subject
           expect(tracer.constants_definition_paths).to eq('Dummy' => [path, another_path])
         end
       end
 
-      context 'skips constant without path' do
+      context 'which skips' do
         let(:path) { nil }
         let(:name) { 'Dummy' }
 
-        specify do
+        it 'constant without path' do
           subject
           expect(tracer.constants_definition_paths).to be_empty
         end
       end
 
-      context 'skips constant without name' do
+      context 'which skips' do
         let(:path) { 'some/dummy.rb' }
         let(:name) { nil }
 
-        specify do
+        it 'constant without name' do
           subject
           expect(tracer.constants_definition_paths).to be_empty
         end

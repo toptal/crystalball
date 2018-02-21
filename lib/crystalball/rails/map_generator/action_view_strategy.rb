@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'crystalball/map_generator/base_strategy'
-require 'crystalball/map_generator/execution_detector'
+require 'crystalball/map_generator/helpers/path_filter'
 require 'crystalball/rails/map_generator/action_view_strategy/patch'
 
 module Crystalball
@@ -10,7 +10,8 @@ module Crystalball
       # Map generator strategy to build map of views affected by an example.
       # It patches `ActionView::Template#compile!` to get original name of compiled views.
       class ActionViewStrategy
-        include Crystalball::MapGenerator::BaseStrategy
+        include ::Crystalball::MapGenerator::BaseStrategy
+        include ::Crystalball::MapGenerator::Helpers::PathFilter
 
         class << self
           # List of views affected by current example
@@ -24,12 +25,6 @@ module Crystalball
           end
         end
 
-        attr_reader :execution_detector
-
-        def initialize(execution_detector = ::Crystalball::MapGenerator::ExecutionDetector.new)
-          @execution_detector = execution_detector
-        end
-
         def after_start
           Patch.apply!
         end
@@ -41,7 +36,7 @@ module Crystalball
         def call(case_map)
           self.class.reset_views
           yield case_map
-          case_map.push(*execution_detector.detect(self.class.views))
+          case_map.push(*filter(self.class.views))
         end
       end
     end

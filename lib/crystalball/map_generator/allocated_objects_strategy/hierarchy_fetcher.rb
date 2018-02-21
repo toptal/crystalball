@@ -4,7 +4,7 @@ module Crystalball
   class MapGenerator
     class AllocatedObjectsStrategy
       # Class to get full hierarchy of a class(including singleton_class)
-      class HierarchyLister
+      class HierarchyFetcher
         DEFAULT_STOP_CLASSES = [Object, BasicObject].freeze
 
         attr_reader :stop_classes

@@ -4,7 +4,7 @@ module Crystalball
   class MapGenerator
     class AllocatedObjectsStrategy
       # Class to list objects from ObjectSpace
-      class ObjectLister
+      class ObjectTracker
         attr_reader :ignored_types
 
         DEFAULT_IGNORED_TYPES = [
