@@ -16,7 +16,8 @@ module Crystalball
           self.trace_point ||= TracePoint.new(:class) do |tp|
             class_name = tp.binding.eval('name')
             next unless class_name && tp.path
-            constants_definition_paths[class_name] = tp.path
+            constants_definition_paths[class_name] ||= []
+            constants_definition_paths[class_name] << tp.path
           end.tap(&:enable)
         end
 

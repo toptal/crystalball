@@ -57,7 +57,7 @@ module Crystalball
         end.uniq
 
         classes.flat_map do |klass|
-          hierarchy_lister.ancestors_for(klass).map do |ancestor|
+          hierarchy_lister.ancestors_for(klass).flat_map do |ancestor|
             definition_tracer.constants_definition_paths[ancestor.name]
           end
         end.compact

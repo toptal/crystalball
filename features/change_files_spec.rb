@@ -27,6 +27,23 @@ describe 'change files' do
     )
   end
 
+  it 'generates map if Class1 reopen is changed' do
+    class1_reopen_path.open('w') { |f| f.write <<~RUBY }
+      class Class1
+      end
+    RUBY
+
+    is_expected.to include(
+      './spec/class1_spec.rb[1:1:1]',
+      './spec/class1_spec.rb[1:1:2:1]',
+      './spec/class1_spec.rb[1:1:3:1]',
+      './spec/class1_spec.rb[1:1:4:1]',
+      './spec/class1_spec.rb[1:2:1]',
+      './spec/class1_spec.rb[1:3:1]',
+      './spec/file_spec.rb[1:1]'
+    )
+  end
+
   it 'generates map if Class2 is changed' do
     class2_path.open('a') { |f| f.write <<~RUBY }
       Class2.__send__(:attr_reader, :var)

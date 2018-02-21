@@ -8,6 +8,7 @@ shared_context 'simple git repository' do
   let(:lib_path) { root.join('lib') }
   let(:spec_path) { root.join('spec') }
   let(:class1_path) { lib_path.join('class1.rb') }
+  let(:class1_reopen_path) { lib_path.join('class1_reopen.rb') }
   let(:class2_path) { lib_path.join('class2.rb') }
   let(:class2_eval_path) { lib_path.join('class2_eval.rb') }
   let(:model1_path) { root.join('models', 'model1.rb') }
