@@ -15,4 +15,10 @@ shared_examples 'module1' do
       end
     end
   end
+
+  describe '#field' do
+    before { subject.field = 'value' }
+
+    it { expect(subject.field).to eq 'value' }
+  end
 end
