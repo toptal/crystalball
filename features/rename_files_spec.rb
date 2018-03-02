@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../spec/spec_helper'
+require_relative 'feature_helper'
 
 describe 'rename files' do
   subject(:forecast) do
