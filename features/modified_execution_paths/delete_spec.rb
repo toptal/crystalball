@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require_relative 'feature_helper'
+require_relative '../feature_helper'
 
-describe 'rename files' do
+describe 'delete files' do
   subject(:forecast) do
     Crystalball.foresee(workdir: root, map_path: root.join('execution_map.yml')) do |predictor|
       predictor.use Crystalball::Predictor::ModifiedExecutionPaths.new
@@ -10,9 +10,8 @@ describe 'rename files' do
   end
   include_context 'simple git repository'
 
-  it 'generates map if Class1 file was renamed' do
-    move_path = lib_path.join('my_class.rb')
-    git.lib.mv(class1_path, move_path)
+  it 'generates map if Class1 is deleted' do
+    delete class1_path
 
     is_expected.to include(
       './spec/class1_spec.rb[1:1:1]',
@@ -25,9 +24,8 @@ describe 'rename files' do
     )
   end
 
-  it 'generates map if Module1 file was renamed' do
-    move_path = lib_path.join('my_module.rb')
-    git.lib.mv(module1_path, move_path)
+  it 'generates map if Module1 is deleted' do
+    delete module1_path
 
     is_expected.to include(
       './spec/class1_spec.rb[1:1:1]',

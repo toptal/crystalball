@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'feature_helper'
+require_relative '../feature_helper'
 
 describe 'new spec file' do
   subject(:forecast) do

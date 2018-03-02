@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'feature_helper'
+require_relative '../feature_helper'
 
 describe 'change associated files' do
   subject(:forecast) do
@@ -12,13 +12,8 @@ describe 'change associated files' do
   include_context 'simple git repository'
 
   it 'generates map if Model1 is changed' do
-    model1_path.open('w') { |f| f.write <<~RUBY }
-      class Model1
-      end
-    RUBY
+    change model1_path
 
-    is_expected.to match_array(%w[
-                                 ./spec/models/model1_spec.rb
-                               ])
+    is_expected.to match_array(%w[./spec/models/model1_spec.rb])
   end
 end

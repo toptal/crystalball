@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'feature_helper'
+require_relative '../feature_helper'
 
 describe 'change files' do
   subject(:forecast) do
@@ -11,10 +11,7 @@ describe 'change files' do
   include_context 'simple git repository'
 
   it 'generates map if Class1 is changed' do
-    class1_path.open('w') { |f| f.write <<~RUBY }
-      class Class1
-      end
-    RUBY
+    change class1_path
 
     is_expected.to include(
       './spec/class1_spec.rb[1:1:1]',
@@ -28,10 +25,7 @@ describe 'change files' do
   end
 
   it 'generates map if Class1 reopen is changed' do
-    class1_reopen_path.open('w') { |f| f.write <<~RUBY }
-      class Class1
-      end
-    RUBY
+    change class1_reopen_path
 
     is_expected.to include(
       './spec/class1_spec.rb[1:1:1]',
@@ -45,9 +39,7 @@ describe 'change files' do
   end
 
   it 'generates map if Class2 is changed' do
-    class2_path.open('a') { |f| f.write <<~RUBY }
-      Class2.__send__(:attr_reader, :var)
-    RUBY
+    change class2_path
 
     is_expected.to include(
       './spec/class2_spec.rb[1:1:1]',
@@ -61,10 +53,7 @@ describe 'change files' do
   end
 
   it 'generates map if Module1 is changed' do
-    module1_path.open('w') { |f| f.write <<~RUBY }
-      module Module1
-      end
-    RUBY
+    change module1_path
 
     is_expected.to include(
       './spec/class1_spec.rb[1:1:1]',
@@ -81,10 +70,7 @@ describe 'change files' do
   end
 
   it 'generates map if Module2 is changed' do
-    module2_path.open('w') { |f| f.write <<~RUBY }
-      module Module2
-      end
-    RUBY
+    change module2_path
 
     is_expected.to include(
       './spec/class2_spec.rb[1:1:1]',
@@ -96,10 +82,7 @@ describe 'change files' do
   end
 
   it 'generated diff if changes were committed' do
-    class1_path.open('w') { |f| f.write <<~RUBY }
-      class Class1
-      end
-    RUBY
+    change class1_path
     git.add class1_path.to_s
     git.commit 'Second commit'
 
@@ -112,5 +95,28 @@ describe 'change files' do
       './spec/class1_spec.rb[1:3:1]',
       './spec/file_spec.rb[1:1]'
     )
+  end
+
+  it 'generates map if Model1 is changed' do
+    change model1_path
+
+    is_expected.to match_array(%w[
+                                 ./spec/models/model1_spec.rb[1:2:1]
+                                 ./spec/views/index.html.erb_spec.rb[1:1]
+                                 ./spec/views/index.html.erb_spec.rb[1:2]
+                                 ./spec/views/index.html.erb_spec.rb[1:3]
+                                 ./spec/views/show.html.erb_spec.rb[1:1]
+                               ])
+  end
+
+  it 'generates map if _item partial is changed' do
+    change item_view_path
+
+    is_expected.to match_array(%w[
+                                 ./spec/views/index.html.erb_spec.rb[1:1]
+                                 ./spec/views/index.html.erb_spec.rb[1:2]
+                                 ./spec/views/index.html.erb_spec.rb[1:3]
+                                 ./spec/views/show.html.erb_spec.rb[1:1]
+                               ])
   end
 end

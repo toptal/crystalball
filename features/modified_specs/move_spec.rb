@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require_relative 'feature_helper'
+require_relative '../feature_helper'
 
-describe 'rename specs' do
+describe 'move specs' do
   subject(:forecast) do
     Crystalball.foresee(workdir: root, map_path: root.join('execution_map.yml')) do |predictor|
       predictor.use Crystalball::Predictor::ModifiedSpecs.new
@@ -10,10 +10,9 @@ describe 'rename specs' do
   end
   include_context 'simple git repository'
 
-  it 'generates map if class1_spec file was renamed' do
-    move_path = spec_path.join('my_class_spec.rb')
-    git.lib.mv(class1_spec_path, move_path)
+  it 'generates map if class1_spec file was moved' do
+    move(class1_spec_path)
 
-    is_expected.to match_array(%w[spec/my_class_spec.rb])
+    is_expected.to match_array(%w[spec/moved_class1_spec.rb])
   end
 end

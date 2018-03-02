@@ -31,4 +31,18 @@ shared_context 'simple git repository' do
   after do
     root.rmtree
   end
+
+  def change(file_path)
+    file_path.write('changed')
+  end
+
+  def delete(file_path)
+    git.lib.remove file_path
+  end
+
+  def move(file_path)
+    move_path = file_path.dirname.join("moved_#{file_path.basename}")
+    git.lib.mv(file_path, move_path)
+    move_path
+  end
 end
