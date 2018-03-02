@@ -4,8 +4,10 @@ require 'spec_helper'
 
 describe Crystalball::ExecutionMap do
   subject { described_class.new }
-  let(:affected_files) { double }
+  let(:affected_files) { instance_double(Array) }
   let(:case_map) { instance_double(Crystalball::CaseMap, uid: 'file_spec.rb:1', affected_files: affected_files) }
+
+  before { allow(affected_files).to receive(:uniq) { affected_files } }
 
   describe '#<<' do
     it 'adds case to data' do
