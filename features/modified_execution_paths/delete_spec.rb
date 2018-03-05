@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative '../feature_helper'
+require_relative './shared_contexts/class1_examples'
 
 describe 'delete files' do
   subject(:forecast) do
@@ -9,18 +10,11 @@ describe 'delete files' do
     end
   end
   include_context 'simple git repository'
+  include_context 'class1 examples'
 
   it 'generates map if Class1 is deleted' do
     delete class1_path
 
-    is_expected.to include(
-      './spec/class1_spec.rb[1:1:1]',
-      './spec/class1_spec.rb[1:1:2:1]',
-      './spec/class1_spec.rb[1:1:3:1]',
-      './spec/class1_spec.rb[1:1:4:1]',
-      './spec/class1_spec.rb[1:2:1]',
-      './spec/class1_spec.rb[1:3:1]',
-      './spec/file_spec.rb[1:1]'
-    )
+    is_expected.to include(*class1_examples)
   end
 end
