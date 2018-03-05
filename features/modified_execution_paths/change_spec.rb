@@ -81,22 +81,6 @@ describe 'change files' do
     )
   end
 
-  it 'generated diff if changes were committed' do
-    change class1_path
-    git.add class1_path.to_s
-    git.commit 'Second commit'
-
-    is_expected.to include(
-      './spec/class1_spec.rb[1:1:1]',
-      './spec/class1_spec.rb[1:1:2:1]',
-      './spec/class1_spec.rb[1:1:3:1]',
-      './spec/class1_spec.rb[1:1:4:1]',
-      './spec/class1_spec.rb[1:2:1]',
-      './spec/class1_spec.rb[1:3:1]',
-      './spec/file_spec.rb[1:1]'
-    )
-  end
-
   it 'generates map if Model1 is changed' do
     change model1_path
 

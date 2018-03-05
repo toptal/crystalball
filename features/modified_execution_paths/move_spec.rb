@@ -23,21 +23,4 @@ describe 'move files' do
       './spec/file_spec.rb[1:1]'
     )
   end
-
-  it 'generates map if Module1 file was moved' do
-    move module1_path
-
-    is_expected.to include(
-      './spec/class1_spec.rb[1:1:1]',
-      './spec/class1_spec.rb[1:1:2:1]',
-      './spec/class1_spec.rb[1:1:3:1]',
-      './spec/class1_spec.rb[1:1:4:1]',
-      './spec/class1_spec.rb[1:2:1]',
-      './spec/class2_spec.rb[1:1:1]',
-      './spec/class2_spec.rb[1:1:2:1]',
-      './spec/class2_spec.rb[1:1:3:1]',
-      './spec/class2_spec.rb[1:1:4:1]',
-      './spec/class2_spec.rb[1:2:1]'
-    )
-  end
 end
