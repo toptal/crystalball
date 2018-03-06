@@ -11,21 +11,16 @@ module Crystalball
 
       # @param [String] SHA of commit
       # @param [String] type of execution map
-      def initialize(commit: nil, type: nil, version:)
+      def initialize(commit: nil, type: nil, version: nil)
         @commit = commit
         @type = type
         @version = version
       end
 
       def to_h
-        {type: type, version: version, commit: commit}
+        {type: type, commit: commit, version: version}
       end
     end
-
-    # Current version of generated map
-    # Change minor part in case of backward compatible changes of map
-    # Change major part in case of backward incompatible changes of map
-    VERSION = 1.0
 
     attr_reader :cases, :metadata
 
@@ -37,18 +32,7 @@ module Crystalball
     def initialize(metadata: {}, cases: {})
       @cases = cases
 
-      version = metadata[:version].to_f
-
-      if cases.any?
-        version = 1.0 if version.zero?
-        guard_version_compatibility(version)
-      elsif version.nonzero?
-        guard_version_compatibility(version)
-      else
-        version = VERSION
-      end
-
-      @metadata = Metadata.new(type: self.class.name, version: version, **metadata)
+      @metadata = Metadata.new(type: self.class.name, **metadata)
     end
 
     # Adds case map to the list
@@ -64,11 +48,6 @@ module Crystalball
     end
 
     private
-
-    def guard_version_compatibility(version)
-      version = 1.0 if version.zero?
-      raise "Execution map incompatible version: #{version}. Expected: ~#{VERSION}" if version.floor != VERSION.floor
-    end
 
     attr_writer :cases, :metadata
   end
