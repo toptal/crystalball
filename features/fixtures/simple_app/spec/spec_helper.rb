@@ -7,7 +7,7 @@ require_relative '../../../../lib/crystalball'
 require_relative '../../../../lib/crystalball/rails'
 Crystalball::MapGenerator.start! do |c|
   c.register Crystalball::MapGenerator::CoverageStrategy.new
-  c.register Crystalball::MapGenerator::AllocatedObjectsStrategy.new
+  c.register Crystalball::MapGenerator::AllocatedObjectsStrategy.build(only: ['Object'])
   c.register Crystalball::Rails::MapGenerator::ActionViewStrategy.new
 end
 

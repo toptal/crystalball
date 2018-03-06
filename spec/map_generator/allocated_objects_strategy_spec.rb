@@ -5,10 +5,27 @@ require 'spec_helper'
 describe Crystalball::MapGenerator::AllocatedObjectsStrategy do
   subject(:strategy) { described_class.new(execution_detector: execution_detector, object_tracker: object_tracker) }
 
-  let(:execution_detector) { instance_double('Crystalball::MapGenerator::ExecutionDetector') }
+  let(:execution_detector) { instance_double('Crystalball::MapGenerator::AllocatedObjectsStrategy::ExecutionDetector') }
   let(:object_tracker) { instance_double('Crystalball::MapGenerator::AllocatedObjectsStrategy::ObjectTracker') }
 
   include_examples 'base strategy'
+
+  describe '.build' do
+    let(:whitelist) { double }
+    let(:root) { double }
+
+    it 'creates a strategy with specified params' do
+      fetcher = instance_double('Crystalball::MapGenerator::AllocatedObjectsStrategy::HierarchyFetcher')
+      allow(Crystalball::MapGenerator::AllocatedObjectsStrategy::HierarchyFetcher).to receive(:new).with(whitelist).and_return(fetcher)
+
+      allow(Crystalball::MapGenerator::AllocatedObjectsStrategy::ExecutionDetector).to receive(:new).with(root_path: root, hierarchy_fetcher: fetcher).and_return(execution_detector)
+      allow(Crystalball::MapGenerator::AllocatedObjectsStrategy::ObjectTracker).to receive(:new).with(only_of: whitelist).and_return(object_tracker)
+
+      expect(described_class).to receive(:new).with(execution_detector: execution_detector, object_tracker: object_tracker).once
+
+      described_class.build(only: whitelist, root: root)
+    end
+  end
 
   describe '#call' do
     subject { strategy.call(case_map) {} }

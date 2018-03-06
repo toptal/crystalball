@@ -16,10 +16,14 @@ module Crystalball
 
       delegate %i[after_register before_finalize] => :execution_detector
 
-      def initialize(
-        execution_detector: ExecutionDetector.new,
-        object_tracker: ObjectTracker.new
-      )
+      def self.build(only: [], root: Dir.pwd)
+        hierarchy_fetcher = HierarchyFetcher.new(only)
+        execution_detector = ExecutionDetector.new(root_path: root, hierarchy_fetcher: hierarchy_fetcher)
+
+        new(execution_detector: execution_detector, object_tracker: ObjectTracker.new(only_of: only))
+      end
+
+      def initialize(execution_detector:, object_tracker:)
         @object_tracker = object_tracker
         @execution_detector = execution_detector
       end
