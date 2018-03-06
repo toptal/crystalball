@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require_relative '../spec/spec_helper'
+require_relative 'feature_helper'
 require_relative '../lib/crystalball/predictor_evaluator'
 
-describe 'evaluate prediction' do
+describe 'Prediction evaluation' do
   subject(:evaluator) do
     Crystalball::PredictorEvaluator.new(predictor, actual_failures: actual_failures)
   end
@@ -29,7 +29,7 @@ describe 'evaluate prediction' do
     RUBY
   end
 
-  specify do
+  it 'generates proper stats' do
     expect(evaluator).to have_attributes(
       predicted_failures: %w[./spec/models/model1_spec.rb],
       unpredicted_failures: %w[./spec/class1_spec.rb],

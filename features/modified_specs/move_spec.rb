@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require_relative '../spec/spec_helper'
+require_relative '../feature_helper'
 
-describe 'delete specs' do
+describe 'Moving spec file' do
   subject(:forecast) do
     Crystalball.foresee(workdir: root, map_path: root.join('execution_map.yml')) do |predictor|
       predictor.use Crystalball::Predictor::ModifiedSpecs.new
@@ -10,9 +10,9 @@ describe 'delete specs' do
   end
   include_context 'simple git repository'
 
-  it 'generates map if Class1 spec is deleted' do
-    git.lib.remove class1_spec_path
+  it 'adds it to a prediction list' do
+    move(class1_spec_path)
 
-    is_expected.to match_array([])
+    is_expected.to match_array(%w[spec/moved_class1_spec.rb])
   end
 end

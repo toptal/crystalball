@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require_relative '../spec/spec_helper'
+require_relative '../feature_helper'
 
-describe 'new spec file' do
+describe 'Creating spec file' do
   subject(:forecast) do
     Crystalball.foresee(workdir: root, map_path: root.join('execution_map.yml')) do |predictor|
       predictor.use Crystalball::Predictor::ModifiedSpecs.new
@@ -11,7 +11,7 @@ describe 'new spec file' do
 
   include_context 'simple git repository'
 
-  it 'adds new spec file to map' do
+  it 'adds it to a prediction list' do
     new_spec_path = spec_path.join('new_spec.rb')
     new_spec_path.open('w') { |f| f.write(<<~RUBY) }
       require 'spec_helper'
