@@ -2,7 +2,7 @@
 
 require_relative '../feature_helper'
 
-describe 'change associated files' do
+describe 'Changing associated source file' do
   subject(:forecast) do
     Crystalball.foresee(workdir: root, map_path: root.join('execution_map.yml')) do |predictor|
       predictor.use Crystalball::Predictor::AssociatedSpecs.new from: %r{models/(?<file>.*).rb},
@@ -11,7 +11,7 @@ describe 'change associated files' do
   end
   include_context 'simple git repository'
 
-  it 'generates map if Model1 is changed' do
+  it 'adds matched spec to a prediction list' do
     change model1_path
 
     is_expected.to match_array(%w[./spec/models/model1_spec.rb])

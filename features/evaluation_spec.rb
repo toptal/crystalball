@@ -3,7 +3,7 @@
 require_relative 'feature_helper'
 require_relative '../lib/crystalball/predictor_evaluator'
 
-describe 'evaluate prediction' do
+describe 'Prediction evaluation' do
   subject(:evaluator) do
     Crystalball::PredictorEvaluator.new(predictor, actual_failures: actual_failures)
   end

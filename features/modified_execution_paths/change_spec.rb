@@ -3,7 +3,7 @@
 require_relative '../feature_helper'
 require_relative './shared_contexts/class1_examples'
 
-describe 'change files' do
+describe 'Changing source file' do
   subject(:forecast) do
     Crystalball.foresee(workdir: root, map_path: root.join('execution_map.yml')) do |predictor|
       predictor.use Crystalball::Predictor::ModifiedExecutionPaths.new
@@ -12,19 +12,19 @@ describe 'change files' do
   include_context 'simple git repository'
   include_context 'class1 examples'
 
-  it 'generates map if Class1 is changed' do
+  it 'adds mapped examples to a prediction list for Class1 definition' do
     change class1_path
 
     is_expected.to include(*class1_examples)
   end
 
-  it 'generates map if Class1 reopen is changed' do
+  it 'adds mapped examples to a prediction list for Class1 reopen' do
     change class1_reopen_path
 
     is_expected.to include(*class1_examples)
   end
 
-  it 'generates map if Class2 is changed' do
+  it 'adds mapped examples to a prediction list for Class2 definition' do
     change class2_path
 
     is_expected.to include(
@@ -38,7 +38,7 @@ describe 'change files' do
     )
   end
 
-  it 'generates map if Module1 is changed' do
+  it 'adds mapped examples to a prediction list for Module1 definition' do
     change module1_path
 
     is_expected.to include(
@@ -55,7 +55,7 @@ describe 'change files' do
     )
   end
 
-  it 'generates map if Module2 is changed' do
+  it 'adds mapped examples to a prediction list for Module2 definition' do
     change module2_path
 
     is_expected.to include(
@@ -67,7 +67,7 @@ describe 'change files' do
     )
   end
 
-  it 'generates map if Model1 is changed' do
+  it 'adds mapped examples to a prediction list for Model1 definition' do
     change model1_path
 
     is_expected.to match_array(%w[
@@ -79,7 +79,7 @@ describe 'change files' do
                                ])
   end
 
-  it 'generates map if _item partial is changed' do
+  it 'adds mapped examples to a prediction list for _item view' do
     change item_view_path
 
     is_expected.to match_array(%w[

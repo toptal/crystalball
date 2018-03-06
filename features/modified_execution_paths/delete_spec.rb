@@ -3,7 +3,7 @@
 require_relative '../feature_helper'
 require_relative './shared_contexts/class1_examples'
 
-describe 'delete files' do
+describe 'Deleting source file' do
   subject(:forecast) do
     Crystalball.foresee(workdir: root, map_path: root.join('execution_map.yml')) do |predictor|
       predictor.use Crystalball::Predictor::ModifiedExecutionPaths.new
@@ -12,7 +12,7 @@ describe 'delete files' do
   include_context 'simple git repository'
   include_context 'class1 examples'
 
-  it 'generates map if Class1 is deleted' do
+  it 'adds mapped examples to a prediction list' do
     delete class1_path
 
     is_expected.to include(*class1_examples)

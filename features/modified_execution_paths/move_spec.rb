@@ -3,7 +3,7 @@
 require_relative '../feature_helper'
 require_relative './shared_contexts/class1_examples'
 
-describe 'move files' do
+describe 'Moving source file' do
   subject(:forecast) do
     Crystalball.foresee(workdir: root, map_path: root.join('execution_map.yml')) do |predictor|
       predictor.use Crystalball::Predictor::ModifiedExecutionPaths.new
@@ -12,7 +12,7 @@ describe 'move files' do
   include_context 'simple git repository'
   include_context 'class1 examples'
 
-  it 'generates map if Class1 file was moved' do
+  it 'adds mapped examples to a prediction list' do
     move class1_path
 
     is_expected.to include(*class1_examples)

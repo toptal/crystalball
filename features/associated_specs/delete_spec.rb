@@ -2,7 +2,7 @@
 
 require_relative '../feature_helper'
 
-describe 'delete associated files' do
+describe 'Deleting associated source file' do
   subject(:forecast) do
     Crystalball.foresee(workdir: root, map_path: root.join('execution_map.yml')) do |predictor|
       predictor.use Crystalball::Predictor::AssociatedSpecs.new from: %r{models/(?<file>.*).rb},
@@ -11,7 +11,7 @@ describe 'delete associated files' do
   end
   include_context 'simple git repository'
 
-  it 'generates map if Model1 is deleted' do
+  it 'adds matched spec to a prediction list' do
     delete model1_path
 
     is_expected.to match_array(%w[./spec/models/model1_spec.rb])
