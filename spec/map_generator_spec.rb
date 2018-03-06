@@ -67,11 +67,14 @@ describe Crystalball::MapGenerator do
       end
     end
 
+    let(:version) { 1.5 }
+
     before do
       configuration.commit = 'abc'
       configuration.dump_threshold = threshold
       configuration.map_storage = storage
       configuration.register dummy_strategy
+      stub_const('::Crystalball::ExecutionMap::VERSION', version)
     end
 
     describe '#start!' do
@@ -87,7 +90,7 @@ describe Crystalball::MapGenerator do
       end
 
       it 'dump new map metadata to storage' do
-        expect(storage).to receive(:dump).with(type: map_class.to_s, commit: 'abc')
+        expect(storage).to receive(:dump).with(type: map_class.to_s, commit: 'abc', version: version)
         subject.start!
       end
 

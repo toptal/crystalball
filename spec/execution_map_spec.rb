@@ -25,4 +25,38 @@ describe Crystalball::ExecutionMap do
       end.to change { subject.cases.size }.by(-1)
     end
   end
+
+  context 'controls version compatibility' do
+    subject { described_class.new(metadata: {version: version}, cases: cases) }
+    let(:cases) { {'spec' => ['file']} }
+
+    before do
+      stub_const("#{described_class}::VERSION", 1.0)
+    end
+
+    context 'and passes for compatible version' do
+      let(:version) { '1.5' }
+
+      specify do
+        expect { subject }.not_to raise_error(StandardError)
+      end
+    end
+
+    context 'and works with specified version but without cases' do
+      let(:version) { '1.5' }
+      let(:cases) { {} }
+
+      specify do
+        expect { subject }.not_to raise_error(StandardError)
+      end
+    end
+
+    context 'and raises for incompatible version' do
+      let(:version) { '2.0' }
+
+      specify do
+        expect { subject }.to raise_error('Execution map incompatible version: 2.0. Expected: ~1.0')
+      end
+    end
+  end
 end
