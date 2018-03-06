@@ -20,7 +20,10 @@ describe Crystalball::MapGenerator::AllocatedObjectsStrategy::HierarchyFetcher d
     end
 
     context 'when stop classes passed' do
-      let(:stop_classes) { [ancestor3] }
+      let(:stop_classes) { ['Dummy'] }
+      let(:ancestor3) { Dummy }
+
+      before { stub_const('Dummy', Class.new) }
 
       it 'filters ancestors' do
         expect(subject).to match_array [ancestor1, ancestor2]

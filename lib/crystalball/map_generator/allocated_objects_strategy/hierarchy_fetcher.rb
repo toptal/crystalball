@@ -5,12 +5,10 @@ module Crystalball
     class AllocatedObjectsStrategy
       # Class to get full hierarchy of a module(including singleton_class)
       class HierarchyFetcher
-        DEFAULT_STOP_MODULES = [Object, BasicObject].freeze
-
         attr_reader :stop_modules
 
         # @param Array[String] stop_modules list of classes or modules which will be used to stop hierarchy lookup
-        def initialize(stop_modules = DEFAULT_STOP_MODULES)
+        def initialize(stop_modules = [])
           @stop_modules = stop_modules
         end
 
@@ -22,9 +20,13 @@ module Crystalball
 
         private
 
+        def stop_consts
+          @stop_consts ||= stop_modules.map { |str| Object.const_get(str) }
+        end
+
         def pick_ancestors(mod)
           ancestors = mod.ancestors
-          index = ancestors.index { |k| stop_modules.include?(k) } || ancestors.size
+          index = ancestors.index { |k| stop_consts.include?(k) } || ancestors.size
           ancestors[0...index]
         end
       end

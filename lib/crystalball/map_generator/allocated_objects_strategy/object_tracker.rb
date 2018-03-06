@@ -8,7 +8,7 @@ module Crystalball
         attr_reader :only_of
 
         # @param Array[Module] only_of classes or modules to watch on
-        def initialize(only_of: [Object])
+        def initialize(only_of: ['Object'])
           @allocated_ids = Set.new
           @only_of = only_of
         end
@@ -25,8 +25,12 @@ module Crystalball
 
         attr_accessor :allocated_ids
 
+        def whitelisted_constants
+          @whitelisted_constants ||= only_of.map { |str| Object.const_get(str) }
+        end
+
         def store_allocated_ids
-          only_of.each do |mod|
+          whitelisted_constants.each do |mod|
             ObjectSpace.each_object(mod) do |object|
               allocated_ids << object.__id__
             end
@@ -36,7 +40,7 @@ module Crystalball
         def new_allocated_objects
           objects = []
 
-          only_of.each do |mod|
+          whitelisted_constants.each do |mod|
             ObjectSpace.each_object(mod) do |object|
               next if allocated_ids.include?(object.__id__)
 

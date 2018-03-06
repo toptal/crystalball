@@ -5,7 +5,7 @@ require 'spec_helper'
 describe Crystalball::MapGenerator::AllocatedObjectsStrategy::ObjectTracker do
   subject(:tracker) { described_class.new(only_of: only_of) }
 
-  let(:only_of) { [Object] }
+  let(:only_of) { ['Object'] }
   let(:obj1) { double }
   let(:obj2) { double(class: Dummy) }
 
