@@ -58,7 +58,7 @@ module Crystalball
     end
 
     def map
-      @map ||= map_class.new(metadata: {commit: configuration.commit})
+      @map ||= map_class.new(metadata: {commit: configuration.commit, version: configuration.version})
     end
 
     private

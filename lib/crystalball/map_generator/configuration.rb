@@ -10,6 +10,7 @@ module Crystalball
       attr_writer :map_storage
       attr_writer :map_class
       attr_accessor :commit
+      attr_accessor :version
 
       attr_reader :strategies
 

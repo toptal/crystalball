@@ -7,17 +7,18 @@ module Crystalball
 
     # Simple data object for map metadata information
     class Metadata
-      attr_accessor :commit, :type
+      attr_accessor :commit, :type, :version
 
       # @param [String] SHA of commit
       # @param [String] type of execution map
-      def initialize(commit: nil, type: nil)
+      def initialize(commit: nil, type: nil, version: nil)
         @commit = commit
         @type = type
+        @version = version
       end
 
       def to_h
-        {type: type, commit: commit}
+        {type: type, commit: commit, version: version}
       end
     end
 
@@ -30,6 +31,7 @@ module Crystalball
     # @param [Hash] initial list of cases
     def initialize(metadata: {}, cases: {})
       @cases = cases
+
       @metadata = Metadata.new(type: self.class.name, **metadata)
     end
 
