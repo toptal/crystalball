@@ -2,7 +2,7 @@
 
 module Crystalball
   class MapGenerator
-    # Map generator strategy based on harvesting Coverage information during example execution
+    # Manages map generation strategies
     class StrategiesCollection
       include Enumerable
 
@@ -10,6 +10,9 @@ module Crystalball
         @strategies = strategies
       end
 
+      # Calls every strategy on the given case map and returns the modified case map
+      # @param [Crystalball::CaseMap] initial case map
+      # @return [Crystalball::CaseMap] case map augmented by each strategy
       def run(case_map, example, &block)
         run_for_strategies(case_map, example, *_strategies.reverse, &block)
         case_map

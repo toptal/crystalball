@@ -20,6 +20,9 @@ module Crystalball
         Coverage.start
       end
 
+      # Adds to the case_map's affected files the ones the ones in which
+      # the coverage has changed after the tests runs.
+      # @param [Crystalball::CaseMap] object holding example metadata and affected files
       def call(case_map, _)
         before = Coverage.peek_result
         yield case_map
