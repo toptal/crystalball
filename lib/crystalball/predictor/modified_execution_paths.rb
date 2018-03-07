@@ -6,7 +6,6 @@ module Crystalball
     # specs depend on which files and will return only those specs which depend on files modified since last time map
     # was generated.
     class ModifiedExecutionPaths
-
       # @param [Crystalball::SourceDiff] diff - the diff from which to predict
       #   which specs should run
       # @param [Crystalball::CaseMap] map - the map with the relations of
