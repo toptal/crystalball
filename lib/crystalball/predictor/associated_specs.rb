@@ -6,8 +6,8 @@ module Crystalball
     # When used will look for files matched to `from` regex and use captures to fill `to` string to
     # get paths of proper specs
     class AssociatedSpecs
-      # @param [Regexp] regular expression to match specific files and get proper captures
-      # @param [String] string in sprintf format to get proper files using captures of regexp
+      # @param [Regexp] from - regular expression to match specific files and get proper captures
+      # @param [String] to - string in sprintf format to get proper files using captures of regexp
       def initialize(from:, to:)
         @from = from
         @to = to

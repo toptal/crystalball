@@ -4,7 +4,7 @@ module Crystalball
   class SourceDiff
     # Data object for single file in Git repo diff
     class FileDiff
-      # @param [Git::DiffFile] raw diff for a single file made by ruby-git gem
+      # @param [Git::DiffFile] git_diff - raw diff for a single file made by ruby-git gem
       def initialize(git_diff)
         @git_diff = git_diff
       end

@@ -42,9 +42,9 @@ module Crystalball
         @dump_threshold = value.to_i
       end
 
-      # Rigister new strategy for map generation
+      # Register new strategy for map generation
       #
-      # @param [Crystalball::MapGenerator::BaseStrategy]
+      # @param [Crystalball::MapGenerator::BaseStrategy] strategy
       def register(strategy)
         @strategies.push strategy
         strategy.after_register

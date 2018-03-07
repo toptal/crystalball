@@ -12,7 +12,7 @@ module Crystalball
 
       # Each strategy must implement #call augmenting the affected_files list and
       # yielding back the CaseMap.
-      # @param [Crystalball::CaseMap] object holding example metadata and affected files
+      # @param [Crystalball::CaseMap] _case_map - object holding example metadata and affected files
       def call(_case_map, _example)
         raise NotImplementedError
       end

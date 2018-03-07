@@ -20,7 +20,7 @@ module Crystalball
 
     # Adds additional predictor to use
     #
-    # @param [Object]
+    # @param [#call] strategy - the strategy can be any object that responds to #call
     def use(strategy)
       prediction_strategies << strategy
     end

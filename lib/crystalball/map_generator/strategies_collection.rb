@@ -11,7 +11,7 @@ module Crystalball
       end
 
       # Calls every strategy on the given case map and returns the modified case map
-      # @param [Crystalball::CaseMap] initial case map
+      # @param [Crystalball::CaseMap] case_map - initial case map
       # @return [Crystalball::CaseMap] case map augmented by each strategy
       def run(case_map, example, &block)
         run_for_strategies(case_map, example, *_strategies.reverse, &block)

@@ -30,7 +30,7 @@ module Crystalball
 
       # Adds to the affected files every file which contain the definition of the
       # classes of the objects created during the spec execution.
-      # @param [Crystalball::CaseMap] object holding example metadata and affected files
+      # @param [Crystalball::CaseMap] case_map - object holding example metadata and affected files
       def call(case_map, _)
         GC.start
         GC.disable
