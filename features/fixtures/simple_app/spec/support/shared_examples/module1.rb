@@ -21,4 +21,10 @@ shared_examples 'module1' do
 
     it { expect(subject.field).to eq 'value' }
   end
+
+  describe '#name' do
+    subject { super().name }
+
+    it { is_expected.to eq name }
+  end
 end

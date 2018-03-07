@@ -2,6 +2,7 @@
 
 require 'rspec'
 require 'action_view'
+require 'i18n'
 
 require_relative '../../../../lib/crystalball'
 require_relative '../../../../lib/crystalball/rails'
@@ -14,6 +15,7 @@ end
 
 require_relative 'support/shared_examples/module1.rb'
 require_relative 'support/shared_contexts/action_view.rb'
+require_relative '../lib/locales.rb'
 require_relative '../lib/module1.rb'
 require_relative '../lib/class1.rb'
 require_relative '../lib/class1_reopen.rb'

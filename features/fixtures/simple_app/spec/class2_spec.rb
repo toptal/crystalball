@@ -3,6 +3,8 @@
 require 'spec_helper'
 
 describe Class2 do
+  let(:name) { 'Johanne Doe' }
+
   include_examples 'module1'
 
   describe '#bar' do
@@ -16,6 +18,12 @@ describe Class2 do
 
     before { described_class.another_field = 'value' }
 
-    it { expect(subject).to eq 'value' }
+    it { is_expected.to eq 'value' }
+  end
+
+  describe '#translated_value' do
+    subject { super().translated_value }
+
+    it { is_expected.to eq 'Something' }
   end
 end
