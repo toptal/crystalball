@@ -13,6 +13,11 @@ module Crystalball
         @to = to
       end
 
+      # This strategy does not depend on a previously generated case map.
+      # It uses the defined regex rules to infer which specs to run.
+      # @param [Crystalball::SourceDiff] diff - the diff from which to predict
+      #   which specs should run
+      # @return [Array<String>] the spec paths associated with the changes
       def call(diff, _)
         diff.map(&:relative_path).grep(from)
             .map { |source_file_path| to % captures(source_file_path) }
