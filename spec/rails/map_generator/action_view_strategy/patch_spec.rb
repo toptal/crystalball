@@ -7,7 +7,7 @@ describe Crystalball::Rails::MapGenerator::ActionViewStrategy::Patch do
     Class.new do
       include Crystalball::Rails::MapGenerator::ActionViewStrategy::Patch
 
-      def old_compile!(mod); end
+      def cb_original_compile!(mod); end
 
       def identifier
         'view'
@@ -16,25 +16,34 @@ describe Crystalball::Rails::MapGenerator::ActionViewStrategy::Patch do
   end
 
   context 'ActionView::Template patching' do
+    let!(:patched_class) do
+      stub_const(
+        '::ActionView::Template',
+        Class.new do
+          def compile!; end
+        end
+      )
+    end
+
     it 'changes and restores compile! method' do
-      original_compile = ::ActionView::Template.instance_method(:compile!)
+      original_compile = patched_class.instance_method(:compile!)
       described_class.apply!
-      expect(::ActionView::Template.instance_method(:compile!)).not_to eq original_compile
+      expect(patched_class.instance_method(:compile!)).not_to eq original_compile
       described_class.revert!
-      expect(::ActionView::Template.instance_method(:compile!)).to eq original_compile
+      expect(patched_class.instance_method(:compile!)).to eq original_compile
     end
   end
 
-  describe '#new_compile!' do
-    subject { instance.new_compile!(mod) }
+  describe '#cb_patched_compile!' do
+    subject { instance.cb_patched_compile!(mod) }
     let(:mod) { 'some' }
     let(:views) { [] }
 
     before { allow(Crystalball::Rails::MapGenerator::ActionViewStrategy).to receive(:views) { views } }
 
     it do
-      expect(instance).to receive(:old_compile!).with(mod)
-      subject
+      expect(instance).to receive(:cb_original_compile!).with(mod)
+      expect { subject }.to change { views }.from([]).to(['view'])
     end
   end
 end

@@ -98,8 +98,8 @@ describe 'Changing source file' do
     change name_locale_path
 
     is_expected.to include(
-      '.spec/class1_spec.rb[1:3:1]',
-      '.spec/class2_spec.rb[1:3:1]',
+      './spec/class1_spec.rb[1:3:1]',
+      './spec/class2_spec.rb[1:3:1]'
     )
   end
 
@@ -107,7 +107,7 @@ describe 'Changing source file' do
     change value_locale_path
 
     is_expected.to include(
-      '.spec/class2_spec.rb[1:6:1]'
+      './spec/class2_spec.rb[1:6:1]'
     )
   end
 end

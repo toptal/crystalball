@@ -3,7 +3,7 @@
 module Crystalball
   class MapGenerator
     module Helpers
-      # Class for filtering files paths
+      # Helper module to filter file paths
       module PathFilter
         attr_reader :root_path
 

@@ -16,9 +16,9 @@ describe Class2 do
   describe '.another_field' do
     subject { described_class.another_field }
 
-    before { described_class.another_field = 'value' }
+    before { described_class.another_field = '123' }
 
-    it { is_expected.to eq 'value' }
+    it { is_expected.to eq '123' }
   end
 
   describe '#translated_value' do
