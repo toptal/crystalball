@@ -93,4 +93,21 @@ describe 'Changing source file' do
                                  ./spec/views/show.html.erb_spec.rb[1:1]
                                ])
   end
+
+  it 'adds mapped examples to a prediction list for name locale' do
+    change name_locale_path
+
+    is_expected.to include(
+      '.spec/class1_spec.rb[1:3:1]',
+      '.spec/class2_spec.rb[1:3:1]',
+    )
+  end
+
+  it 'adds mapped examples to a prediction list for value locale' do
+    change value_locale_path
+
+    is_expected.to include(
+      '.spec/class2_spec.rb[1:6:1]'
+    )
+  end
 end
