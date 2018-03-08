@@ -23,6 +23,8 @@ module Crystalball
         new(execution_detector: execution_detector, object_tracker: ObjectTracker.new(only_of: only))
       end
 
+      # @param [#detect] execution_detector
+      # @param [#created_during] object_tracker
       def initialize(execution_detector:, object_tracker:)
         @object_tracker = object_tracker
         @execution_detector = execution_detector
