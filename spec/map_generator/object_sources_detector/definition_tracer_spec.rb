@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe Crystalball::MapGenerator::AllocatedObjectsStrategy::DefinitionTracer do
+describe Crystalball::MapGenerator::ObjectSourcesDetector::DefinitionTracer do
   subject(:tracer) { described_class.new(root_path) }
 
   let(:trace_point) { instance_double('TracePoint', enable: true) }

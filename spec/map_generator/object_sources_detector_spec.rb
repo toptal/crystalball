@@ -2,11 +2,11 @@
 
 require 'spec_helper'
 
-describe Crystalball::MapGenerator::AllocatedObjectsStrategy::ExecutionDetector do
+describe Crystalball::MapGenerator::ObjectSourcesDetector do
   subject(:detector) { described_class.new(root_path: Dir.pwd, definition_tracer: definition_tracer, hierarchy_fetcher: hierarchy_fetcher) }
 
-  let(:definition_tracer) { instance_double('Crystalball::MapGenerator::AllocatedObjectsStrategy::DefinitionTracer') }
-  let(:hierarchy_fetcher) { instance_double('Crystalball::MapGenerator::AllocatedObjectsStrategy::HierarchyFetcher') }
+  let(:definition_tracer) { instance_double('Crystalball::MapGenerator::ObjectSourcesDetector::DefinitionTracer') }
+  let(:hierarchy_fetcher) { instance_double('Crystalball::MapGenerator::ObjectSourcesDetector::HierarchyFetcher') }
 
   describe '#after_register' do
     subject { detector.after_register }

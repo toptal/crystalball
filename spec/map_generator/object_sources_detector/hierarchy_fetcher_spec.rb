@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe Crystalball::MapGenerator::AllocatedObjectsStrategy::HierarchyFetcher do
+describe Crystalball::MapGenerator::ObjectSourcesDetector::HierarchyFetcher do
   subject(:fetcher) { described_class.new(stop_classes) }
 
   let(:stop_classes) { [] }

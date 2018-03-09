@@ -32,7 +32,7 @@ describe Crystalball::Rails::MapGenerator::ActionViewStrategy do
       allow(strategy).to receive(:filter).with(['view']).and_return([1, 2, 3])
 
       expect do
-        subject.call(case_map) do
+        subject.call(case_map, 'example') do
           Crystalball::Rails::MapGenerator::ActionViewStrategy.views.push 'view'
         end
       end.to change { case_map }.to [1, 2, 3]
@@ -42,7 +42,7 @@ describe Crystalball::Rails::MapGenerator::ActionViewStrategy do
       allow(strategy).to receive(:filter).with([]).and_return([])
 
       expect do |b|
-        subject.call(case_map, &b)
+        subject.call(case_map, 'example', &b)
       end.to yield_with_args(case_map)
     end
   end

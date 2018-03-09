@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'crystalball/map_generator/base_strategy'
-require 'crystalball/map_generator/allocated_objects_strategy/execution_detector'
+require 'crystalball/map_generator/object_sources_detector'
 require 'crystalball/map_generator/allocated_objects_strategy/object_tracker'
 
 module Crystalball
@@ -17,8 +17,8 @@ module Crystalball
       delegate %i[after_register before_finalize] => :execution_detector
 
       def self.build(only: [], root: Dir.pwd)
-        hierarchy_fetcher = HierarchyFetcher.new(only)
-        execution_detector = ExecutionDetector.new(root_path: root, hierarchy_fetcher: hierarchy_fetcher)
+        hierarchy_fetcher = ObjectSourcesDetector::HierarchyFetcher.new(only)
+        execution_detector = ObjectSourcesDetector.new(root_path: root, hierarchy_fetcher: hierarchy_fetcher)
 
         new(execution_detector: execution_detector, object_tracker: ObjectTracker.new(only_of: only))
       end
@@ -28,7 +28,7 @@ module Crystalball
         @execution_detector = execution_detector
       end
 
-      def call(case_map)
+      def call(case_map, _)
         GC.start
         GC.disable
 

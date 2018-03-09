@@ -6,16 +6,18 @@ describe Crystalball::MapGenerator::StrategiesCollection do
   subject { described_class.new }
 
   let(:strategy1) do
-    lambda do |val, &block|
+    lambda do |val, example, &block|
       val.push('1')
+      val.push(example)
       block.call(val)
       val.push('1')
     end
   end
 
   let(:strategy2) do
-    lambda do |val, &block|
+    lambda do |val, _example, &block|
       val.push('2')
+      val.push('example')
       block.call(val)
       val.push('2')
     end
@@ -29,6 +31,8 @@ describe Crystalball::MapGenerator::StrategiesCollection do
   end
 
   describe '#run' do
+    let(:example) { 'example' }
+
     before do
       subject.push(strategy1, strategy2)
     end
@@ -36,8 +40,8 @@ describe Crystalball::MapGenerator::StrategiesCollection do
     it 'wraps strategies one into another' do
       result = []
       expect do
-        subject.run(result) { |v| v.push('BLOCK') }
-      end.to change { result }.to(%w[2 1 BLOCK 1 2])
+        subject.run(result, example) { |v| v.push('BLOCK') }
+      end.to change { result }.to(%w[2 example 1 example BLOCK 1 2])
     end
   end
 end

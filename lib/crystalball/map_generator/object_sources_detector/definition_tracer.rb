@@ -2,7 +2,7 @@
 
 module Crystalball
   class MapGenerator
-    class AllocatedObjectsStrategy
+    class ObjectSourcesDetector
       # Class to save paths to classes and modules definitions during code loading. Should be
       # started as soon as possible. Use #constants_definition_paths to fetch traced info
       class DefinitionTracer
