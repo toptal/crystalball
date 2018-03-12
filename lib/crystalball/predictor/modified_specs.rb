@@ -6,7 +6,7 @@ module Crystalball
     # return all new or modified files. You can specify spec regexp using first parameter to `#initialize`.
     class ModifiedSpecs
       # @param [Regexp] regexp to filter specs files
-      def initialize(spec_pattern = /.*_spec\.rb\z/)
+      def initialize(spec_pattern = %r{spec/.*_spec\.rb\z})
         @spec_pattern = spec_pattern
       end
 
