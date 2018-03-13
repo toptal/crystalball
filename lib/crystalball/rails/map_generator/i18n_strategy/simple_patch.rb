@@ -61,9 +61,10 @@ module Crystalball
             data.each do |key, value|
               case value
               when Hash
+                next if value.frozen?
                 cb_add_filename_to_values(value, filename)
               else
-                data[key] = {cb_filename: filename, cb_value: value}
+                data[key] = {cb_filename: filename, cb_value: value}.freeze
               end
             end
           end
