@@ -27,13 +27,13 @@ describe Crystalball::MapGenerator::CoverageStrategy do
 
     it 'pushes affected files detected by detector to case map' do
       expect do
-        subject.call(case_map) {}
+        subject.call(case_map, 'example') {}
       end.to change { case_map }.to [1, 2, 3]
     end
 
     it 'yields case_map to a block' do
       expect do |b|
-        subject.call(case_map, &b)
+        subject.call(case_map, 'example', &b)
       end.to yield_with_args(case_map)
     end
   end

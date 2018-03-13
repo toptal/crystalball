@@ -34,6 +34,7 @@ describe 'Changing source file' do
       './spec/class2_spec.rb[1:1:4:1]',
       './spec/class2_spec.rb[1:2:1]',
       './spec/class2_spec.rb[1:3:1]',
+      './spec/class2_spec.rb[1:4:1]',
       './spec/file_spec.rb[1:2]'
     )
   end
@@ -51,7 +52,8 @@ describe 'Changing source file' do
       './spec/class2_spec.rb[1:1:2:1]',
       './spec/class2_spec.rb[1:1:3:1]',
       './spec/class2_spec.rb[1:1:4:1]',
-      './spec/class2_spec.rb[1:2:1]'
+      './spec/class2_spec.rb[1:2:1]',
+      './spec/class2_spec.rb[1:4:1]'
     )
   end
 
@@ -63,7 +65,8 @@ describe 'Changing source file' do
       './spec/class2_spec.rb[1:1:2:1]',
       './spec/class2_spec.rb[1:1:3:1]',
       './spec/class2_spec.rb[1:1:4:1]',
-      './spec/class2_spec.rb[1:2:1]'
+      './spec/class2_spec.rb[1:2:1]',
+      './spec/class2_spec.rb[1:4:1]'
     )
   end
 
@@ -71,6 +74,7 @@ describe 'Changing source file' do
     change model1_path
 
     is_expected.to match_array(%w[
+                                 ./spec/models/model1_spec.rb[1:1:1]
                                  ./spec/models/model1_spec.rb[1:2:1]
                                  ./spec/views/index.html.erb_spec.rb[1:1]
                                  ./spec/views/index.html.erb_spec.rb[1:2]

@@ -1,0 +1,36 @@
+# frozen_string_literal: true
+
+require 'spec_helper'
+
+describe Crystalball::MapGenerator::DescribedClassStrategy do
+  subject(:strategy) { described_class.new(execution_detector: execution_detector) }
+
+  let(:execution_detector) { instance_double('Crystalball::MapGenerator::ObjectSourcesDetector') }
+
+  include_examples 'base strategy'
+
+  describe '#call' do
+    subject { strategy.call(case_map, example) {} }
+
+    let(:case_map) { [] }
+    let(:objects) { [Dummy] }
+    let(:example) { double(metadata: {described_class: Dummy}) }
+
+    before do
+      stub_const('Dummy', Class.new)
+      allow(execution_detector).to receive(:detect).with(objects) { [1, 2, 3] }
+    end
+
+    it 'yields case_map to a block' do
+      expect do |b|
+        strategy.call(case_map, example, &b)
+      end.to yield_with_args(case_map)
+    end
+
+    it 'pushes affected files detected by detector to case map' do
+      expect do
+        subject
+      end.to change { case_map }.to [1, 2, 3]
+    end
+  end
+end

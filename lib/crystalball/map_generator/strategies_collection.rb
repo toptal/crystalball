@@ -10,8 +10,8 @@ module Crystalball
         @strategies = strategies
       end
 
-      def run(case_map, &block)
-        run_for_strategies(case_map, *_strategies.reverse, &block)
+      def run(case_map, example, &block)
+        run_for_strategies(case_map, example, *_strategies.reverse, &block)
         case_map
       end
 
@@ -29,11 +29,11 @@ module Crystalball
         @strategies
       end
 
-      def run_for_strategies(case_map, *strats, &block)
+      def run_for_strategies(case_map, example, *strats, &block)
         return yield(case_map) if strats.empty?
 
         strat = strats.shift
-        strat.call(case_map) { |c| run_for_strategies(c, *strats, &block) }
+        strat.call(case_map, example) { |c| run_for_strategies(c, example, *strats, &block) }
       end
     end
   end

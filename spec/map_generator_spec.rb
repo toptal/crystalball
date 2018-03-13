@@ -61,7 +61,7 @@ describe Crystalball::MapGenerator do
   context 'configured' do
     let(:dummy_strategy) do
       double.as_null_object.tap do |s|
-        def s.call(case_map)
+        def s.call(case_map, _example)
           yield case_map
         end
       end
@@ -163,8 +163,9 @@ describe Crystalball::MapGenerator do
       end
 
       it 'adds execution map for given case' do
-        allow(configuration.strategies).to receive(:run).with(kind_of(Crystalball::CaseMap)).and_return(example_map('1'))
         rspec_case = rspec_example
+        allow(configuration.strategies).to receive(:run).with(kind_of(Crystalball::CaseMap), rspec_case)
+                                                        .and_return(example_map('1'))
         expect do
           subject.refresh_for_case(rspec_case)
         end.to change { subject.map.size }.by(1)
@@ -174,7 +175,7 @@ describe Crystalball::MapGenerator do
         let(:threshold) { 2 }
 
         it 'dumps map cases and clears the map if map size is over threshold' do
-          allow(configuration.strategies).to receive(:run).with(kind_of(Crystalball::CaseMap))
+          allow(configuration.strategies).to receive(:run).with(kind_of(Crystalball::CaseMap), any_args)
                                                           .and_return(example_map('1'), example_map('2'), example_map('3'))
 
           expect(storage).to receive(:dump).with('1' => [], '2' => []).once

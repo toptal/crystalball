@@ -20,7 +20,7 @@ module Crystalball
         Coverage.start
       end
 
-      def call(case_map)
+      def call(case_map, _)
         before = Coverage.peek_result
         yield case_map
         after = Coverage.peek_result

@@ -13,7 +13,7 @@ describe Crystalball::MapGenerator::BaseStrategy do
   describe '#call' do
     specify do
       expect do
-        subject.call(1)
+        subject.call(1, 2)
       end.to raise_error NotImplementedError
     end
   end

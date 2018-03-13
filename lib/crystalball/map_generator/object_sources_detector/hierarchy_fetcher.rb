@@ -2,7 +2,7 @@
 
 module Crystalball
   class MapGenerator
-    class AllocatedObjectsStrategy
+    class ObjectSourcesDetector
       # Class to get full hierarchy of a module(including singleton_class)
       class HierarchyFetcher
         attr_reader :stop_modules

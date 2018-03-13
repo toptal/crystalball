@@ -10,7 +10,7 @@ module Crystalball
 
       def before_finalize; end
 
-      def call(_case_map)
+      def call(_case_map, _example)
         raise NotImplementedError
       end
     end

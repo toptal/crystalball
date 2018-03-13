@@ -33,7 +33,7 @@ module Crystalball
           Patch.revert!
         end
 
-        def call(case_map)
+        def call(case_map, _)
           self.class.reset_views
           yield case_map
           case_map.push(*filter(self.class.views))
