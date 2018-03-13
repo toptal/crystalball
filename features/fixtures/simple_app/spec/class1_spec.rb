@@ -3,6 +3,8 @@
 require 'spec_helper'
 
 describe Class1 do
+  let(:name) { 'John Doe' }
+
   include_examples 'module1'
 
   describe '#bar' do

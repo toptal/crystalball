@@ -6,6 +6,7 @@ shared_context 'simple git repository' do
   let(:tmp_path) { features_root.join('tmp') }
   let(:root) { tmp_path.join('simple_app') }
   let(:lib_path) { root.join('lib') }
+  let(:locales_path) { root.join('locales') }
   let(:spec_path) { root.join('spec') }
   let(:class1_path) { lib_path.join('class1.rb') }
   let(:class1_reopen_path) { lib_path.join('class1_reopen.rb') }
@@ -15,6 +16,8 @@ shared_context 'simple git repository' do
   let(:item_view_path) { root.join('views', '_item.html.erb') }
   let(:module1_path) { lib_path.join('module1.rb') }
   let(:module2_path) { lib_path.join('module2.rb') }
+  let(:name_locale_path) { locales_path.join('name.yml') }
+  let(:value_locale_path) { locales_path.join('value.yml') }
   let(:class1_spec_path) { spec_path.join('class1_spec.rb') }
   let(:git) { Git.init(root.to_s) }
 

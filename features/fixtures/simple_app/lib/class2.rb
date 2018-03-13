@@ -5,4 +5,8 @@ class Class2
   def bar
     'bar of Class2'
   end
+
+  def translated_value
+    I18n.t(:value)
+  end
 end

@@ -7,4 +7,8 @@ module Module1
   def foo(arg)
     "foo of Module1 #{arg}".strip
   end
+
+  def name
+    I18n.t("#{self.class.name}.name")
+  end
 end
