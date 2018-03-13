@@ -74,6 +74,15 @@ describe Crystalball::Rails::MapGenerator::I18nStrategy::SimplePatch do
       expect(instance).to receive(:cb_original_store_translations).with(locale, user: {name: {cb_filename: filename, cb_value: 'John'}})
       subject
     end
+
+    context 'when data contains filenames' do
+      let(:data) { {user: {name: {cb_filename: filename, cb_value: 'John'}.freeze}} }
+
+      it do
+        expect(instance).to receive(:cb_original_store_translations).with(locale, data)
+        subject
+      end
+    end
   end
 
   describe '#cb_patched_lookup' do
