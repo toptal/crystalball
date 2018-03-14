@@ -80,6 +80,24 @@ config.register Crystalball::MapGenerator::AllocatedObjectsStrategy
 The initialization takes two keyword arguments: `execution_detector` and `object_tracker`.
 `execution_detector` must be an object that responds to `#detect` receiving a list of objects and returning the paths affected by said objects. `object_tracker` is something that responds to `#created_during` which yields to the caller and returns the array of objects allocated during the execution of the block.
 
+### DescribedClassStrategy
+
+This strategy will take each example that has a `described_class` (i.e. examples inside `describe` blocks of classes and not strings) and add the paths where the described class and its ancestors are defined to the case map of the example;
+
+To use it, add to your `Crystalball::MapGenerator.start!` block:
+
+```ruby
+# ...
+config.register Crystalball::MapGenerator::DescribedClassStrategy.new
+```
+
+As with `AllocatedObjectsStrategy`, you can pass a custom execution detector (an object that responds to `#detect` and returns the paths) to the initialization:
+
+```ruby
+# ...
+config.register Crystalball::MapGenerator::DescribedClassStrategy.new(MyDetector)
+```
+
 ### ActionViewStrategy
 
 This is a Rails specific strategy that patches `ActionView::Template#compile!` to map the examples to affected views. Use it as follows:
@@ -92,7 +110,7 @@ config.register Crystalball::MapGenerator::ActionViewStrategy.new
 
 ### Custom strategies
 
-You can create your own strategy and use it with the map generator. Any object that responds to `#call` receiving a `Crystalball::CaseMap` and augmenting its list of affected files using `case_map.push(*paths_to_files)`.
+You can create your own strategy and use it with the map generator. Any object that responds to `#call(case_map, example)` (where `case_map` is a `Crystalball::CaseMap` and `example` a `RSpec::Core::Example`) and augmenting its list of affected files using `case_map.push(*paths_to_files)`.
 Check out the [implementation](https://github.com/toptal/crystalball/tree/master/lib/crystalball/map_generator) of the default strategies for details.
 
 Keep in mind that all the strategies configured for the map generator will run for each example of your test suite, so it may slow down the generation process considerably.
