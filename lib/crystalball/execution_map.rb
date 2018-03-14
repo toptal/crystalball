@@ -24,7 +24,7 @@ module Crystalball
 
     attr_reader :cases, :metadata
 
-    delegate %i[commit commit=] => :metadata
+    delegate %i[commit commit= version version=] => :metadata
     delegate %i[size] => :cases
 
     # @param [Hash] add or override metadata of execution map
