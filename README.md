@@ -98,14 +98,27 @@ As with `AllocatedObjectsStrategy`, you can pass a custom execution detector (an
 config.register Crystalball::MapGenerator::DescribedClassStrategy.new(MyDetector)
 ```
 
-### ActionViewStrategy
+### Rails specific strategies
 
-This is a Rails specific strategy that patches `ActionView::Template#compile!` to map the examples to affected views. Use it as follows:
+To use Rails specific strategies you must first `require 'crystalball/rails'`.
+
+#### ActionViewStrategy
+
+This strategy patches `ActionView::Template#compile!` to map the examples to affected views. Use it as follows:
 
 ```ruby
-require 'crystalball/rails'
 # ...
 config.register Crystalball::MapGenerator::ActionViewStrategy.new
+```
+
+#### I18nStrategy
+
+Patches I18n to have access to the path where the locales are defined, so that those paths can be added to the case map.
+To use it, add to your config:
+
+```ruby
+# ...
+config.register Crystalball::MapGenerator::I18nStrategy.new
 ```
 
 ### Custom strategies
