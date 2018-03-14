@@ -19,9 +19,9 @@ require 'crystalball/version'
 module Crystalball
   # Prints the list of specs which might fail
   #
-  # @param [String] path to the root directory of repository (usually contains .git folder inside). Default: current directory
-  # @param [String] path to the execution map. Default: execution_map.yml
-  # @param [Proc] block used to configure predictors
+  # @param [String] workdir - path to the root directory of repository (usually contains .git folder inside). Default: current directory
+  # @param [String] map_path - path to the execution map. Default: execution_map.yml
+  # @param [Proc] block - used to configure predictors
   #
   # @example
   #   Crystalball.foresee do |predictor|

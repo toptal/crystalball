@@ -33,6 +33,8 @@ module Crystalball
           Patch.revert!
         end
 
+        # Adds views related to the spec to the case map
+        # @param [Crystalball::CaseMap] case_map - object holding example metadata and affected files
         def call(case_map, _)
           self.class.reset_views
           yield case_map

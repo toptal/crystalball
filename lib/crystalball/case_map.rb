@@ -8,8 +8,8 @@ module Crystalball
 
     delegate %i[push] => :affected_files
 
-    # @param [String] id of example
-    # @param [Array<String>] list of files affected by example
+    # @param [String] example - id of example
+    # @param [Array<String>] affected_files - list of files affected by example
     def initialize(example, affected_files = [])
       @uid = example.id
       @file_path = example.file_path

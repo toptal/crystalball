@@ -7,13 +7,14 @@ module Crystalball
       class HierarchyFetcher
         attr_reader :stop_modules
 
-        # @param Array[String] stop_modules list of classes or modules which will be used to stop hierarchy lookup
+        # @param [Array<String>] stop_modules - list of classes or modules which
+        #   will be used to stop hierarchy lookup
         def initialize(stop_modules = [])
           @stop_modules = stop_modules
         end
 
-        # @param Module const
-        # @return Array[Module] list of ancestors of a module
+        # @param [Module] mod - the module for which to fetch the ancestors
+        # @return [Array<Module>] list of ancestors of a module
         def ancestors_for(mod)
           (pick_ancestors(mod) + pick_ancestors(mod.singleton_class)).uniq
         end

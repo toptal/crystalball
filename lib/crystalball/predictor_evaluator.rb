@@ -5,8 +5,8 @@ module Crystalball
   class PredictorEvaluator
     attr_reader :predictor, :actual_failures
 
-    # @param [Crystalball::Predictor] configured predictor to fetch list of examples which might fail
-    # @param [Array<String>] list of actual failed examples
+    # @param [Crystalball::Predictor] predictor - configured predictor to fetch list of examples which might fail
+    # @param [Array<String>] actual_failures - list of actual failed examples
     def initialize(predictor, actual_failures:)
       @predictor = predictor
       @actual_failures = actual_failures

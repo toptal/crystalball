@@ -9,8 +9,9 @@ module Crystalball
     class Metadata
       attr_accessor :commit, :type, :version
 
-      # @param [String] SHA of commit
-      # @param [String] type of execution map
+      # @param [String] commit - SHA of commit
+      # @param [String] type - type of execution map
+      # @param [Numeric] version - map generator version number
       def initialize(commit: nil, type: nil, version: nil)
         @commit = commit
         @type = type
@@ -27,8 +28,8 @@ module Crystalball
     delegate %i[commit commit= version version=] => :metadata
     delegate %i[size] => :cases
 
-    # @param [Hash] add or override metadata of execution map
-    # @param [Hash] initial list of cases
+    # @param [Hash] metadata - add or override metadata of execution map
+    # @param [Hash] cases - initial list of cases
     def initialize(metadata: {}, cases: {})
       @cases = cases
 
@@ -37,7 +38,7 @@ module Crystalball
 
     # Adds case map to the list
     #
-    # @param [Crystalball::CaseMap]
+    # @param [Crystalball::CaseMap] case_map
     def <<(case_map)
       cases[case_map.uid] = case_map.affected_files.uniq
     end

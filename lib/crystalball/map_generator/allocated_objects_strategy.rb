@@ -23,11 +23,16 @@ module Crystalball
         new(execution_detector: execution_detector, object_tracker: ObjectTracker.new(only_of: only))
       end
 
+      # @param [#detect] execution_detector
+      # @param [#created_during] object_tracker
       def initialize(execution_detector:, object_tracker:)
         @object_tracker = object_tracker
         @execution_detector = execution_detector
       end
 
+      # Adds to the affected files every file which contain the definition of the
+      # classes of the objects created during the spec execution.
+      # @param [Crystalball::CaseMap] case_map - object holding example metadata and affected files
       def call(case_map, _)
         GC.start
         GC.disable

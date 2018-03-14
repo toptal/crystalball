@@ -7,14 +7,14 @@ module Crystalball
       class ObjectTracker
         attr_reader :only_of
 
-        # @param Array[Module] only_of classes or modules to watch on
+        # @param [Array<Module>] only_of - classes or modules to watch on
         def initialize(only_of: ['Object'])
           @allocated_ids = Set.new
           @only_of = only_of
         end
 
-        # @param Block a block to yield
-        # @return Array[Object] objects allocated during the block execution
+        # @yield a block to execute
+        # @return [Array<Object>] objects allocated during the block execution
         def created_during
           store_allocated_ids
           yield

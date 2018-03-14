@@ -7,12 +7,12 @@ module Crystalball
       module PathFilter
         attr_reader :root_path
 
-        # @param [String] absolute path to root folder of repository
+        # @param [String] root_path - absolute path to root folder of repository
         def initialize(root_path = Dir.pwd)
           @root_path = root_path
         end
 
-        # @param Array[String] paths
+        # @param [Array<String>] paths
         # @return relatve paths inside root_path only
         def filter(paths)
           paths
