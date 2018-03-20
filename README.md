@@ -60,7 +60,7 @@ By default, the execution detector is a `Crystalball::MapGenerator::CoverageStra
 
 ### AllocatedObjectsStrategy
 
-Looks for the files in which the objects created during the spec execution are defined. It is considerably slower than `CoverageStrategy`.
+Looks for the files in which the objects allocated during the spec execution are defined. It is considerably slower than `CoverageStrategy`.
 To use this strategy, use the convenient method `.build` which takes two optional keyword arguments: `only`, used to define the classes or modules to have their descendants tracked (defaults to `[]`); and `root`, which is the path where the detection will take place (defaults to `Dir.pwd`).
 Here's an example that tracks allocation of `ActiveRecord::Base` objects:
 
@@ -78,7 +78,7 @@ config.register Crystalball::MapGenerator::AllocatedObjectsStrategy
 ```
 
 The initialization takes two keyword arguments: `execution_detector` and `object_tracker`.
-`execution_detector` must be an object that responds to `#detect` receiving a list of objects and returning the paths affected by said objects. `object_tracker` is something that responds to `#created_during` which yields to the caller and returns the array of objects allocated during the execution of the block.
+`execution_detector` must be an object that responds to `#detect` receiving a list of objects and returning the paths affected by said objects. `object_tracker` is something that responds to `#used_classes_during` which yields to the caller and returns the array of classes of objects allocated during the execution of the block.
 
 ### DescribedClassStrategy
 

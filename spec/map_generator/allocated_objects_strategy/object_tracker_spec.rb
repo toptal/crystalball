@@ -3,32 +3,42 @@
 require 'spec_helper'
 
 describe Crystalball::MapGenerator::AllocatedObjectsStrategy::ObjectTracker do
-  subject(:tracker) { described_class.new(only_of: only_of) }
-
-  let(:only_of) { ['Object'] }
-  let(:obj1) { double }
-  let(:obj2) { double(class: Dummy) }
+  subject(:tracker) { described_class.new }
 
   before do
     stub_const('Dummy', Class.new)
-    allow(ObjectSpace).to receive(:each_object).with(Object).and_yield(obj1)
+    stub_const('SubDummy', Class.new(Dummy))
   end
 
-  describe '#created_during' do
-    subject do
-      tracker.created_during do
-        allow(ObjectSpace).to receive(:each_object).with(Object).and_yield(obj1).and_yield(obj2)
+  describe '#used_classes_during' do
+    it 'returns objects allocated during a block' do
+      expect(tracker.used_classes_during { Dummy.allocate }).to match_array(Dummy)
+    end
+
+    it 'returns objects created during a block' do
+      expect(tracker.used_classes_during do
+        Dummy.new
+        Object.new
+      end).to match_array([Object, Dummy])
+    end
+
+    it 'empty array if no objects were allocated' do
+      expect(tracker.used_classes_during { Dummy.class }).to be_empty
+    end
+
+    context 'with only_of specified' do
+      subject(:tracker) { described_class.new(only_of: ['Dummy']) }
+
+      it 'ignores created objects of other classes' do
+        expect(tracker.used_classes_during do
+          Dummy.new
+          Object.new
+        end).to match_array(Dummy)
       end
-    end
 
-    it 'lists objects' do
-      expect(subject).to eq [obj2]
-    end
-
-    it 'yields a block' do
-      expect do |b|
-        tracker.created_during(&b)
-      end.to yield_with_no_args
+      it 'lists subclasses too' do
+        expect(tracker.used_classes_during { SubDummy.new }).to match_array(SubDummy)
+      end
     end
   end
 end

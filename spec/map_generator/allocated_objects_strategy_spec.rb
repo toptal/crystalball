@@ -34,21 +34,14 @@ describe Crystalball::MapGenerator::AllocatedObjectsStrategy do
     let(:objects) { [] }
 
     before do
-      allow(object_tracker).to receive(:created_during) { objects }.and_yield
+      allow(object_tracker).to receive(:used_classes_during) { objects }.and_yield
       allow(execution_detector).to receive(:detect).with(objects) { [1, 2, 3] }
-    end
-
-    it 'manages GC' do
-      expect(GC).to receive(:start)
-      expect(GC).to receive(:disable)
-      expect(GC).to receive(:enable)
-      subject
     end
 
     it 'yields case_map to a block' do
       expect do |b|
         strategy.call(case_map, 'example', &b)
-      end.to yield_with_args(case_map)
+      end.to yield_with_args(case_map, 'example')
     end
 
     it 'pushes affected files detected by detector to case map' do

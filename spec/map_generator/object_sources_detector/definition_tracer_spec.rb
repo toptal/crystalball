@@ -17,18 +17,16 @@ describe Crystalball::MapGenerator::ObjectSourcesDetector::DefinitionTracer do
     end
 
     context 'with block' do
-      let(:trace_point) { instance_double('TracePoint', enable: nil, path: path, binding: binding) }
-      let(:binding) { instance_double('Binding') }
+      let(:trace_point) { instance_double('TracePoint', enable: nil, path: path, self: Dummy) }
 
       before do
         stub_const('Dummy', Class.new)
         allow(TracePoint).to receive(:new).with(:class) { trace_point }.and_yield(trace_point)
-        allow(binding).to receive(:eval).with('self') { Dummy }
       end
 
       context 'which stores' do
         let(:path) { '/some/dummy.rb' }
-        let(:another_trace_point) { instance_double('TracePoint', enable: nil, path: another_path, binding: binding) }
+        let(:another_trace_point) { instance_double('TracePoint', enable: nil, path: another_path, self: Dummy) }
         let(:another_path) { '/another/dummy.rb' }
 
         before do
