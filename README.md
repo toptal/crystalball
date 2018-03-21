@@ -159,11 +159,11 @@ TODO: Write good description for anyone who wants to customize behavior
 
 ## Plans
 
-1. Different strategies for source diff
-1. Different strategies for failure predictor
+1. RSpec runner + Spring integration
+1. Map size optimization
 1. Different strategies for execution map
-1. Guard replacement
-1. integration for git hook
+1. Different strategies for failure predictor
+1. Integration for git hook
 
 ## Development
 
