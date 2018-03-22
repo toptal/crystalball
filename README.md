@@ -98,6 +98,18 @@ As with `AllocatedObjectsStrategy`, you can pass a custom execution detector (an
 config.register Crystalball::MapGenerator::DescribedClassStrategy.new(MyDetector)
 ```
 
+### GraphQL Strategy
+
+This strategy adds to the case map all the files in which `GraphQL::ObjectType.define` is called, for every example that executes a GraphQL query or mutation.
+It will patch `GraphQL::ObjectType.define` to register the paths of the definitions.
+
+To use it, you must `require 'crystalball/graphql'` and then:
+
+```ruby
+# ...
+config.register Crystalball::GraphQL::MapGenerator::GraphQLStrategy.new
+```
+
 ### Rails specific strategies
 
 To use Rails specific strategies you must first `require 'crystalball/rails'`.
