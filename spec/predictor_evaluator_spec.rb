@@ -5,11 +5,11 @@ require 'crystalball/predictor_evaluator'
 
 describe Crystalball::PredictorEvaluator do
   subject(:evaluator) { described_class.new(predictor, actual_failures: actual_failures) }
-  let(:predictor) { instance_double('Crystalball::Predictor', cases: prediction, diff: git_diff, map: map) }
+  let(:predictor) { instance_double('Crystalball::Predictor', prediction: prediction, diff: git_diff, map: map) }
   let(:map) { instance_double('Crystalball::ExecutionMap', cases: cases, size: cases.size) }
   let(:cases) { {'./file1.rb[1:1]' => [], './file2.rb[1:1]' => [], './file2[1:2]' => []} }
   let(:git_diff) { instance_double('Crystalball::SourceDiff', lines: 42) }
-  let(:prediction) { %w[./file1.rb[1:1] ./file2.rb[1:1]] }
+  let(:prediction) { Crystalball::Prediction.new(%w[./file1.rb[1:1] ./file2.rb[1:1]]) }
   let(:actual_failures) { %w[./file1.rb[1:1] ./file2.rb[1:2]] }
 
   describe '#predicted_failures' do

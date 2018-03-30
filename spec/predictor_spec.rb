@@ -17,8 +17,8 @@ describe Crystalball::Predictor do
     end
   end
 
-  describe '#cases' do
-    subject { predictor.cases }
+  describe '#prediction' do
+    subject { predictor.prediction.to_a }
 
     let(:source_diff) { instance_double('Crystalball::SourceDiff') }
     before do

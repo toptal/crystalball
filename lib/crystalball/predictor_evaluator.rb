@@ -49,7 +49,7 @@ module Crystalball
     private
 
     def prediction
-      @prediction ||= predictor.cases
+      @prediction ||= predictor.prediction
     end
   end
 end
