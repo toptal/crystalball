@@ -16,10 +16,10 @@ describe Crystalball do
 
     it 'initializes predictor and returns cases' do
       allow(Crystalball::Predictor).to receive(:new).with(map, repo, from: commit).and_return(predictor)
-      expected_result = double
-      allow(predictor).to receive(:cases).and_return(expected_result)
+      compact_prediction = double
+      allow(predictor).to receive(:prediction).and_return(double(compact: compact_prediction))
 
-      expect(described_class.foresee).to eq expected_result
+      expect(described_class.foresee).to eq compact_prediction
     end
   end
 end

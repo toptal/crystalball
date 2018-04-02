@@ -25,11 +25,11 @@ module Crystalball
       prediction_strategies << strategy
     end
 
-    # TODO: check if it would be better to call predictors with one case instead of passing the whole map.
-    # @return [Array<String>] list of examples which may fail
-    def cases
-      filter raw_prediction(diff)
+    # @return [Crystalball::Prediction] list of examples which may fail
+    def prediction
+      Prediction.new(filter(raw_prediction(diff)))
     end
+    alias cases prediction
 
     def diff
       repo.diff(from, to)
@@ -37,6 +37,7 @@ module Crystalball
 
     private
 
+    # TODO: check if it would be better to call predictors with one case instead of passing the whole map.
     def predict!(current_diff)
       prediction_strategies.flat_map { |strategy| strategy.call(current_diff, map) }
     end

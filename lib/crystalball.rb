@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'crystalball/git_repo'
+require 'crystalball/prediction'
 require 'crystalball/predictor'
 require 'crystalball/predictor/modified_execution_paths'
 require 'crystalball/predictor/modified_specs'
@@ -30,6 +31,6 @@ module Crystalball
   #   end
   def self.foresee(workdir: '.', map_path: 'execution_map.yml', &block)
     map = MapStorage::YAMLStorage.load(Pathname(map_path))
-    Predictor.new(map, GitRepo.open(Pathname(workdir)), from: map.commit, &block).cases
+    Predictor.new(map, GitRepo.open(Pathname(workdir)), from: map.commit, &block).prediction.compact
   end
 end
