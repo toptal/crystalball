@@ -15,7 +15,7 @@ module Crystalball
       def start!(&block)
         generator = new(&block)
 
-        RSpec.configure do |c|
+        ::RSpec.configure do |c|
           c.before(:suite) { generator.start! }
 
           c.around(:each) { |e| generator.refresh_for_case(e) }

@@ -11,7 +11,7 @@ describe Crystalball::MapGenerator do
     before do
       allow(Coverage).to receive(:start)
       allow(described_class).to receive(:new).and_return(generator)
-      allow(RSpec).to receive(:configure).and_yield(rspec_configuration)
+      allow(::RSpec).to receive(:configure).and_yield(rspec_configuration)
     end
 
     it 'sets before suite callback' do
