@@ -9,11 +9,12 @@ module Crystalball
     class PredictionBuilder
       # Class for storing local prediction configuration
       class Configuration
-        attr_reader :map_path, :repo_path, :predictor_class_name, :diff_from, :diff_to, :requires
+        attr_reader :map_path, :map_expiration_period, :repo_path, :predictor_class_name, :diff_from, :diff_to, :requires
 
         def initialize(config = {})
           @raw_config = config
           @map_path = Pathname(config.fetch('map_path', 'tmp/execution_maps'))
+          @map_expiration_period = config.fetch('map_expiration_period', 86_400).to_i
           @repo_path = Pathname(config.fetch('repo_path', Dir.pwd))
           @predictor_class_name = config.fetch('predictor_class', 'Crystalball::Predictor')
           @requires = config.fetch('requires', [])
@@ -56,6 +57,16 @@ module Crystalball
         base_predictor.prediction
       end
 
+      def expired_map?
+        return false if config.map_expiration_period <= 0
+
+        map_commit = repo.gcommit(map.commit) || raise("Cant find map commit info #{map.commit}")
+
+        map_commit.date < Time.now - config.map_expiration_period
+      end
+
+      private
+
       def map
         @map ||= Crystalball::MapStorage::YAMLStorage.load(config.map_path)
       end
@@ -63,8 +74,6 @@ module Crystalball
       def repo
         @repo ||= Crystalball::GitRepo.open(config.repo_path)
       end
-
-      private
 
       def base_predictor
         @base_predictor ||= config.predictor_class.new(map, repo, from: config.diff_from, to: config.diff_to)

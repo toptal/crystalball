@@ -11,7 +11,7 @@ describe Crystalball::RSpec::Runner do
   end
 
   describe '.invoke' do
-    let(:predictor_config) { {} }
+    let(:predictor_config) { {'map_expiration_period' => 0} }
 
     it 'configures predictor' do
       expect(described_class).to receive(:setup_prediction_builder).with(predictor_config).and_call_original
@@ -20,7 +20,9 @@ describe Crystalball::RSpec::Runner do
   end
 
   describe '.run' do
-    let(:prediction_builder) { instance_double('Crystalball::RSpec::PredictionBuilder', prediction: double(compact: compact_prediction)) }
+    let(:prediction_builder) do
+      instance_double('Crystalball::RSpec::PredictionBuilder', prediction: double(compact: compact_prediction), expired_map?: false)
+    end
     let(:compact_prediction) { ['test'] }
 
     before do
@@ -31,6 +33,17 @@ describe Crystalball::RSpec::Runner do
       expect(RSpec::Core::ConfigurationOptions).to receive(:new).with(['test']).and_call_original
 
       described_class.run([])
+    end
+
+    context 'with expired map' do
+      before { allow(prediction_builder).to receive(:expired_map?).and_return true }
+
+      let(:out_stream) { double(puts: true) }
+
+      it 'prints out warning' do
+        expect(out_stream).to receive(:puts).with('Maps are outdated!')
+        described_class.run([], STDERR, out_stream)
+      end
     end
   end
 end
