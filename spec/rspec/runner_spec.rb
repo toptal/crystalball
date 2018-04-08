@@ -5,17 +5,72 @@ require 'spec_helper'
 describe Crystalball::RSpec::Runner do
   subject { described_class }
 
+  let(:map) { instance_double('Crystalball::MapStorage::YAMLStorage') }
+
   before do
-    allow(Crystalball::MapStorage::YAMLStorage).to receive(:load).and_return(instance_double('Crystalball::MapStorage::YAMLStorage'))
+    described_class.reset!
+    allow(Crystalball::MapStorage::YAMLStorage).to receive(:load).and_return(map)
     allow_any_instance_of(described_class).to receive(:run).and_return 0
   end
 
-  describe '.invoke' do
-    let(:predictor_config) { {'map_expiration_period' => 0} }
+  describe '.prepare' do
+    let(:expected_config) { {'map_path' => 'map.yml', 'map_expiration_period' => 0} }
+    let(:config_content) { expected_config.to_yaml }
 
-    it 'configures predictor' do
-      expect(described_class).to receive(:setup_prediction_builder).with(predictor_config).and_call_original
-      described_class.invoke(predictor_config)
+    it 'loads predictor map' do
+      expect(subject.prepare).to eq map
+    end
+
+    it 'performs predictor setup' do
+      expect(Crystalball::RSpec::PredictionBuilder).to receive(:new).and_call_original
+      subject.prepare
+    end
+
+    before { allow(Pathname).to receive(:new).and_call_original }
+
+    context 'with CRYSTALBALL_CONFIG env variable set' do
+      let(:expected_config) { YAML.safe_load(Pathname('spec/fixtures/example_runner_config.yml').read) }
+      let(:config_file) { double(read: config_content, exist?: true) }
+      before do
+        allow(Pathname).to receive(:new).with('spec/fixtures/example_runner_config.yml').and_return(config_file)
+      end
+
+      around do |example|
+        ENV['CRYSTALBALL_CONFIG'] = 'spec/fixtures/example_runner_config.yml'
+        example.call
+        ENV.delete('CRYSTALBALL_CONFIG')
+      end
+
+      specify do
+        expect(Crystalball::RSpec::PredictionBuilder)
+          .to receive(:new).with(expected_config).and_call_original
+        subject.prepare
+      end
+    end
+
+    context 'if crystalball.yml is present' do
+      let(:config_file) { double(read: config_content, exist?: true) }
+      before do
+        allow(Pathname).to receive(:new).with('crystalball.yml').and_return(config_file)
+      end
+
+      specify do
+        expect(Crystalball::RSpec::PredictionBuilder).to receive(:new).with(expected_config).and_call_original
+        subject.prepare
+      end
+    end
+
+    context 'if config/crystalball.yml is present' do
+      let(:config_file) { double(read: config_content, exist?: true) }
+      before do
+        allow(Pathname).to receive(:new).with('crystalball.yml').and_return(double(exist?: false))
+        allow(Pathname).to receive(:new).with('config/crystalball.yml').and_return(config_file)
+      end
+
+      specify do
+        expect(Crystalball::RSpec::PredictionBuilder).to receive(:new).with(expected_config).and_call_original
+        subject.prepare
+      end
     end
   end
 

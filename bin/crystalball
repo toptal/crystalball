@@ -2,17 +2,4 @@
 # frozen_string_literal: true
 
 require 'crystalball'
-
-require 'pathname'
-
-config_file = Pathname('crystalball.yml')
-config_file = Pathname('config/crystalball.yml') unless config_file.exist?
-
-prediction_config = if config_file.exist?
-                      require 'yaml'
-                      YAML.safe_load(config_file.read)
-                    else
-                      {}
-                    end
-
-Crystalball::RSpec::Runner.invoke(prediction_config)
+Crystalball::RSpec::Runner.invoke

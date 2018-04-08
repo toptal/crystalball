@@ -1,0 +1,12 @@
+# Custom path to your maps folder. Default: `tmp/execution_maps`
+map_path: 'execution_map.yml'
+#
+# Custom predictor class to use. Default: 'Crystalball::Predictor`
+# predictor_class_name: 'StandardPredictor'
+# #
+# Set of requires. Usually used to require custom predictor class file. Default: []
+# requires:
+#   - './standard_predictor'
+#
+# Custom map expiration period in seconds. 0 = Disable expiration check. Default: 86400 (1 day)
+# map_expiration_period : 0

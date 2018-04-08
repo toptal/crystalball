@@ -77,11 +77,11 @@ module Crystalball
         map_commit.date < Time.now - config['map_expiration_period']
       end
 
-      private
-
       def map
         @map ||= Crystalball::MapStorage::YAMLStorage.load(config['map_path'])
       end
+
+      private
 
       def repo
         @repo ||= Crystalball::GitRepo.open(config['repo_path'])
