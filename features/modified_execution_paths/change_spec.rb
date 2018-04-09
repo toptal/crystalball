@@ -2,6 +2,7 @@
 
 require_relative '../feature_helper'
 require_relative './shared_contexts/class1_examples'
+require_relative './shared_contexts/model1_examples'
 
 describe 'Changing source file' do
   subject(:forecast) do
@@ -11,6 +12,7 @@ describe 'Changing source file' do
   end
   include_context 'simple git repository'
   include_context 'class1 examples'
+  include_context 'model1 examples'
 
   it 'adds mapped examples to a prediction list for Class1 definition' do
     change class1_path
@@ -81,14 +83,7 @@ describe 'Changing source file' do
   it 'adds mapped examples to a prediction list for Model1 definition' do
     change model1_path
 
-    is_expected.to include(
-      './spec/models/model1_spec.rb[1:1:1]',
-      './spec/models/model1_spec.rb[1:2:1]',
-      './spec/views/index.html.erb_spec.rb[1:1]',
-      './spec/views/index.html.erb_spec.rb[1:2]',
-      './spec/views/index.html.erb_spec.rb[1:3]',
-      './spec/views/show.html.erb_spec.rb[1:1]'
-    )
+    is_expected.to include(*model1_examples)
   end
 
   it 'adds mapped examples to a prediction list for _item view' do
@@ -117,5 +112,11 @@ describe 'Changing source file' do
     is_expected.to include(
       './spec/class2_spec.rb[1:6:1]'
     )
+  end
+
+  it 'adds mapped examples to a prediction list for schema' do
+    change schema_path
+
+    is_expected.to include(*model1_examples)
   end
 end
