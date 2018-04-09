@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 require_relative '../feature_helper'
-require_relative './shared_contexts/class1_examples'
-require_relative './shared_contexts/model1_examples'
 
 describe 'Changing source file' do
   subject(:forecast) do
@@ -112,11 +110,5 @@ describe 'Changing source file' do
     is_expected.to include(
       './spec/class2_spec.rb[1:6:1]'
     )
-  end
-
-  it 'adds mapped examples to a prediction list for schema' do
-    change schema_path
-
-    is_expected.to include(*model1_examples)
   end
 end

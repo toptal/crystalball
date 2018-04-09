@@ -13,6 +13,8 @@ Crystalball::MapGenerator.start! do |c|
   c.register Crystalball::Rails::MapGenerator::I18nStrategy.new
 end
 
+Crystalball::Rails::TablesMapGenerator.start!
+
 require_relative 'support/shared_examples/module1.rb'
 require_relative 'support/shared_contexts/action_view.rb'
 require_relative 'support/active_record_mock.rb'

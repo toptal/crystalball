@@ -9,6 +9,7 @@
 /tmp/
 features/tmp/
 execution_map.yml
+tables_map.yml
 
 # rspec failure tracking
 .rspec_status

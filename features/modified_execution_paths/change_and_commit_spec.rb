@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require_relative '../feature_helper'
-require_relative './shared_contexts/class1_examples'
 
 describe 'Changing and commiting a source file' do
   subject(:forecast) do

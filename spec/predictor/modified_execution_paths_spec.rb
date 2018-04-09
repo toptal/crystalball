@@ -8,8 +8,9 @@ describe Crystalball::Predictor::ModifiedExecutionPaths do
   let(:path1) { 'file1.rb' }
   let(:file_diff1) { Crystalball::SourceDiff::FileDiff.new(Git::Diff::DiffFile.new(repository, path: path1)) }
   let(:diff) { [file_diff1] }
-  let(:map) { instance_double('Crystalball::MapGenerator::StandardMap', cases: cases) }
+  let(:map) { instance_double('Crystalball::MapGenerator::ExecutionMap', cases: cases) }
   let(:cases) { {spec_file: [path1]} }
+  let(:path1) { 'file1.rb' }
 
   describe '#call' do
     subject { predictor.call(diff, map) }
