@@ -4,6 +4,9 @@ require 'yaml'
 
 module Crystalball
   class MapStorage
+    # Exception class for missing map files
+    class NoFilesFoundError < StandardError; end
+
     # YAML persistence adapter for execution map storage
     class YAMLStorage
       attr_reader :path
@@ -25,6 +28,8 @@ module Crystalball
 
         def read_files(path)
           paths = path.directory? ? path.each_child.select(&:file?) : [path]
+
+          fail NoFilesFoundError unless paths.any?(&:exist?)
 
           paths.map do |file|
             metadata, *cases = file.read.split("---\n").reject(&:empty?).map do |yaml|
