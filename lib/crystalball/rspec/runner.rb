@@ -53,8 +53,9 @@ module Crystalball
         end
 
         def build_prediction(out)
-          check_map(out)
+          check_map(out) unless ENV['CRYSTALBALL_SKIP_MAP_CHECK']
           prediction = prediction_builder.prediction.compact
+          prediction = ['spec/lib/crystalball/map_downloader_spec.rb']
           out.puts "Prediction: #{prediction.first(5).join(' ')}#{'...' if prediction.size > 5}"
           out.puts "Starting RSpec."
           prediction
@@ -62,6 +63,24 @@ module Crystalball
 
         def check_map(out)
           out.puts 'Maps are outdated!' if prediction_builder.expired_map?
+        end
+      end
+
+      def run_specs(example_groups)
+        check_examples_limit(example_groups)
+        super
+      end
+
+      def check_examples_limit(example_groups)
+        limit = self.class.config.examples_limit
+        return if ENV['CRYSTALBALL_SKIP_EXAMPLES_LIMIT'] || !limit.positive?
+
+        examples_count = @world.example_count(example_groups)
+
+        if examples_count > limit
+          @configuration.output_stream.puts "Example group size (#{examples_count}) is over the limit (#{limit})"
+          @configuration.output_stream.puts "Aborting spec run"
+          exit
         end
       end
     end
