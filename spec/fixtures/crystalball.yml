@@ -1,5 +1,7 @@
 # Custom path to your maps folder. Default: `tmp/execution_maps`
 map_path: 'execution_map.yml'
+# Maximum amount of examples which will be run automatically. Default: no limit.
+examples_limit: 1
 #
 # Custom predictor class to use. Default: 'Crystalball::Predictor`
 # predictor_class_name: 'StandardPredictor'

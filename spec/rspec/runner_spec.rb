@@ -10,12 +10,15 @@ describe Crystalball::RSpec::Runner do
   before do
     described_class.reset!
     allow(Crystalball::MapStorage::YAMLStorage).to receive(:load).and_return(map)
-    allow_any_instance_of(described_class).to receive(:run).and_return 0
+    allow_any_instance_of(described_class).to receive(:setup).and_return 0
+    allow(RSpec::Core::ExampleGroup).to receive(:run).and_return 0
   end
 
   describe '.prepare' do
     let(:expected_config) { {'map_path' => 'map.yml', 'map_expiration_period' => 0} }
     let(:config_content) { expected_config.to_yaml }
+
+    before { allow(Pathname).to receive(:new).and_call_original }
 
     it 'loads predictor map' do
       expect(subject.prepare).to eq map
@@ -26,17 +29,15 @@ describe Crystalball::RSpec::Runner do
       subject.prepare
     end
 
-    before { allow(Pathname).to receive(:new).and_call_original }
-
     context 'with CRYSTALBALL_CONFIG env variable set' do
-      let(:expected_config) { YAML.safe_load(Pathname('spec/fixtures/example_runner_config.yml').read) }
+      let(:expected_config) { YAML.safe_load(Pathname('spec/fixtures/crystalball.yml').read) }
       let(:config_file) { double(read: config_content, exist?: true) }
       before do
-        allow(Pathname).to receive(:new).with('spec/fixtures/example_runner_config.yml').and_return(config_file)
+        allow(Pathname).to receive(:new).with('spec/fixtures/crystalball.yml').and_return(config_file)
       end
 
       around do |example|
-        ENV['CRYSTALBALL_CONFIG'] = 'spec/fixtures/example_runner_config.yml'
+        ENV['CRYSTALBALL_CONFIG'] = 'spec/fixtures/crystalball.yml'
         example.call
         ENV.delete('CRYSTALBALL_CONFIG')
       end
@@ -88,6 +89,33 @@ describe Crystalball::RSpec::Runner do
       expect(RSpec::Core::ConfigurationOptions).to receive(:new).with(['test']).and_call_original
 
       described_class.run([])
+    end
+
+    context 'with examples_limit set' do
+      before do
+        allow_any_instance_of(RSpec::Core::World).to receive(:example_count).and_call_original
+        allow_any_instance_of(RSpec::Core::World).to receive(:example_count).with([RSpec::ExampleGroups::CrystalballRSpecRunner]) { 2 }
+        ENV['CRYSTALBALL_CONFIG'] = 'spec/fixtures/crystalball.yml'
+      end
+
+      after { ENV.delete('CRYSTALBALL_CONFIG') }
+
+      it 'exits RSpec ' do
+        expect { described_class.run([]) }.to raise_error SystemExit
+      end
+
+      context 'and CRYSTALBALL_SKIP_EXAMPLES_LIMIT set' do
+        around do |example|
+          ENV['CRYSTALBALL_SKIP_EXAMPLES_LIMIT'] = '1'
+          example.call
+          ENV.delete('CRYSTALBALL_SKIP_EXAMPLES_LIMIT')
+        end
+
+        it 'runs examples' do
+          expect(RSpec::Core::ExampleGroup).to receive(:run)
+          expect { described_class.run([]) }.not_to raise_error
+        end
+      end
     end
 
     context 'with expired map' do

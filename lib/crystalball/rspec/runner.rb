@@ -55,7 +55,6 @@ module Crystalball
         def build_prediction(out)
           check_map(out) unless ENV['CRYSTALBALL_SKIP_MAP_CHECK']
           prediction = prediction_builder.prediction.compact
-          prediction = ['spec/lib/crystalball/map_downloader_spec.rb']
           out.puts "Prediction: #{prediction.first(5).join(' ')}#{'...' if prediction.size > 5}"
           out.puts "Starting RSpec."
           prediction
@@ -72,16 +71,16 @@ module Crystalball
       end
 
       def check_examples_limit(example_groups)
-        limit = self.class.config.examples_limit
+        limit = config['examples_limit'].to_i
         return if ENV['CRYSTALBALL_SKIP_EXAMPLES_LIMIT'] || !limit.positive?
 
         examples_count = @world.example_count(example_groups)
 
-        if examples_count > limit
-          @configuration.output_stream.puts "Example group size (#{examples_count}) is over the limit (#{limit})"
-          @configuration.output_stream.puts "Aborting spec run"
-          exit
-        end
+        return if examples_count <= limit
+
+        @configuration.output_stream.puts "Example group size (#{examples_count}) is over the limit (#{limit})"
+        @configuration.output_stream.puts "Aborting spec run"
+        exit
       end
     end
   end
