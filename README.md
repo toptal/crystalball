@@ -27,21 +27,17 @@ Or install it yourself as:
 ## Usage
 
 1. Start MapGenerator in your `spec_helper` before you loaded any file of your app. E.g.
-  ```ruby
-  Crystalball::MapGenerator.start! do |config|
-    config.register Crystalball::MapGenerator::CoverageStrategy.new
-  end
-  ```
-1. Run your test suite on clean branch with green build. This step will create file `execution_map.yml` in your project root
+    ```ruby
+    Crystalball::MapGenerator.start! do |config|
+      config.register Crystalball::MapGenerator::CoverageStrategy.new
+    end
+    ```
+1. Run your test suite on clean branch with green build. This step will generate file `execution_map.yml` in your project root
 1. Make some changes to your app code
-1. To see list of tests which might fail because of your changes, call:
-  ```ruby
-  Crystalball.foresee do |predictor|
-    predictor.use Crystalball::Predictor::ModifiedExecutionPaths.new
-    predictor.use Crystalball::Predictor::ModifiedSpecs.new
-  end
-  ```
-1. Or you can configure and use [Crystalball::RSpec::Runner](#rspec-runner)
+1. Run `bundle exec crystalball` to build a prediction and run RSpec with it. Check out [RSpec runner section](#rspec-runner) for customization details.
+
+Keep in mind that as your target branch (usually master) code changes your execution maps will become outdated, 
+so you need to regenerate execution maps regularly.
 
 ## Map Generator
 
@@ -147,20 +143,25 @@ Checks the case map and the diff to see which specs are affected by the new or m
 ### ModifiedSpecs
 
 As the name implies, checks for modified specs. The scope can be modified by passing a regex as argument, which defaults to `%r{spec/.*_spec\.rb\z}`.
-This strategy does not depend on a previoulsy generated case map.
+This strategy does not depend on a previously generated case map.
 
 ### Custom strategies
 
 As with the map generator you may define custom strategies for prediction. It must be an object that responds to `#call(diff, case_map)` (where `diff` is a `Crystalball::SourceDiff` and `case_map` is a `Crystalball::CaseMap`) and returns an array of paths.
 
-Check out the [implementation](https://github.com/toptal/crystalball/tree/master/lib/crystalball/predictor) of the default strategies for details.
+Check out [default strategies implementation](https://github.com/toptal/crystalball/tree/master/lib/crystalball/predictor) for details.
+
 ## Under the hood
 
 TODO: Write good description for anyone who wants to customize behavior
 
+## Spring integration
+
+It's very easy to integrate Crystalball with [Spring](https://github.com/rails/spring). Check out [spring-commands-crystalball](https://github.com/pluff/spring-commands-crystalball) for details.
+
 ## Plans
 
-1. RSpec runner + Spring integration
+1. RSpec parallel integration
 1. Map size optimization
 1. Different strategies for execution map
 1. Different strategies for failure predictor
@@ -168,24 +169,20 @@ TODO: Write good description for anyone who wants to customize behavior
 
 ## RSpec Runner
 
-There is a custom RSpec runner you can use in your development. It builds a prediction and runs it.
+There is a custom RSpec runner you can use in your development with `bundle exec crystalball` command. It builds a prediction and runs it.
 
-### Configuration
+### Runner Configuration
 
 #### Config file
 
-Create a YAML file for the runner. Default location is `./config/crystalball.yml` or simply `./crystalball.yml`. Or you can create it in another place but define `CRYSTALBALL_CONFIG` env variable with a path to it.
-You can find an example of a config file in [`spec/fixtures/crystalball.yml`](https://github.com/toptal/crystalball/blob/master/spec/fixtures/crystalball.yml)
+Create a YAML file for the runner. Default locations are `./crystalball.yml` and `./config/crystalball.yml`. You can override config path with `CRYSTALBALL_CONFIG` env variable.
+Please check an [example of a config file](https://github.com/toptal/crystalball/blob/master/spec/fixtures/crystalball.yml) for available options
 
 #### Environment variables
 
-`export CRYSTALBALL_CONFIG=path/to/crystalball.yml` if you want to override default path to config file.  
-`export CRYSTALBALL_SKIP_MAP_CHECK=true` if you want to skip maps expiration period check.  
-`export CRYSTALBALL_SKIP_EXAMPLES_LIMIT=true` if you want to skip examples limit check.
-
-### Usage
-
-To build a prediction and run RSpec on it just execute `bundle exec crystalball`
+`CRYSTALBALL_CONFIG=path/to/crystalball.yml` if you want to override default path to config file.  
+`CRYSTALBALL_SKIP_MAP_CHECK=true` if you want to skip maps expiration period check.  
+`CRYSTALBALL_SKIP_EXAMPLES_LIMIT=true` if you want to skip examples limit check.
 
 ## Development
 

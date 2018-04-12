@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'crystalball/simple_predictor'
+
 module Crystalball
   module RSpec
     class Runner
@@ -10,7 +12,7 @@ module Crystalball
             'map_path' => 'tmp/execution_maps',
             'map_expiration_period' => 86_400,
             'repo_path' => Dir.pwd,
-            'predictor_class_name' => 'Crystalball::Predictor',
+            'predictor_class_name' => 'Crystalball::SimplePredictor',
             'requires' => [],
             'diff_from' => 'HEAD',
             'diff_to' => nil,
