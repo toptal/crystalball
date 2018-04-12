@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 describe Crystalball::RSpec::PredictionBuilder do
-  subject(:builder) { described_class.new(configuration) }
+  subject(:builder) { described_class.new(Crystalball::RSpec::Runner::Configuration.new(configuration)) }
   let(:configuration) { {'repo_path' => 'test'} }
 
   let(:map) { instance_double('Crystalball::ExecutionMap') }
@@ -12,67 +12,6 @@ describe Crystalball::RSpec::PredictionBuilder do
   before do
     allow(Crystalball::MapStorage::YAMLStorage).to receive(:load).with(Pathname('tmp/execution_maps')).and_return(map)
     allow(Crystalball::GitRepo).to receive(:open).with(Pathname('test')).and_return(repo)
-  end
-
-  describe '#config' do
-    context 'by default' do
-      let(:configuration) { {} }
-      specify do
-        expect(subject.config.to_h)
-          .to match(
-            'map_path' => Pathname('tmp/execution_maps'),
-            'map_expiration_period' => 86_400,
-            'repo_path' => Pathname(Dir.pwd),
-            'predictor_class_name' => 'Crystalball::Predictor',
-            'predictor_class' => Crystalball::Predictor,
-            'requires' => [],
-            'diff_from' => 'HEAD',
-            'diff_to' => nil
-          )
-      end
-    end
-
-    context 'with overrides' do
-      let(:configuration) do
-        {
-          'map_path' => 'execution_map.yml',
-          'repo_path' => 'test',
-          'predictor_class_name' => 'MyPredictor',
-          'requires' => ['test.rb'],
-          'diff_from' => 'HEAD~3',
-          'diff_to' => 'HEAD',
-          'map_expiration_period' => 1,
-          'custom' => 42
-        }
-      end
-
-      before do
-        # Don't ask me why we need this additional stub, but we really need it.
-        allow_any_instance_of(Object).to receive(:require).and_call_original
-        allow_any_instance_of(Object).to receive(:require).with('test.rb') do
-          stub_const('MyPredictor', Class.new)
-        end
-      end
-
-      it 'allows to set any config attribute' do
-        expect(subject.config.to_h)
-          .to match(
-            'map_path' => Pathname('execution_map.yml'),
-            'repo_path' => Pathname('test'),
-            'predictor_class_name' => 'MyPredictor',
-            'predictor_class' => MyPredictor,
-            'requires' => ['test.rb'],
-            'diff_from' => 'HEAD~3',
-            'diff_to' => 'HEAD',
-            'map_expiration_period' => 1,
-            'custom' => 42
-          )
-      end
-
-      it 'returns other custom attributes as is' do
-        expect(subject.config['custom']).to eq 42
-      end
-    end
   end
 
   describe '#prediction' do

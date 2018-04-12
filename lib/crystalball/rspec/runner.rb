@@ -23,7 +23,16 @@ module Crystalball
         end
 
         def prepare
-          load_map
+          load_config
+          config['runner_class'].load_map
+        end
+
+        protected
+
+        def load_map
+          setup_prediction_builder
+          check_map($stdout) unless ENV['CRYSTALBALL_SKIP_MAP_CHECK']
+          prediction_builder.map
         end
 
         private
@@ -35,21 +44,21 @@ module Crystalball
 
         def load_config
           self.config ||= begin
-            config_file = Pathname.new(ENV.fetch('CRYSTALBALL_CONFIG', 'crystalball.yml'))
-            config_file = Pathname.new('config/crystalball.yml') unless config_file.exist?
-
-            if config_file.exist?
+            config_src = if config_file
               require 'yaml'
               YAML.safe_load(config_file.read)
             else
               {}
             end
+
+            Configuration.new(config_src)
           end
         end
 
-        def load_map
-          setup_prediction_builder
-          prediction_builder.map
+        def config_file
+          file = Pathname.new(ENV.fetch('CRYSTALBALL_CONFIG', 'crystalball.yml'))
+          file = Pathname.new('config/crystalball.yml') unless file.exist?
+          file.exist? ? file : nil
         end
 
         def build_prediction(out)
@@ -85,3 +94,5 @@ module Crystalball
     end
   end
 end
+
+require 'crystalball/rspec/runner/configuration'
