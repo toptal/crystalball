@@ -30,7 +30,6 @@ Gem::Specification.new do |spec|
   spec.executables   = [File.basename('bin/crystalball')]
   spec.require_paths = ["lib"]
 
-  spec.add_dependency 'activesupport'
   spec.add_dependency 'git'
 
   spec.required_ruby_version = '> 2.3.0'

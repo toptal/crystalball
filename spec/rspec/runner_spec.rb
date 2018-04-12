@@ -74,9 +74,9 @@ describe Crystalball::RSpec::Runner do
         subject.prepare
         expect(subject.prediction_builder.config.to_h)
           .to include(
-                'map_path' => Pathname(expected_config['map_path']),
-                'map_expiration_period' => 0
-              )
+            'map_path' => Pathname(expected_config['map_path']),
+            'map_expiration_period' => 0
+          )
       end
     end
   end

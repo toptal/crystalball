@@ -2,17 +2,15 @@
 
 require 'rspec/core'
 require 'crystalball/rspec/prediction_builder'
-require 'active_support/core_ext/class/attribute'
 
 module Crystalball
   module RSpec
     # Our custom RSpec runner to run predictions
     class Runner < ::RSpec::Core::Runner
-      class_attribute :prediction_builder, :config
-
       class << self
         def run(args, err = $stderr, out = $stdout)
-          setup_prediction_builder
+          return config['runner_class'].run(args, err, out) unless config['runner_class'] == self
+
           out.puts "Crystalball starts to glow..."
           super(args + build_prediction(out), err, out)
         end
@@ -23,33 +21,32 @@ module Crystalball
         end
 
         def prepare
-          load_config
           config['runner_class'].load_map
+        end
+
+        def prediction_builder
+          @prediction_builder ||= PredictionBuilder.new(config)
         end
 
         protected
 
         def load_map
-          setup_prediction_builder
           check_map($stdout) unless ENV['CRYSTALBALL_SKIP_MAP_CHECK']
           prediction_builder.map
         end
 
         private
 
-        def setup_prediction_builder
-          load_config
-          self.prediction_builder ||= PredictionBuilder.new(config)
-        end
+        attr_writer :config, :prediction_builder
 
-        def load_config
-          self.config ||= begin
+        def config
+          @config ||= begin
             config_src = if config_file
-              require 'yaml'
-              YAML.safe_load(config_file.read)
-            else
-              {}
-            end
+                           require 'yaml'
+                           YAML.safe_load(config_file.read)
+                         else
+                           {}
+                         end
 
             Configuration.new(config_src)
           end

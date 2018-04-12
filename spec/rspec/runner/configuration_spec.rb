@@ -70,4 +70,3 @@ describe Crystalball::RSpec::Runner::Configuration do
     end
   end
 end
-

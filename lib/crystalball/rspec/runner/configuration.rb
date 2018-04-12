@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Crystalball
   module RSpec
     class Runner
