@@ -12,3 +12,6 @@ examples_limit: 1
 #
 # Custom map expiration period in seconds. 0 = Disable expiration check. Default: 86400 (1 day)
 # map_expiration_period : 0
+#
+# Runner class
+# runner_class_name: 'RunnerClass'

@@ -18,7 +18,10 @@ describe Crystalball::RSpec::Runner do
     let(:expected_config) { {'map_path' => 'map.yml', 'map_expiration_period' => 0} }
     let(:config_content) { expected_config.to_yaml }
 
-    before { allow(Pathname).to receive(:new).and_call_original }
+    before do
+      allow(Pathname).to receive(:new).and_call_original
+      allow_any_instance_of(Crystalball::RSpec::PredictionBuilder).to receive(:expired_map?).and_return(false)
+    end
 
     it 'loads predictor map' do
       expect(subject.prepare).to eq map
@@ -31,10 +34,6 @@ describe Crystalball::RSpec::Runner do
 
     context 'with CRYSTALBALL_CONFIG env variable set' do
       let(:expected_config) { YAML.safe_load(Pathname('spec/fixtures/crystalball.yml').read) }
-      let(:config_file) { double(read: config_content, exist?: true) }
-      before do
-        allow(Pathname).to receive(:new).with('spec/fixtures/crystalball.yml').and_return(config_file)
-      end
 
       around do |example|
         ENV['CRYSTALBALL_CONFIG'] = 'spec/fixtures/crystalball.yml'
@@ -43,9 +42,8 @@ describe Crystalball::RSpec::Runner do
       end
 
       specify do
-        expect(Crystalball::RSpec::PredictionBuilder)
-          .to receive(:new).with(expected_config).and_call_original
         subject.prepare
+        expect(subject.prediction_builder.config.to_h).to include('map_path' => Pathname(expected_config['map_path']))
       end
     end
 
@@ -56,8 +54,12 @@ describe Crystalball::RSpec::Runner do
       end
 
       specify do
-        expect(Crystalball::RSpec::PredictionBuilder).to receive(:new).with(expected_config).and_call_original
         subject.prepare
+        expect(subject.prediction_builder.config.to_h)
+          .to include(
+            'map_path' => Pathname(expected_config['map_path']),
+            'map_expiration_period' => 0
+          )
       end
     end
 
@@ -69,8 +71,12 @@ describe Crystalball::RSpec::Runner do
       end
 
       specify do
-        expect(Crystalball::RSpec::PredictionBuilder).to receive(:new).with(expected_config).and_call_original
         subject.prepare
+        expect(subject.prediction_builder.config.to_h)
+          .to include(
+            'map_path' => Pathname(expected_config['map_path']),
+            'map_expiration_period' => 0
+          )
       end
     end
   end
