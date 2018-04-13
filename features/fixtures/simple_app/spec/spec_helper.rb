@@ -12,6 +12,7 @@ Crystalball::MapGenerator.start! do |c|
   c.register Crystalball::Rails::MapGenerator::I18nStrategy.new
 end
 
+require_relative '../standard_predictor'
 require_relative 'support/shared_examples/module1.rb'
 require_relative 'support/shared_contexts/action_view.rb'
 require_relative '../lib/locales.rb'

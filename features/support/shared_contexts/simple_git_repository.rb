@@ -36,7 +36,7 @@ shared_context 'simple git repository' do
   end
 
   def change(file_path)
-    file_path.write('changed')
+    file_path.write("'changed'")
   end
 
   def delete(file_path)
