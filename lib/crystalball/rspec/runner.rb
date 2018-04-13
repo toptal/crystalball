@@ -28,17 +28,6 @@ module Crystalball
           @prediction_builder ||= PredictionBuilder.new(config)
         end
 
-        protected
-
-        def load_map
-          check_map($stdout) unless ENV['CRYSTALBALL_SKIP_MAP_CHECK']
-          prediction_builder.map
-        end
-
-        private
-
-        attr_writer :config, :prediction_builder
-
         def config
           @config ||= begin
             config_src = if config_file
@@ -51,6 +40,17 @@ module Crystalball
             Configuration.new(config_src)
           end
         end
+
+        protected
+
+        def load_map
+          check_map($stdout) unless ENV['CRYSTALBALL_SKIP_MAP_CHECK']
+          prediction_builder.map
+        end
+
+        private
+
+        attr_writer :config, :prediction_builder
 
         def config_file
           file = Pathname.new(ENV.fetch('CRYSTALBALL_CONFIG', 'crystalball.yml'))
@@ -77,7 +77,7 @@ module Crystalball
       end
 
       def check_examples_limit(example_groups)
-        limit = config['examples_limit'].to_i
+        limit = self.class.config['examples_limit'].to_i
         return if ENV['CRYSTALBALL_SKIP_EXAMPLES_LIMIT'] || !limit.positive?
 
         examples_count = @world.example_count(example_groups)
