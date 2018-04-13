@@ -35,12 +35,13 @@ Or install it yourself as:
 1. Run your test suite on clean branch with green build. This step will create file `execution_map.yml` in your project root
 1. Make some changes to your app code
 1. To see list of tests which might fail because of your changes, call:
-```ruby
-Crystalball.foresee do |predictor|
-  predictor.use Crystalball::Predictor::ModifiedExecutionPaths.new
-  predictor.use Crystalball::Predictor::ModifiedSpecs.new
-end
-```
+  ```ruby
+  Crystalball.foresee do |predictor|
+    predictor.use Crystalball::Predictor::ModifiedExecutionPaths.new
+    predictor.use Crystalball::Predictor::ModifiedSpecs.new
+  end
+  ```
+1. Or you can configure and use [Crystalball::RSpec::Runner](#rspec-runner)
 
 ## Map Generator
 
@@ -164,6 +165,27 @@ TODO: Write good description for anyone who wants to customize behavior
 1. Different strategies for execution map
 1. Different strategies for failure predictor
 1. Integration for git hook
+
+## RSpec Runner
+
+There is a custom RSpec runner you can use in your development. It builds a prediction and runs it.
+
+### Configuration
+
+#### Config file
+
+Create a YAML file for the runner. Default location is `./config/crystalball.yml` or simply `./crystalball.yml`. Or you can create it in another place but define `CRYSTALBALL_CONFIG` env variable with a path to it.
+You can find an example of a config file in [`spec/fixtures/crystalball.yml`](https://github.com/toptal/crystalball/blob/master/spec/fixtures/crystalball.yml)
+
+#### Environment variables
+
+`export CRYSTALBALL_CONFIG=path/to/crystalball.yml` if you want to override default path to config file.  
+`export CRYSTALBALL_SKIP_MAP_CHECK=true` if you want to skip maps expiration period check.  
+`export CRYSTALBALL_SKIP_EXAMPLES_LIMIT=true` if you want to skip examples limit check.
+
+### Usage
+
+To build a prediction and run RSpec on it just execute `bundle exec crystalball`
 
 ## Development
 
