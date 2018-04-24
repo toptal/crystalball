@@ -26,6 +26,36 @@ describe Crystalball::Prediction do
 
       it { is_expected.to match_array(%w[dir/ file2_spec.rb]) }
     end
+
+    context 'when prediction includes root' do
+      let(:raw_cases) do
+        %w[
+          ./
+          dir/file1_spec.rb
+          ./dir/file1_spec.rb
+          dir/
+          file2_spec.rb
+          file2_spec.rb[1:1]
+        ]
+      end
+
+      it { is_expected.to match_array(%w[./]) }
+
+      context 'when root is just `.`' do
+        let(:raw_cases) do
+          %w[
+            .
+            dir/file1_spec.rb
+            ./dir/file1_spec.rb
+            dir/
+            file2_spec.rb
+            file2_spec.rb[1:1]
+          ]
+        end
+
+        it { is_expected.to match_array(%w[./]) }
+      end
+    end
   end
 
   describe '#method_missing' do
