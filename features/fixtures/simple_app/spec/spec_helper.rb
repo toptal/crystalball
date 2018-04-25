@@ -4,6 +4,7 @@ require 'rspec'
 
 require_relative '../../../../lib/crystalball'
 require_relative '../../../../lib/crystalball/rails'
+require_relative '../../../../lib/crystalball/map_generator/parser_strategy'
 
 Crystalball::MapGenerator.start! do |c|
   c.register Crystalball::MapGenerator::CoverageStrategy.new
@@ -11,6 +12,7 @@ Crystalball::MapGenerator.start! do |c|
   c.register Crystalball::MapGenerator::DescribedClassStrategy.new
   c.register Crystalball::Rails::MapGenerator::ActionViewStrategy.new
   c.register Crystalball::Rails::MapGenerator::I18nStrategy.new
+  c.register Crystalball::MapGenerator::ParserStrategy.new(pattern: %r{(lib/)})
 end
 
 Crystalball::Rails::TablesMapGenerator.start!
