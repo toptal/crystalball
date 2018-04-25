@@ -7,12 +7,17 @@ module Crystalball
       @cases = cases
     end
 
+    # When the cases are something like:
+    #   ./spec/foo ./spec/foo/bar_spec.rb
+    # this returns just ./spec/foo
     def compact
-      result = []
-      sort_by(&:length).each do |c|
+      shrinked_cases = sort_by(&:length).each_with_object([]) do |c, result|
         result << c unless result.any? { |r| c.start_with?(r, "./#{r}") }
-      end
-      result
+      end.compact
+
+      return %w[./] if (shrinked_cases & %w[. ./]).any?
+
+      shrinked_cases
     end
 
     def to_a
