@@ -6,7 +6,7 @@ describe Crystalball::Predictor do
   subject(:predictor) { described_class.new(instance_double('Crystalball::ExecutionMap', cases: cases), repository) }
   let(:cases) { {spec_file: %w[file1.rb]} }
   let(:repository) { instance_double('Crystalball::GitRepo', repo_path: Pathname('.')) }
-  let(:map) { instance_double('Crystalball::MapGenerator::StandardMap', cases: cases) }
+  let(:map) { instance_double('Crystalball::MapGenerator::ExecutionMap', cases: cases) }
   let(:cases) { {'spec_file' => %w[file1.rb]} }
 
   describe '#initialize' do

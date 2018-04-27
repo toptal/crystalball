@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../spec/spec_helper'
+require_relative '../spec/rails_helper'
 
 SimpleCov.add_filter 'features/support/shared_contexts/'
 

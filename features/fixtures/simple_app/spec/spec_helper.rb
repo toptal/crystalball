@@ -4,6 +4,7 @@ require 'rspec'
 
 require_relative '../../../../lib/crystalball'
 require_relative '../../../../lib/crystalball/rails'
+
 Crystalball::MapGenerator.start! do |c|
   c.register Crystalball::MapGenerator::CoverageStrategy.new
   c.register Crystalball::MapGenerator::AllocatedObjectsStrategy.build(only: ['Object'])
@@ -12,8 +13,12 @@ Crystalball::MapGenerator.start! do |c|
   c.register Crystalball::Rails::MapGenerator::I18nStrategy.new
 end
 
+Crystalball::Rails::TablesMapGenerator.start!
+
 require_relative 'support/shared_examples/module1.rb'
 require_relative 'support/shared_contexts/action_view.rb'
+require_relative 'support/active_record_mock.rb'
+require_relative '../db/schema.rb'
 require_relative '../lib/locales.rb'
 require_relative '../lib/module1.rb'
 require_relative '../lib/class1.rb'

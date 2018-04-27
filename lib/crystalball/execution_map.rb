@@ -7,7 +7,7 @@ module Crystalball
 
     # Simple data object for map metadata information
     class Metadata
-      attr_accessor :commit, :type, :version
+      attr_reader :commit, :type, :version
 
       # @param [String] commit - SHA of commit
       # @param [String] type - type of execution map
@@ -25,7 +25,7 @@ module Crystalball
 
     attr_reader :cases, :metadata
 
-    delegate %i[commit commit= version version=] => :metadata
+    delegate %i[commit version] => :metadata
     delegate %i[size] => :cases
 
     # @param [Hash] metadata - add or override metadata of execution map
