@@ -19,6 +19,7 @@ shared_context 'simple git repository' do
   let(:name_locale_path) { locales_path.join('name.yml') }
   let(:value_locale_path) { locales_path.join('value.yml') }
   let(:class1_spec_path) { spec_path.join('class1_spec.rb') }
+  let(:action_view_shared_context) { spec_path.join('support', 'shared_contexts', 'action_view.rb') }
   let(:git) { Git.init(root.to_s) }
 
   before do

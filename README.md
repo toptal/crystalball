@@ -145,6 +145,11 @@ Checks the case map and the diff to see which specs are affected by the new or m
 As the name implies, checks for modified specs. The scope can be modified by passing a regex as argument, which defaults to `%r{spec/.*_spec\.rb\z}`.
 This strategy does not depend on a previously generated case map.
 
+### ModifiedSupportSpecs
+
+Checks for modified support files used in specs and predicts full spec file. The scope can be modified by passing a regex as argument, which defaults to `%r{spec/support/.*\.rb\z}`.
+Mostly usable for shared_contexts and shared_examples.
+
 ### Custom strategies
 
 As with the map generator you may define custom strategies for prediction. It must be an object that responds to `#call(diff, case_map)` (where `diff` is a `Crystalball::SourceDiff` and `case_map` is a `Crystalball::CaseMap`) and returns an array of paths.
