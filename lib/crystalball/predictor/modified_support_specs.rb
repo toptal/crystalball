@@ -23,7 +23,7 @@ module Crystalball
       # @return [Array<String>] the spec paths associated with the changes
       def call(diff, map)
         super do
-          changed_support_files = diff.map(&:new_relative_path).grep(support_spec_pattern)
+          changed_support_files = diff.map(&:relative_path).grep(support_spec_pattern)
 
           examples = detect_examples(changed_support_files, map)
 
