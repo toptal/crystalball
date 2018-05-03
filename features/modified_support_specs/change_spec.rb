@@ -3,19 +3,17 @@
 require_relative '../feature_helper'
 
 describe 'Changing support spec file' do
-  subject(:forecast) do
-    Crystalball.foresee(workdir: root, map_path: root.join('execution_map.yml')) do |predictor|
-      predictor.use Crystalball::Predictor::ModifiedSupportSpecs.new
-    end
-  end
   include_context 'simple git repository'
+  include_context 'base forecast'
+
+  let(:strategies) { [Crystalball::Predictor::ModifiedSupportSpecs.new] }
 
   it 'adds full spec to a prediction list' do
     change action_view_shared_context
 
-    is_expected.to match_array([
-                                 './spec/views/index.html.erb_spec.rb',
-                                 './spec/views/show.html.erb_spec.rb'
-                               ])
+    expect(forecast).to match_array([
+                                      './spec/views/index.html.erb_spec.rb',
+                                      './spec/views/show.html.erb_spec.rb'
+                                    ])
   end
 end
