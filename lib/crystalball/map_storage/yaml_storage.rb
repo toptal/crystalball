@@ -29,7 +29,7 @@ module Crystalball
         def read_files(path)
           paths = path.directory? ? path.each_child.select(&:file?) : [path]
 
-          raise NoFilesFoundError unless paths.any?(&:exist?)
+          raise NoFilesFoundError, "No files or folder exists #{path}" unless paths.any?(&:exist?)
 
           paths.map do |file|
             metadata, *cases = file.read.split("---\n").reject(&:empty?).map do |yaml|
@@ -61,6 +61,7 @@ module Crystalball
       #
       # @param [Hash] data to write to storage file
       def dump(data)
+        path.dirname.mkpath
         path.open('a') { |f| f.write YAML.dump(data) }
       end
     end

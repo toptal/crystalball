@@ -14,23 +14,23 @@ module Crystalball
       end
 
       def prediction
-        base_predictor.prediction
+        predictor.prediction
       end
 
       def expired_map?
         return false if config['map_expiration_period'] <= 0
 
-        map_commit = repo.gcommit!(map.commit)
+        map_commit = repo.gcommit!(execution_map.commit)
 
-        map_commit ||= repo.fetch && repo.gcommit!(map.commit)
+        map_commit ||= repo.fetch && repo.gcommit!(execution_map.commit)
 
-        raise("Cant find map commit info #{map.commit}") unless map_commit
+        raise("Cant find map commit info #{execution_map.commit}") unless map_commit
 
         map_commit.date < Time.now - config['map_expiration_period']
       end
 
-      def map
-        @map ||= Crystalball::MapStorage::YAMLStorage.load(config['map_path'])
+      def execution_map
+        @execution_map ||= Crystalball::MapStorage::YAMLStorage.load(config['execution_map_path'])
       end
 
       def repo
@@ -39,8 +39,18 @@ module Crystalball
 
       private
 
-      def base_predictor
-        @base_predictor ||= config['predictor_class'].new(map, repo, from: config['diff_from'], to: config['diff_to'])
+      # This method should be overridden in ancestor. Example:
+      #
+      # def predictor
+      #   super do |p|
+      #     p.use Crystalball::Predictor::ModifiedExecutionPaths.new
+      #     p.use Crystalball::Predictor::ModifiedSpecs.new
+      #   end
+      # end
+      #
+      def predictor(&block)
+        raise NotImplementedError, 'Configure `prediction_builder_class_name` in `crystalball.yml` and override `predictor` method' unless block_given?
+        @predictor ||= Crystalball::Predictor.new(execution_map, repo, from: config['diff_from'], to: config['diff_to'], &block)
       end
     end
   end

@@ -10,7 +10,7 @@ describe Crystalball::RSpec::PredictionBuilder do
   let(:repo) { double }
 
   before do
-    allow(Crystalball::MapStorage::YAMLStorage).to receive(:load).with(Pathname('tmp/execution_maps')).and_return(map)
+    allow(Crystalball::MapStorage::YAMLStorage).to receive(:load).with(Pathname('tmp/execution_map.yml')).and_return(map)
     allow(Crystalball::GitRepo).to receive(:open).with(Pathname('test')).and_return(repo)
   end
 
@@ -24,22 +24,12 @@ describe Crystalball::RSpec::PredictionBuilder do
   describe '#prediction' do
     let(:configuration) do
       super().merge(
-        'predictor_class_name' => 'MyPredictor',
         'diff_from' => 'HEAD~3',
         'diff_to' => 'HEAD'
       )
     end
-    let(:base_predictor) { instance_double('MyPredictor', prediction: prediction) }
-    let(:prediction) { double }
-
-    before do
-      stub_const('MyPredictor', Class.new(Crystalball::Predictor))
-    end
-
-    it 'builds base predictor according to config and returns its prediction' do
-      allow(MyPredictor).to receive(:new).with(map, repo, from: 'HEAD~3', to: 'HEAD').and_return(base_predictor)
-
-      expect(builder.prediction).to eq prediction
+    it 'raises NotImplementedError by default' do
+      expect { builder.prediction }.to raise_error NotImplementedError
     end
   end
 
