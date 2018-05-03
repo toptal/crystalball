@@ -11,7 +11,7 @@ describe Crystalball::Predictor::AssociatedSpecs do
   describe '#call' do
     subject { predictor.call(diff, {}) }
 
-    it { is_expected.to eq([spec_path1]) }
+    it { is_expected.to eq(["./#{spec_path1}"]) }
 
     context 'when path does not match pattern' do
       let(:path1) { 'file1.rb' }

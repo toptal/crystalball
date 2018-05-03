@@ -13,6 +13,6 @@ describe 'Moving spec file' do
   it 'adds it to a prediction list' do
     move(class1_spec_path)
 
-    is_expected.to match_array(%w[spec/moved_class1_spec.rb])
+    is_expected.to match_array(%w[./spec/moved_class1_spec.rb])
   end
 end
