@@ -95,6 +95,21 @@ As with `AllocatedObjectsStrategy`, you can pass a custom execution detector (an
 config.register Crystalball::MapGenerator::DescribedClassStrategy.new(MyDetector)
 ```
 
+### ParserStrategy
+
+The `ParserStrategy`, as the name suggests parses the files in order to detect which files are affected by an example.
+It works by first parsing all (`.rb`) files that match the given pattern under the configured root directory (defaults to current directory) to collect the constants definition paths.
+Then, when each example is executed, the affected files of the current case map are parsed to check for method calls to those constants. For that reason, `ParserStrategy` **only works when used with other strategies and is placed at the end of the strategies list**.
+
+To use it, add the `parser` gem to your `Gemfile` and:
+
+```
+require 'crystalball/map_generator/parser_strategy'
+# ...
+# config.register OtherStrategy.new
+config.register Crystalball::MapGenerator::ParserStrategy.new(pattern: /\A(app)|(lib)/)
+```
+
 ### Rails specific strategies
 
 To use Rails specific strategies you must first `require 'crystalball/rails'`.

@@ -4,6 +4,10 @@
 class Class1
   attr_reader :var
 
+  def self.foo
+    # NOOP
+  end
+
   def initialize(var = 1)
     @var = var
   end

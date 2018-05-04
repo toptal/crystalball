@@ -6,7 +6,7 @@ module Crystalball
     attr_reader :uid, :file_path, :affected_files
     extend Forwardable
 
-    delegate %i[push] => :affected_files
+    delegate %i[push each] => :affected_files
 
     # @param [String] example - id of example
     # @param [Array<String>] affected_files - list of files affected by example

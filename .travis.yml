@@ -4,7 +4,7 @@ env:
 language: ruby
 sudo: false
 rvm:
-  - 2.4.2
+  - 2.4.3
 branches:
   only:
     - master
