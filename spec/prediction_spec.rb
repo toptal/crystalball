@@ -16,45 +16,28 @@ describe Crystalball::Prediction do
     context 'when one part is included into other part' do
       let(:raw_cases) do
         %w[
-          dir/file1_spec.rb
           ./dir/file1_spec.rb
-          dir/
-          file2_spec.rb
-          file2_spec.rb[1:1]
+          ./dir/
+          ./file2_spec.rb
+          ./file2_spec.rb[1:1]
         ]
       end
 
-      it { is_expected.to match_array(%w[dir/ file2_spec.rb]) }
+      it { is_expected.to match_array(%w[./dir/ ./file2_spec.rb]) }
     end
 
     context 'when prediction includes root' do
       let(:raw_cases) do
         %w[
           ./
-          dir/file1_spec.rb
           ./dir/file1_spec.rb
-          dir/
-          file2_spec.rb
-          file2_spec.rb[1:1]
+          ./dir/
+          ./file2_spec.rb
+          ./file2_spec.rb[1:1]
         ]
       end
 
       it { is_expected.to match_array(%w[./]) }
-
-      context 'when root is just `.`' do
-        let(:raw_cases) do
-          %w[
-            .
-            dir/file1_spec.rb
-            ./dir/file1_spec.rb
-            dir/
-            file2_spec.rb
-            file2_spec.rb[1:1]
-          ]
-        end
-
-        it { is_expected.to match_array(%w[./]) }
-      end
     end
   end
 

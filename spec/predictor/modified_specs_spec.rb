@@ -12,7 +12,7 @@ describe Crystalball::Predictor::ModifiedSpecs do
   describe '#call' do
     subject { predictor.call(diff, {}) }
 
-    it { is_expected.to eq([path1]) }
+    it { is_expected.to eq(["./#{path1}"]) }
 
     context 'when path does not match pattern' do
       let(:path1) { 'file1.rb' }

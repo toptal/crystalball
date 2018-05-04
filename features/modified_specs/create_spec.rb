@@ -3,13 +3,10 @@
 require_relative '../feature_helper'
 
 describe 'Creating spec file' do
-  subject(:forecast) do
-    Crystalball.foresee(workdir: root, map_path: root.join('execution_map.yml')) do |predictor|
-      predictor.use Crystalball::Predictor::ModifiedSpecs.new
-    end
-  end
-
   include_context 'simple git repository'
+  include_context 'base forecast'
+
+  let(:strategies) { [Crystalball::Predictor::ModifiedSpecs.new] }
 
   it 'adds it to a prediction list' do
     new_spec_path = spec_path.join('new_spec.rb')
@@ -22,6 +19,6 @@ describe 'Creating spec file' do
     RUBY
     git.add(new_spec_path.to_s)
 
-    is_expected.to match_array(%w[spec/new_spec.rb])
+    expect(forecast).to match_array(%w[./spec/new_spec.rb])
   end
 end

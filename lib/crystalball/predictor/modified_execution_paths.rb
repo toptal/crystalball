@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'crystalball/predictor/strategy'
 require 'crystalball/predictor/helpers/affected_examples_detector'
 
 module Crystalball
@@ -8,7 +9,8 @@ module Crystalball
     # specs depend on which files and will return only those specs which depend on files modified since last time map
     # was generated.
     class ModifiedExecutionPaths
-      include ::Crystalball::Predictor::Helpers::AffectedExamplesDetector
+      include Helpers::AffectedExamplesDetector
+      include Strategy
 
       # @param [Crystalball::SourceDiff] diff - the diff from which to predict
       #   which specs should run
@@ -16,7 +18,9 @@ module Crystalball
       #   examples and affected files
       # @return [Array<String>] the spec paths associated with the changes
       def call(diff, map)
-        detect_examples(diff.map(&:relative_path), map)
+        super do
+          detect_examples(diff.map(&:relative_path), map)
+        end
       end
     end
   end
