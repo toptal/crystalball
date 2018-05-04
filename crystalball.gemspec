@@ -7,7 +7,7 @@ require 'crystalball/version'
 Gem::Specification.new do |spec|
   spec.name          = "crystalball"
   spec.version       = Crystalball::VERSION
-  spec.authors       = ["Pavel Shutsin"]
+  spec.authors       = ["Pavel Shutsin", "Evgenii Pecherkin", "Jaimerson Araujo"]
   spec.email         = ["publicshady@gmail.com"]
 
   spec.summary       = 'A library for RSpec regression test selection'
