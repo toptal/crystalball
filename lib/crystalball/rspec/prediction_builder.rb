@@ -33,11 +33,11 @@ module Crystalball
         @map ||= Crystalball::MapStorage::YAMLStorage.load(config['map_path'])
       end
 
-      private
-
       def repo
         @repo ||= Crystalball::GitRepo.open(config['repo_path'])
       end
+
+      private
 
       def base_predictor
         @base_predictor ||= config['predictor_class'].new(map, repo, from: config['diff_from'], to: config['diff_to'])
