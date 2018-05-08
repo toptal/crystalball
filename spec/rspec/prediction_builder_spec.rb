@@ -14,6 +14,13 @@ describe Crystalball::RSpec::PredictionBuilder do
     allow(Crystalball::GitRepo).to receive(:open).with(Pathname('test')).and_return(repo)
   end
 
+  describe '#repo' do
+    it 'opens a GitRepo with the given path' do
+      expect(Crystalball::GitRepo).to receive(:open).with(Pathname('test'))
+      builder.repo
+    end
+  end
+
   describe '#prediction' do
     let(:configuration) do
       super().merge(
