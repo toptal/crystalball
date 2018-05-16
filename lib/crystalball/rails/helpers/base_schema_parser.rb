@@ -19,7 +19,7 @@ module Crystalball
         private
 
         # Store info about call in hash. First argument of method call used as a key
-        def method_missing(method_name, *args, &block) # rubocop:disable Style/MethodMissing
+        def method_missing(method_name, *args, &block) # rubocop:disable Style/MethodMissingSuper
           name = args.shift
           add_to_hash(name, options: [method_name] + args)
 

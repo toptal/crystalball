@@ -140,6 +140,20 @@ RSpec.describe Crystalball::MapGenerator::ParserStrategy::Processor do
         expect(consts_defined_in).to eq(%w[MyClass MyClass::MY_CONSTANT MyClass::MY_OTHER_CONSTANT])
       end
     end
+
+    context 'when contains syntax error' do
+      let(:str) do
+        <<~STR
+          require 'foo'
+
+          class MyClass < Foo
+        STR
+      end
+
+      it 'returns nothing' do
+        expect(consts_defined_in).to eq([])
+      end
+    end
   end
 
   describe '#consts_interacted_with_in' do
