@@ -66,19 +66,15 @@ module Crystalball
       end
 
       def collect_tables_info
-        ObjectSpace.each_object(ActiveRecord::Base.singleton_class) do |descendant|
-          table_name = table_name_of(descendant)
+        ActiveRecord::Base.descendants.each do |descendant|
+          table_name = descendant.table_name
 
           next if table_name.nil?
 
-          map[table_name] = object_sources_detector.detect([descendant])
-        end
-      end
+          files = object_sources_detector.detect([descendant])
 
-      def table_name_of(model)
-        model.table_name
-      rescue NoMethodError # Some inner classes catched here
-        nil
+          map.add(files: files, for_table: table_name)
+        end
       end
 
       attr_writer :map

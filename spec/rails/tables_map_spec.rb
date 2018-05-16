@@ -9,11 +9,20 @@ describe Crystalball::Rails::TablesMap do
   before { allow(affected_files).to receive(:uniq) { affected_files } }
 
   describe '#clear!' do
+    before { subject['dummies'] = %w[models/dummy.rb] }
+
     it 'wipes out all cases' do
-      subject['dummies'] = %w[models/dummy.rb]
       expect do
         subject.clear!
       end.to change { subject.cases.size }.by(-1)
+    end
+  end
+
+  describe '#add files for table' do
+    it do
+      expect do
+        subject.add(files: [1, 2, 3, 1], for_table: 'dummies')
+      end.to change { subject.cases }.to('dummies' => [1, 2, 3])
     end
   end
 end
