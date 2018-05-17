@@ -12,7 +12,7 @@ ActiveRecord::Schema.define(version: 20_180_321_094_057) do
     t.index "name"
   end
 
-  create_table "dummies", id: :serial, force: :cascade
+  create_table "model2s", id: :serial, force: :cascade
 
   add_foreign_key "model1s", "dummies", column: "dummy_id"
 end

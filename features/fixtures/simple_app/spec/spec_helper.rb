@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 require 'rspec'
+require 'active_record'
+require 'sqlite3'
+
+ActiveRecord::Base.establish_connection(adapter: 'sqlite3', database: ':memory:')
 
 require_relative '../../../../lib/crystalball'
 require_relative '../../../../lib/crystalball/rails'
@@ -19,7 +23,6 @@ Crystalball::Rails::TablesMapGenerator.start!
 
 require_relative 'support/shared_examples/module1.rb'
 require_relative 'support/shared_contexts/action_view.rb'
-require_relative 'support/active_record_mock.rb'
 require_relative '../db/schema.rb'
 require_relative '../lib/locales.rb'
 require_relative '../lib/module1.rb'
@@ -28,3 +31,4 @@ require_relative '../lib/class1_reopen.rb'
 require_relative '../lib/class2.rb'
 require_relative '../lib/class2_eval.rb'
 require_relative '../models/model1.rb'
+require_relative '../models/model2.rb'
