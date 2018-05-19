@@ -2,4 +2,46 @@
 # frozen_string_literal: true
 
 require 'crystalball'
-Crystalball::RSpec::Runner.invoke
+
+if (ARGV & %w[-w --watch]).any?
+  require 'listen'
+  config = Crystalball::RSpec::Runner::Configuration.new(YAML.safe_load(File.read('crystalball.yml')))
+  map = Crystalball::MapStorage::YAMLStorage.load(config['map_path'])
+  Wrapper = Struct.new(:relative_path) do
+    def deleted?
+      false
+    end
+
+    def new_relative_path
+      relative_path
+    end
+  end
+
+  predictor = Crystalball::FilePredictor.new(map) do |p|
+    p.use Crystalball::Predictor::ModifiedExecutionPaths.new
+    p.use Crystalball::Predictor::ModifiedSpecs.new
+  end
+
+  listener = Listen.to('./', relative: true, ignore: %r{spec/examples\.txt}) do |modified, added, _removed|
+    puts "Changed: #{modified.join(', ')}" if modified
+    puts "Added: #{added.join(', ')}" if added
+    files = (modified | added).map { |f| Wrapper.new(f) }
+    prediction = predictor.prediction(files).to_a
+    puts "Prediction: #{prediction.join(' ')}"
+    fork do
+      RSpec::Core::Runner.run(prediction)
+    end
+  end
+
+  listener.start
+  puts "Crystalball is listening to file changes..."
+
+  trap 'INT' do
+    puts "\nExiting Crystalball..."
+    exit 130
+  end
+
+  sleep
+else
+  Crystalball::RSpec::Runner.invoke
+end
