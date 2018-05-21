@@ -12,7 +12,11 @@ module Crystalball
           return config['runner_class'].run(args, err, out) unless config['runner_class'] == self
 
           out.puts "Crystalball starts to glow..."
-          super(args + build_prediction(out), err, out)
+          prediction = build_prediction(out)
+
+          check_limit(out) { prediction.size } # Actual examples size is not less than prediction size.
+
+          super(args + prediction, err, out)
         end
 
         def reset!
@@ -39,6 +43,18 @@ module Crystalball
 
             Configuration.new(config_src)
           end
+        end
+
+        def check_limit(out)
+          limit = config['examples_limit'].to_i
+          return if ENV['CRYSTALBALL_SKIP_EXAMPLES_LIMIT'] || !limit.positive?
+
+          examples_count = yield
+          return if examples_count <= limit
+
+          out.puts "Example group size (#{examples_count}) is over the limit (#{limit})"
+          out.puts "Aborting spec run"
+          exit
         end
 
         protected
@@ -77,16 +93,7 @@ module Crystalball
       end
 
       def check_examples_limit(example_groups)
-        limit = self.class.config['examples_limit'].to_i
-        return if ENV['CRYSTALBALL_SKIP_EXAMPLES_LIMIT'] || !limit.positive?
-
-        examples_count = @world.example_count(example_groups)
-
-        return if examples_count <= limit
-
-        @configuration.output_stream.puts "Example group size (#{examples_count}) is over the limit (#{limit})"
-        @configuration.output_stream.puts "Aborting spec run"
-        exit
+        self.class.check_limit(@configuration.output_stream) { @world.example_count(example_groups) }
       end
     end
   end
