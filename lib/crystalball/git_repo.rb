@@ -31,6 +31,16 @@ module Crystalball
       diff.empty?
     end
 
+    # Fetches a commit from the repo without lazy evaluation.
+    # @return [Git::Object::Commit|nil]
+    def gcommit!(*args)
+      repo.gcommit(*args).tap do |c|
+        c.send :check_commit # Fetch commit data immediately
+      end
+    rescue Git::GitExecuteError
+      nil
+    end
+
     # Proxy all unknown calls to `Git` object
     def method_missing(method, *args, &block)
       repo.public_send(method, *args, &block) || super
