@@ -20,9 +20,9 @@ module Crystalball
       def expired_map?
         return false if config['map_expiration_period'] <= 0
 
-        map_commit = repo.gcommit(map.commit)
+        map_commit = repo.gcommit!(map.commit)
 
-        map_commit ||= repo.fetch && repo.gcommit(map.commit)
+        map_commit ||= repo.fetch && repo.gcommit!(map.commit)
 
         raise("Cant find map commit info #{map.commit}") unless map_commit
 

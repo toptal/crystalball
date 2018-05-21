@@ -65,7 +65,7 @@ describe Crystalball::RSpec::PredictionBuilder do
 
       context 'when commit exists in the working tree' do
         before do
-          allow(repo).to receive(:gcommit).with(map_commit).and_return(commit_info)
+          allow(repo).to receive(:gcommit!).with(map_commit).and_return(commit_info)
         end
 
         context 'and map commit is too old' do
@@ -83,7 +83,7 @@ describe Crystalball::RSpec::PredictionBuilder do
 
       context 'when map commit doesnt exist in the working tree' do
         it 'tries to fetch repo remotes' do
-          allow(repo).to receive(:gcommit).with(map_commit).and_return(nil, commit_info)
+          allow(repo).to receive(:gcommit!).with(map_commit).and_return(nil, commit_info)
           expect(repo).to receive(:fetch).once.and_return(true)
           expect(subject).to eq false
         end

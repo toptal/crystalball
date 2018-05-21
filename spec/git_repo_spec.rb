@@ -73,6 +73,28 @@ describe Crystalball::GitRepo do
     end
   end
 
+  describe '#gcommit!' do
+    subject { git_repo.gcommit!(commit_sha) }
+    let(:commit_sha) { 'test' }
+    let(:commit) { instance_double('Git::Object::Commit').as_null_object }
+
+    context 'when commit can be fetched from tree' do
+      before do
+        allow_any_instance_of(Git::Base).to receive(:gcommit).with(commit_sha).and_return(commit)
+      end
+
+      it { is_expected.to eq commit }
+    end
+
+    context 'when commit fetching raises an error' do
+      before do
+        allow_any_instance_of(Git::Base).to receive(:gcommit).with(commit_sha).and_raise(Git::GitExecuteError)
+      end
+
+      it { is_expected.to eq nil }
+    end
+  end
+
   describe '#method_missing' do
     it 'delegates to #repo' do
       expect(subject.lib).to eq subject.instance_variable_get(:@repo).lib
