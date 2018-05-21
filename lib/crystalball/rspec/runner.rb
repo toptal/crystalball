@@ -76,7 +76,7 @@ module Crystalball
 
         def build_prediction(out)
           check_map(out) unless ENV['CRYSTALBALL_SKIP_MAP_CHECK']
-          prediction = prediction_builder.prediction.compact
+          prediction = prediction_builder.prediction.sort_by(&:length)
           out.puts "Prediction: #{prediction.first(5).join(' ')}#{'...' if prediction.size > 5}"
           out.puts "Starting RSpec."
           prediction

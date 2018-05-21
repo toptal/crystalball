@@ -83,7 +83,7 @@ describe Crystalball::RSpec::Runner do
 
   describe '.run' do
     let(:prediction_builder) do
-      instance_double('Crystalball::RSpec::PredictionBuilder', prediction: double(compact: compact_prediction), expired_map?: false)
+      instance_double('Crystalball::RSpec::PredictionBuilder', prediction: compact_prediction, expired_map?: false)
     end
     let(:compact_prediction) { ['test'] }
 
