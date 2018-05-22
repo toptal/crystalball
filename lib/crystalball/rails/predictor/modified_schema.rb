@@ -33,7 +33,11 @@ module Crystalball
 
           changed_tables = changed_tables(old_schema, new_schema)
 
-          files = changed_tables.flat_map { |table_name| tables_map[table_name] }.compact
+          files = changed_tables.flat_map do |table_name|
+            files = tables_map[table_name]
+            puts "WARNING: there are no model files for changed table `#{table_name}`. Check https://github.com/toptal/crystalball#warning for detailed description"
+            files
+          end.compact
           detect_examples(files, map)
         end
 

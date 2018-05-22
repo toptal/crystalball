@@ -17,8 +17,6 @@ ActiveRecord::Schema.define(version: 20_180_321_094_057) do
   end
 
   create_table "model1s_model2s", id: :serial, force: :cascade do |t|
-    t.datetime "created_at"
-    t.datetime "updated_at"
     t.integer "model1_id"
     t.integer "model2_id"
   end
