@@ -78,10 +78,6 @@ describe Crystalball::MapGenerator do
     end
 
     describe '#start!' do
-      before do
-        allow_any_instance_of(Crystalball::GitRepo).to receive(:pristine?).and_return(true)
-      end
-
       it 'wipes the map and clears storage' do
         expect(storage).to receive :clear!
         expect do
@@ -92,12 +88,6 @@ describe Crystalball::MapGenerator do
       it 'dump new map metadata to storage' do
         expect(storage).to receive(:dump).with(type: map_class.to_s, commit: 'abc', timestamp: 1234, version: 1.0)
         subject.start!
-      end
-
-      it 'fails if repo is not pristine' do
-        allow_any_instance_of(Crystalball::GitRepo).to receive(:pristine?).and_return(false)
-
-        expect { subject.start! }.to raise_error(StandardError, 'Repository is not pristine! Please stash all your changes')
       end
 
       it 'calls after_start for each registered strategy' do

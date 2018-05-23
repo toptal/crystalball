@@ -33,8 +33,6 @@ module Crystalball
 
     # Registers strategies and prepares metadata for execution map
     def start!
-      raise 'Repository is not pristine! Please stash all your changes' if repo && !repo.pristine?
-
       self.map = nil
       map_storage.clear!
       map_storage.dump(map.metadata.to_h)
