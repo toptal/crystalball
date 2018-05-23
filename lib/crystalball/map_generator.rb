@@ -27,7 +27,7 @@ module Crystalball
 
     def initialize
       @configuration = Configuration.new
-      @configuration.commit = repo.object('HEAD').sha if repo
+      @configuration.commit = repo.gcommit('HEAD') if repo
       yield @configuration if block_given?
     end
 
@@ -58,7 +58,7 @@ module Crystalball
     end
 
     def map
-      @map ||= map_class.new(metadata: {commit: configuration.commit, version: configuration.version})
+      @map ||= map_class.new(metadata: {commit: configuration.commit&.sha, timestamp: configuration.commit&.date&.to_i, version: configuration.version})
     end
 
     private

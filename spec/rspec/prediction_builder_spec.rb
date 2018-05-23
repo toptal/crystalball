@@ -47,35 +47,20 @@ describe Crystalball::RSpec::PredictionBuilder do
       let(:configuration) do
         super().merge('map_expiration_period' => 10)
       end
-      let(:commit_date) { Time.now - 5 }
-      let(:commit_info) { double(date: commit_date) }
-      let(:map_commit) { double }
 
-      before { allow(map).to receive(:commit).and_return(map_commit) }
+      before { allow(map).to receive(:timestamp).and_return(timestamp) }
 
       context 'when commit exists in the working tree' do
-        before do
-          allow(repo).to receive(:gcommit!).with(map_commit).and_return(commit_info)
-        end
-
         context 'and map commit is too old' do
-          let(:commit_date) { Time.now - 10 }
+          let(:timestamp) { Time.now.to_i - 10 }
 
           it { is_expected.to eq true }
         end
 
         context 'and map commit is fresh enough' do
-          let(:commit_date) { Time.now - 9 }
+          let(:timestamp) { Time.now.to_i - 9 }
 
           it { is_expected.to eq false }
-        end
-      end
-
-      context 'when map commit doesnt exist in the working tree' do
-        it 'tries to fetch repo remotes' do
-          allow(repo).to receive(:gcommit!).with(map_commit).and_return(nil, commit_info)
-          expect(repo).to receive(:fetch).once.and_return(true)
-          expect(subject).to eq false
         end
       end
     end

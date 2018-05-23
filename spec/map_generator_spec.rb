@@ -43,9 +43,11 @@ describe Crystalball::MapGenerator do
   describe '#configuration' do
     describe '.commit' do
       subject { configuration.commit }
+      let(:commit) { double }
+
       it 'is git repo HEAD by default' do
-        allow_any_instance_of(Git::Base).to receive(:object).with('HEAD').and_return(double(sha: 'abc'))
-        expect(subject).to eq 'abc'
+        allow_any_instance_of(Git::Base).to receive(:gcommit).with('HEAD').and_return(commit)
+        expect(subject).to eq commit
       end
 
       context 'when repo does not exist' do
@@ -68,7 +70,7 @@ describe Crystalball::MapGenerator do
     end
 
     before do
-      configuration.commit = 'abc'
+      configuration.commit = double(sha: 'abc', date: 1234)
       configuration.dump_threshold = threshold
       configuration.map_storage = storage
       configuration.register dummy_strategy
@@ -88,7 +90,7 @@ describe Crystalball::MapGenerator do
       end
 
       it 'dump new map metadata to storage' do
-        expect(storage).to receive(:dump).with(type: map_class.to_s, commit: 'abc', version: 1.0)
+        expect(storage).to receive(:dump).with(type: map_class.to_s, commit: 'abc', timestamp: 1234, version: 1.0)
         subject.start!
       end
 
