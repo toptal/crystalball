@@ -28,11 +28,11 @@ module Crystalball
 
     # Proxy all unknown calls to `Git` object
     def method_missing(method, *args, &block)
-      repo.public_send(method, *args, &block) || super
+      repo.public_send(method, *args, &block)
     end
 
     def respond_to_missing?(method, *)
-      repo.respond_to?(method, false) || super
+      repo.respond_to?(method, false)
     end
 
     # Creates diff

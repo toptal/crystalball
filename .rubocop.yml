@@ -18,3 +18,5 @@ Naming/UncommunicativeMethodParamName:
   Enabled: false
 Lint/SplatKeywordArguments:
   Enabled: false
+Style/MethodMissingSuper:
+  Enabled: false
