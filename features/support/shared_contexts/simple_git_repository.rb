@@ -2,7 +2,8 @@
 
 shared_context 'simple git repository' do
   let(:features_root) { Pathname(__dir__).join('..', '..', '..', 'features') }
-  let(:simple_app_path) { features_root.join('fixtures', 'simple_app') }
+  let(:fixtures_path) { features_root.join('fixtures') }
+  let(:simple_app_path) { fixtures_path.join('simple_app') }
   let(:tmp_path) { features_root.join('tmp') }
   let(:root) { tmp_path.join('simple_app') }
   let(:lib_path) { root.join('lib') }
@@ -37,8 +38,8 @@ shared_context 'simple git repository' do
     root.rmtree
   end
 
-  def change(file_path)
-    file_path.write("'changed'")
+  def change(file_path, content = '"changed"')
+    file_path.write(content)
   end
 
   def delete(file_path)

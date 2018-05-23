@@ -39,6 +39,12 @@ module Crystalball
         self.cases = {}
       end
 
+      def add(files:, for_table:)
+        cases[for_table] ||= []
+        cases[for_table] += files
+        cases[for_table].uniq!
+      end
+
       private
 
       attr_writer :cases, :metadata

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'crystalball/simple_predictor'
+require 'crystalball/rspec/standard_prediction_builder'
 
 module Crystalball
   module RSpec
@@ -9,14 +9,14 @@ module Crystalball
       class Configuration
         def initialize(config = {})
           @values = {
-            'map_path' => 'tmp/execution_maps',
+            'execution_map_path' => 'tmp/execution_map.yml',
             'map_expiration_period' => 86_400,
             'repo_path' => Dir.pwd,
-            'predictor_class_name' => 'Crystalball::SimplePredictor',
             'requires' => [],
             'diff_from' => 'HEAD',
             'diff_to' => nil,
-            'runner_class_name' => 'Crystalball::RSpec::Runner'
+            'runner_class_name' => 'Crystalball::RSpec::Runner',
+            'prediction_builder_class_name' => 'Crystalball::RSpec::StandardPredictionBuilder'
           }.merge(config)
         end
 
@@ -35,11 +35,11 @@ module Crystalball
 
         private
 
-        def predictor_class
-          @predictor_class ||= begin
+        def prediction_builder_class
+          @prediction_builder_class ||= begin
             run_requires
 
-            Object.const_get(self['predictor_class_name'])
+            Object.const_get(self['prediction_builder_class_name'])
           end
         end
 
@@ -51,8 +51,8 @@ module Crystalball
           end
         end
 
-        def map_path
-          @map_path ||= Pathname.new(values['map_path'])
+        def execution_map_path
+          @execution_map_path ||= Pathname.new(values['execution_map_path'])
         end
 
         def repo_path

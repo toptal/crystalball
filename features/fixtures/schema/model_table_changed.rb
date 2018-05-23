@@ -8,7 +8,6 @@ ActiveRecord::Schema.define(version: 20_180_321_094_057) do
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index "name"
   end
 
   create_table "model2s", id: :serial, force: :cascade do |t|

@@ -25,11 +25,11 @@ module Crystalball
         end
 
         def prepare
-          config['runner_class'].load_map
+          config['runner_class'].load_execution_map
         end
 
         def prediction_builder
-          @prediction_builder ||= PredictionBuilder.new(config)
+          @prediction_builder ||= config['prediction_builder_class'].new(config)
         end
 
         def config
@@ -59,9 +59,9 @@ module Crystalball
 
         protected
 
-        def load_map
+        def load_execution_map
           check_map($stdout) unless ENV['CRYSTALBALL_SKIP_MAP_CHECK']
-          prediction_builder.map
+          prediction_builder.execution_map
         end
 
         private

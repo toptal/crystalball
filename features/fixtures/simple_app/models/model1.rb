@@ -8,5 +8,7 @@ class Model1 < ActiveRecord::Base
     self.field = field
   end
 
+  has_and_belongs_to_many :model2s
+
   attr_accessor :field
 end

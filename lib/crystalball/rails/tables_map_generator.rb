@@ -66,12 +66,14 @@ module Crystalball
       end
 
       def collect_tables_info
-        ObjectSpace.each_object(ActiveRecord::Base.singleton_class) do |descendant|
+        ActiveRecord::Base.descendants.each do |descendant|
           table_name = descendant.table_name
 
-          next if descendant == ActiveRecord::Base || table_name.nil?
+          next if table_name.nil?
 
-          map[table_name] = object_sources_detector.detect([descendant])
+          files = object_sources_detector.detect([descendant])
+
+          map.add(files: files, for_table: table_name)
         end
       end
 

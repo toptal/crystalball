@@ -15,21 +15,12 @@ describe Crystalball::RSpec::Runner do
   end
 
   describe '.prepare' do
-    let(:expected_config) { {'map_path' => 'map.yml', 'map_expiration_period' => 0} }
+    let(:expected_config) { {'execution_map_path' => 'map.yml', 'map_expiration_period' => 0, 'prediction_builder_class_name' => 'Crystalball::RSpec::PredictionBuilder'} }
     let(:config_content) { expected_config.to_yaml }
 
     before do
       allow(Pathname).to receive(:new).and_call_original
       allow_any_instance_of(Crystalball::RSpec::PredictionBuilder).to receive(:expired_map?).and_return(false)
-    end
-
-    it 'loads predictor map' do
-      expect(subject.prepare).to eq map
-    end
-
-    it 'performs predictor setup' do
-      expect(Crystalball::RSpec::PredictionBuilder).to receive(:new).and_call_original
-      subject.prepare
     end
 
     context 'with CRYSTALBALL_CONFIG env variable set' do
@@ -43,7 +34,7 @@ describe Crystalball::RSpec::Runner do
 
       specify do
         subject.prepare
-        expect(subject.prediction_builder.config.to_h).to include('map_path' => Pathname(expected_config['map_path']))
+        expect(subject.prediction_builder.config.to_h).to include('execution_map_path' => Pathname(expected_config['execution_map_path']))
       end
     end
 
@@ -57,7 +48,7 @@ describe Crystalball::RSpec::Runner do
         subject.prepare
         expect(subject.prediction_builder.config.to_h)
           .to include(
-            'map_path' => Pathname(expected_config['map_path']),
+            'execution_map_path' => Pathname(expected_config['execution_map_path']),
             'map_expiration_period' => 0
           )
       end
@@ -74,7 +65,7 @@ describe Crystalball::RSpec::Runner do
         subject.prepare
         expect(subject.prediction_builder.config.to_h)
           .to include(
-            'map_path' => Pathname(expected_config['map_path']),
+            'execution_map_path' => Pathname(expected_config['execution_map_path']),
             'map_expiration_period' => 0
           )
       end

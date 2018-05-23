@@ -11,7 +11,7 @@ describe 'RSpec runner' do
   it 'predicts examples' do
     change class1_path
 
-    is_expected.to match(%r{Prediction:.*spec/class1_spec.rb})
+    is_expected.to match(%r{Prediction:.*(spec/class1_spec.rb|spec/file_spec.rb)})
   end
 
   it 'checks limit' do

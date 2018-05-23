@@ -33,12 +33,12 @@ describe 'Prediction evaluation' do
     expect(evaluator).to have_attributes(
       predicted_failures: %w[./spec/models/model1_spec.rb],
       unpredicted_failures: %w[./spec/class1_spec.rb],
-      diff_size: 12,
-      prediction_to_diff_ratio: 2.0 / 12,
-      prediction_scale: 2.0 / 24,
+      diff_size: 14,
+      prediction_to_diff_ratio: 2.0 / 14,
+      prediction_scale: 2.0 / 25,
       prediction_rate: 0.5,
       prediction_size: 2,
-      map_size: 24
+      map_size: 25
     )
   end
 end

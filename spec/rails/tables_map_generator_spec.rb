@@ -62,7 +62,7 @@ describe Crystalball::Rails::TablesMapGenerator do
       configuration.map_storage = storage
       configuration.version = 1.0
 
-      stub_const('::ActiveRecord::Base', double(table_name: nil))
+      stub_const('::ActiveRecord::Base', double(table_name: nil, descendants: []))
     end
 
     describe '#start!' do
@@ -100,7 +100,7 @@ describe Crystalball::Rails::TablesMapGenerator do
         let(:descendant) { double(table_name: 'Dummy') }
 
         before do
-          allow(ObjectSpace).to receive(:each_object).with(ActiveRecord::Base.singleton_class).and_yield(descendant)
+          allow(ActiveRecord::Base).to receive(:descendants).and_return [descendant]
           allow(subject.object_sources_detector).to receive(:detect).with([descendant]) { ['file1'] }
         end
 
