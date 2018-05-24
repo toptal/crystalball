@@ -97,21 +97,8 @@ describe Crystalball::RSpec::Runner do
 
       after { ENV.delete('CRYSTALBALL_CONFIG') }
 
-      it 'exits RSpec ' do
+      it 'exits RSpec' do
         expect { described_class.run([]) }.to raise_error SystemExit
-      end
-
-      context 'and CRYSTALBALL_SKIP_EXAMPLES_LIMIT set' do
-        around do |example|
-          ENV['CRYSTALBALL_SKIP_EXAMPLES_LIMIT'] = '1'
-          example.call
-          ENV.delete('CRYSTALBALL_SKIP_EXAMPLES_LIMIT')
-        end
-
-        it 'runs examples' do
-          expect(RSpec::Core::ExampleGroup).to receive(:run)
-          expect { described_class.run([]) }.not_to raise_error
-        end
       end
     end
 

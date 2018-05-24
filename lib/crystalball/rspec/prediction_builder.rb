@@ -18,7 +18,8 @@ module Crystalball
       end
 
       def expired_map?
-        return false if config['map_expiration_period'] <= 0
+        expiration_period = config['map_expiration_period'].to_i
+        return false unless expiration_period.positive?
 
         map_commit = repo.gcommit!(execution_map.commit)
 
@@ -26,7 +27,7 @@ module Crystalball
 
         raise("Cant find map commit info #{execution_map.commit}") unless map_commit
 
-        map_commit.date < Time.now - config['map_expiration_period']
+        map_commit.date < Time.now - expiration_period
       end
 
       def execution_map

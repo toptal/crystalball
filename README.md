@@ -209,14 +209,19 @@ There is a custom RSpec runner you can use in your development with `bundle exec
 
 #### Config file
 
-Create a YAML file for the runner. Default locations are `./crystalball.yml` and `./config/crystalball.yml`. You can override config path with `CRYSTALBALL_CONFIG` env variable.
+Create a YAML file for the runner. Default locations are `./crystalball.yml` and `./config/crystalball.yml`.
 Please check an [example of a config file](https://github.com/toptal/crystalball/blob/master/spec/fixtures/crystalball.yml) for available options
 
-#### Environment variables
+#### Overriding config file
 
-`CRYSTALBALL_CONFIG=path/to/crystalball.yml` if you want to override default path to config file.  
-`CRYSTALBALL_SKIP_MAP_CHECK=true` if you want to skip maps expiration period check.  
-`CRYSTALBALL_SKIP_EXAMPLES_LIMIT=true` if you want to skip examples limit check.
+If you want to override the path to config file please set `CRYSTALBALL_CONFIG=path/to/crystalball.yml` env variable.
+
+Any specific configuration option in `crystalball.yml` can be overridden by providing ENV variable with "CRYSTALBALL_" prefix. 
+E.g. "CRYSTALBALL_EXAMPLES_LIMIT=10" will set `examples_limit` value to 10 regardless of what you have in config file.
+More examples:
+* `CRYSTALBALL_EXAMPLES_LIMIT=0` sets no limit on prediction size
+* `CRYSTALBALL_MAP_EXPIRATION_PERIOD=0` sets no expiration period for maps
+* `CRYSTALBALL_DIFF_FROM=origin/master` changes diff building to be `git diff origin/master`
 
 ## Development
 

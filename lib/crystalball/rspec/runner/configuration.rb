@@ -22,7 +22,7 @@ module Crystalball
 
         def to_h
           dynamic_values = {}
-          (private_methods - Object.private_instance_methods - %i[run_requires values]).each do |method|
+          (private_methods - Object.private_instance_methods - %i[run_requires values raw_value]).each do |method|
             dynamic_values[method.to_s] = send(method)
           end
 
@@ -30,10 +30,14 @@ module Crystalball
         end
 
         def [](key)
-          respond_to?(key, true) ? send(key) : values[key]
+          respond_to?(key, true) ? send(key) : raw_value(key)
         end
 
         private
+
+        def raw_value(key)
+          ENV.fetch("CRYSTALBALL_#{key.to_s.upcase}", values[key])
+        end
 
         def prediction_builder_class
           @prediction_builder_class ||= begin
@@ -52,11 +56,11 @@ module Crystalball
         end
 
         def execution_map_path
-          @execution_map_path ||= Pathname.new(values['execution_map_path'])
+          @execution_map_path ||= Pathname.new(raw_value('execution_map_path'))
         end
 
         def repo_path
-          @repo_path ||= Pathname.new(values['repo_path'])
+          @repo_path ||= Pathname.new(raw_value('repo_path'))
         end
 
         attr_reader :values

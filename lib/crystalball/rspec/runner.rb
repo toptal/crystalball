@@ -47,7 +47,7 @@ module Crystalball
 
         def check_limit(out)
           limit = config['examples_limit'].to_i
-          return if ENV['CRYSTALBALL_SKIP_EXAMPLES_LIMIT'] || !limit.positive?
+          return unless limit.positive?
 
           examples_count = yield
           return if examples_count <= limit
@@ -60,7 +60,7 @@ module Crystalball
         protected
 
         def load_execution_map
-          check_map($stdout) unless ENV['CRYSTALBALL_SKIP_MAP_CHECK']
+          check_map($stdout)
           prediction_builder.execution_map
         end
 
@@ -75,7 +75,7 @@ module Crystalball
         end
 
         def build_prediction(out)
-          check_map(out) unless ENV['CRYSTALBALL_SKIP_MAP_CHECK']
+          check_map(out)
           prediction = prediction_builder.prediction.sort_by(&:length)
           out.puts "Prediction: #{prediction.first(5).join(' ')}#{'...' if prediction.size > 5}"
           out.puts "Starting RSpec."
