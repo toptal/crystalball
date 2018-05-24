@@ -22,14 +22,22 @@ describe Crystalball::RSpec::PredictionBuilder do
   end
 
   describe '#prediction' do
-    let(:configuration) do
-      super().merge(
-        'diff_from' => 'HEAD~3',
-        'diff_to' => 'HEAD'
-      )
-    end
     it 'raises NotImplementedError by default' do
       expect { builder.prediction }.to raise_error NotImplementedError
+    end
+
+    context 'with predictor configured' do
+      before do
+        builder.define_singleton_method(:predictor) do
+          super() {}
+        end
+      end
+
+      it 'delegates to predictor' do
+        expected_prediction = double
+        allow_any_instance_of(Crystalball::Predictor).to receive(:prediction).and_return expected_prediction
+        expect(builder.prediction).to eq expected_prediction
+      end
     end
   end
 
