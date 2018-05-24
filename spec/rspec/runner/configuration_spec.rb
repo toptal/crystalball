@@ -68,5 +68,21 @@ describe Crystalball::RSpec::Runner::Configuration do
     it 'returns other custom attributes as is' do
       expect(config['custom']).to eq 42
     end
+
+    context 'with ENV overrides' do
+      around do |example|
+        value = ENV['CRYSTALBALL_DIFF_FROM']
+        begin
+          ENV['CRYSTALBALL_DIFF_FROM'] = 'origin/master'
+          example.call
+        ensure
+          ENV['CRYSTALBALL_DIFF_FROM'] = value
+        end
+      end
+
+      it 'prioritizes ENV variable' do
+        expect(config['diff_from']).to eq 'origin/master'
+      end
+    end
   end
 end

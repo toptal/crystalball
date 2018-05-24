@@ -212,11 +212,12 @@ There is a custom RSpec runner you can use in your development with `bundle exec
 Create a YAML file for the runner. Default locations are `./crystalball.yml` and `./config/crystalball.yml`. You can override config path with `CRYSTALBALL_CONFIG` env variable.
 Please check an [example of a config file](https://github.com/toptal/crystalball/blob/master/spec/fixtures/crystalball.yml) for available options
 
-#### Environment variables
+#### Overriding config file
 
-`CRYSTALBALL_CONFIG=path/to/crystalball.yml` if you want to override default path to config file.  
-`CRYSTALBALL_SKIP_MAP_CHECK=true` if you want to skip maps expiration period check.  
-`CRYSTALBALL_SKIP_EXAMPLES_LIMIT=true` if you want to skip examples limit check.
+If you want to override default path to config file please pass `CRYSTALBALL_CONFIG=path/to/crystalball.yml` env variable to Crystalball runner.
+
+Any specific configuration option in `crystalball.yml` can be overridden by providing ENV variable with "CRYSTALBALL_" prefix. 
+E.g. "CRYSTALBALL_EXAMPLES_LIMIT=10" will set examples limit value to 10 regardless of what you have in config file.
 
 ## Development
 
