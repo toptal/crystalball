@@ -11,8 +11,10 @@ module Crystalball
       include BaseStrategy
       include Helpers::PathFilter
 
+      attr_reader :const_definition_paths
+
       def initialize(root = Dir.pwd, pattern:)
-        @root_path = Pathname(root).realpath.to_s
+        @root_path = Pathname.new(root).realpath.to_s
         @processor = Processor.new
         @const_definition_paths = {}
         @pattern = pattern
@@ -43,7 +45,7 @@ module Crystalball
 
       private
 
-      attr_reader :const_definition_paths, :processor, :pattern, :root_path
+      attr_reader :processor, :pattern, :root_path
 
       def files_to_inspect
         Dir.glob(File.join(root_path, '**/*.rb')).grep(pattern)
