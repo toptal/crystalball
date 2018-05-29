@@ -66,10 +66,6 @@ describe Crystalball::Rails::TablesMapGenerator do
     end
 
     describe '#start!' do
-      before do
-        allow_any_instance_of(Crystalball::GitRepo).to receive(:pristine?).and_return(true)
-      end
-
       it 'wipes the map and clears storage' do
         expect(storage).to receive :clear!
         expect do

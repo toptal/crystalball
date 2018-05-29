@@ -7,25 +7,26 @@ module Crystalball
 
     # Simple data object for map metadata information
     class Metadata
-      attr_reader :commit, :type, :version
+      attr_reader :commit, :type, :version, :timestamp
 
       # @param [String] commit - SHA of commit
       # @param [String] type - type of execution map
       # @param [Numeric] version - map generator version number
-      def initialize(commit: nil, type: nil, version: nil)
+      def initialize(commit: nil, type: nil, version: nil, timestamp: nil)
         @commit = commit
         @type = type
+        @timestamp = timestamp
         @version = version
       end
 
       def to_h
-        {type: type, commit: commit, version: version}
+        {type: type, commit: commit, timestamp: timestamp, version: version}
       end
     end
 
     attr_reader :cases, :metadata
 
-    delegate %i[commit version] => :metadata
+    delegate %i[commit version timestamp] => :metadata
     delegate %i[size] => :cases
 
     # @param [Hash] metadata - add or override metadata of execution map
