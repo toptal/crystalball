@@ -36,9 +36,8 @@ module Crystalball
         yield case_map
         case_map.each do |path|
           next unless path.end_with?('.rb')
-          consts = processor.consts_interacted_with_in(path)
-          used = const_definition_paths.select { |k, _| consts.include?(k) }.values
-          paths.push(*used.flatten)
+          used_consts = processor.consts_interacted_with_in(path)
+          paths.push(*used_files(used_consts))
         end
         case_map.push(*filter(paths))
       end
@@ -46,6 +45,10 @@ module Crystalball
       private
 
       attr_reader :processor, :pattern, :root_path
+
+      def used_files(used_consts)
+        const_definition_paths.select { |k, _| Array(used_consts).include?(k) }.values.flatten
+      end
 
       def files_to_inspect
         Dir.glob(File.join(root_path, '**/*.rb')).grep(pattern)

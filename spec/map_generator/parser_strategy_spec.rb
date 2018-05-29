@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
+require 'crystalball/map_generator/parser_strategy'
 
 RSpec.describe Crystalball::MapGenerator::ParserStrategy do
   subject(:strategy) { described_class.new(root, pattern: pattern) }
@@ -27,14 +28,6 @@ RSpec.describe Crystalball::MapGenerator::ParserStrategy do
   end
 
   describe '#after_register' do
-    it 'yields back each path and constant' do
-      expect { |b| strategy.after_register(&b) }.to yield_successive_args(
-        ['Something', files.first],
-        ['Else', files[1]],
-        ['Stuff', files.last]
-      )
-    end
-
     it 'adds the constants defined to the const_definition_paths' do
       strategy.after_register
       expect(strategy.const_definition_paths).to eq(

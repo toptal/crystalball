@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
+require 'crystalball/map_generator/parser_strategy/processor'
 
 RSpec.describe Crystalball::MapGenerator::ParserStrategy::Processor do
   let(:processor) { described_class.new }

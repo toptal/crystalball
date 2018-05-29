@@ -16,7 +16,6 @@ require 'crystalball/map_generator/configuration'
 require 'crystalball/map_generator/coverage_strategy'
 require 'crystalball/map_generator/allocated_objects_strategy'
 require 'crystalball/map_generator/described_class_strategy'
-require 'crystalball/map_generator/parser_strategy'
 require 'crystalball/map_storage/yaml_storage'
 require 'crystalball/version'
 
