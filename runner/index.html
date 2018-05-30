@@ -434,11 +434,13 @@ Please keep in mind that additional generator\prediction strategies can introduc
 <h4 id="overriding-config-file">Overriding config file<a class="headerlink" href="#overriding-config-file" title="Permanent link">&para;</a></h4>
 <p>If you want to override the path to config file please set <code>CRYSTALBALL_CONFIG=path/to/crystalball.yml</code> env variable.</p>
 <p>Any specific configuration option in <code>crystalball.yml</code> can be overridden by providing ENV variable with "CRYSTALBALL_" prefix. 
-E.g. "CRYSTALBALL_EXAMPLES_LIMIT=10" will set <code>examples_limit</code> value to 10 regardless of what you have in config file.
-More examples:
-<em> <code>CRYSTALBALL_EXAMPLES_LIMIT=0</code> sets no limit on prediction size
-</em> <code>CRYSTALBALL_MAP_EXPIRATION_PERIOD=0</code> sets no expiration period for maps
-* <code>CRYSTALBALL_DIFF_FROM=origin/master</code> changes diff building to be <code>git diff origin/master</code></p>
+E.g. <code>CRYSTALBALL_EXAMPLES_LIMIT=10</code> will set <code>examples_limit</code> value to 10 regardless of what you have in config file.</p>
+<p>More examples:</p>
+<ul>
+<li><code>CRYSTALBALL_EXAMPLES_LIMIT=0</code> sets no limit on prediction size</li>
+<li><code>CRYSTALBALL_MAP_EXPIRATION_PERIOD=0</code> sets no expiration period for maps</li>
+<li><code>CRYSTALBALL_DIFF_FROM=origin/master</code> changes diff building to be <code>git diff origin/master</code></li>
+</ul>
                 
                   
                 

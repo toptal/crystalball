@@ -603,8 +603,8 @@ Check out the <a href="https://github.com/toptal/crystalball/tree/master/lib/cry
 <p>Keep in mind that all the strategies configured for the map generator will run for each example of your test suite, so it may slow down the generation process considerably.</p>
 <h2 id="tablesmapgenerator">TablesMapGenerator<a class="headerlink" href="#tablesmapgenerator" title="Permanent link">&para;</a></h2>
 <p>TablesMapGenerator is a separate map generator for Rails applications. It collects information about tables-to-models mapping and stores it in a file. The file is used by <code>Crystalball::Rails::Predictor::ModifiedSchema</code>.
-Use <code>Crystalball::Rails::TablesMapGenerator.start!</code> to start it.
-By default TablesMapGenerator will generate <code>tables_map.yml</code> file. You can customize this behavior by setting <code>map_storage_path</code> variable:</p>
+Use <code>Crystalball::Rails::TablesMapGenerator.start!</code> to start it.</p>
+<p>By default TablesMapGenerator will generate <code>tables_map.yml</code> file. You can customize this behavior by setting <code>map_storage_path</code> variable:</p>
 <div class="codehilite"><pre><span></span><span class="no">Crystalball</span><span class="o">::</span><span class="no">TablesMapGenerator</span><span class="o">.</span><span class="n">start!</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
   <span class="c1">#...</span>
   <span class="n">config</span><span class="o">.</span><span class="n">map_storage_path</span> <span class="o">=</span> <span class="s1">&#39;my_custom_tables_map_name.yml&#39;</span>
