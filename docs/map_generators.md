@@ -128,6 +128,7 @@ Keep in mind that all the strategies configured for the map generator will run f
 
 TablesMapGenerator is a separate map generator for Rails applications. It collects information about tables-to-models mapping and stores it in a file. The file is used by `Crystalball::Rails::Predictor::ModifiedSchema`.
 Use `Crystalball::Rails::TablesMapGenerator.start!` to start it.
+
 By default TablesMapGenerator will generate `tables_map.yml` file. You can customize this behavior by setting `map_storage_path` variable:
 ```ruby
 Crystalball::TablesMapGenerator.start! do |config|

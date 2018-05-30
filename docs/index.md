@@ -31,6 +31,7 @@ Crystalball workflow can be divided into 2 parts.
 Both of these steps can be heavily customized and enchanted based on your project specifics and your needs.
 
 You might want to check:
+
 * [map generators docs](map_generators.md) for details related to suite profiling.
 * [predictors docs](predictors.md) for details related to actual prediction.
 * [runner docs](runner.md) for runner configuration details. 
