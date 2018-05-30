@@ -1,0 +1,697 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+      
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../img/favicon.ico">
+      <meta name="generator" content="mkdocs-0.17.3, mkdocs-material-2.7.3">
+    
+    
+      
+        <title>Map Generators - Crystalball Manual</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/application.8d40d89b.css">
+      
+        <link rel="stylesheet" href="../assets/stylesheets/application-palette.6079476c.css">
+      
+    
+    
+      <script src="../assets/javascripts/modernizr.1aa3b519.js"></script>
+    
+    
+      <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+      
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    
+    
+    
+  </head>
+  
+    
+    
+    <body dir="ltr" data-md-color-primary="indigo" data-md-color-accent="pink">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448"
+    viewBox="0 0 416 448" id="github">
+  <path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19-18.125
+        8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19 18.125-8.5
+        18.125 8.5 10.75 19 3.125 20.5zM320 304q0 10-3.125 20.5t-10.75
+        19-18.125 8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19
+        18.125-8.5 18.125 8.5 10.75 19 3.125 20.5zM360
+        304q0-30-17.25-51t-46.75-21q-10.25 0-48.75 5.25-17.75 2.75-39.25
+        2.75t-39.25-2.75q-38-5.25-48.75-5.25-29.5 0-46.75 21t-17.25 51q0 22 8
+        38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0
+        37.25-1.75t35-7.375 30.5-15 20.25-25.75 8-38.375zM416 260q0 51.75-15.25
+        82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5-41.75
+        1.125q-19.5 0-35.5-0.75t-36.875-3.125-38.125-7.5-34.25-12.875-30.25-20.25-21.5-28.75q-15.5-30.75-15.5-82.75
+        0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25
+        30.875q36.75-8.75 77.25-8.75 37 0 70 8 26.25-20.5
+        46.75-30.25t47.25-9.75q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34
+        99.5z" />
+</svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="drawer"></label>
+    
+      <a href="#map-generators" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href=".." title="Crystalball Manual" class="md-header-nav__button md-logo">
+          
+            <img src="../img/logo.png" width="24" height="24">
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            
+              <span class="md-header-nav__topic">
+                Crystalball Manual
+              </span>
+              <span class="md-header-nav__topic">
+                Map Generators
+              </span>
+            
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          
+            <label class="md-icon md-icon--search md-header-nav__button" for="search"></label>
+            
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+          
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+
+  <a href="https://github.com/toptal/crystalball/" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      GitHub
+    </div>
+  </a>
+
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+      <main class="md-main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="drawer">
+    <span class="md-nav__button md-logo">
+      
+        <img src="../img/logo.png" width="48" height="48">
+      
+    </span>
+    Crystalball Manual
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+
+  <a href="https://github.com/toptal/crystalball/" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      GitHub
+    </div>
+  </a>
+
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href=".." title="Home" class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        Map Generators
+      </label>
+    
+    <a href="./" title="Map Generators" class="md-nav__link md-nav__link--active">
+      Map Generators
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#execution-map-generator" title="Execution Map Generator" class="md-nav__link">
+    Execution Map Generator
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#custom-map-file-name" title="Custom map file name" class="md-nav__link">
+    Custom map file name
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#coveragestrategy" title="CoverageStrategy" class="md-nav__link">
+    CoverageStrategy
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#allocatedobjectsstrategy" title="AllocatedObjectsStrategy" class="md-nav__link">
+    AllocatedObjectsStrategy
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#describedclassstrategy" title="DescribedClassStrategy" class="md-nav__link">
+    DescribedClassStrategy
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parserstrategy" title="ParserStrategy" class="md-nav__link">
+    ParserStrategy
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#actionviewstrategy" title="ActionViewStrategy" class="md-nav__link">
+    ActionViewStrategy
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i18nstrategy" title="I18nStrategy" class="md-nav__link">
+    I18nStrategy
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#custom-strategies" title="Custom strategies" class="md-nav__link">
+    Custom strategies
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tablesmapgenerator" title="TablesMapGenerator" class="md-nav__link">
+    TablesMapGenerator
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../predictors/" title="Predictors" class="md-nav__link">
+      Predictors
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../runner/" title="Runner" class="md-nav__link">
+      Runner
+    </a>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#execution-map-generator" title="Execution Map Generator" class="md-nav__link">
+    Execution Map Generator
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#custom-map-file-name" title="Custom map file name" class="md-nav__link">
+    Custom map file name
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#coveragestrategy" title="CoverageStrategy" class="md-nav__link">
+    CoverageStrategy
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#allocatedobjectsstrategy" title="AllocatedObjectsStrategy" class="md-nav__link">
+    AllocatedObjectsStrategy
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#describedclassstrategy" title="DescribedClassStrategy" class="md-nav__link">
+    DescribedClassStrategy
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parserstrategy" title="ParserStrategy" class="md-nav__link">
+    ParserStrategy
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#actionviewstrategy" title="ActionViewStrategy" class="md-nav__link">
+    ActionViewStrategy
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i18nstrategy" title="I18nStrategy" class="md-nav__link">
+    I18nStrategy
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#custom-strategies" title="Custom strategies" class="md-nav__link">
+    Custom strategies
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tablesmapgenerator" title="TablesMapGenerator" class="md-nav__link">
+    TablesMapGenerator
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/toptal/crystalball/edit/master/docs/map_generators.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                
+                
+                <h1 id="map-generators">Map generators<a class="headerlink" href="#map-generators" title="Permanent link">&para;</a></h1>
+<h2 id="execution-map-generator">Execution Map Generator<a class="headerlink" href="#execution-map-generator" title="Permanent link">&para;</a></h2>
+<p>There are different map generator strategies that can (and should) be used together for better predictions. Each one has its own benefits and drawbacks, so they should be configured to best fit your needs.</p>
+<h3 id="custom-map-file-name">Custom map file name<a class="headerlink" href="#custom-map-file-name" title="Permanent link">&para;</a></h3>
+<p>You can customize resulting map filename with <code>map_storage_path</code> value. E.g.</p>
+<div class="codehilite"><pre><span></span><span class="no">Crystalball</span><span class="o">::</span><span class="no">MapGenerator</span><span class="o">.</span><span class="n">start!</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+  <span class="c1">#...</span>
+  <span class="n">config</span><span class="o">.</span><span class="n">map_storage_path</span> <span class="o">=</span> <span class="s2">&quot;execution_map_</span><span class="si">#{</span><span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;TEST_ENV_NUMBER&#39;</span><span class="o">].</span><span class="n">to_i</span><span class="si">}</span><span class="s2">.yml&quot;</span>
+<span class="k">end</span>
+</pre></div>
+
+
+<h3 id="coveragestrategy">CoverageStrategy<a class="headerlink" href="#coveragestrategy" title="Permanent link">&para;</a></h3>
+<p>Uses coverage information to detect which files are covered by the given spec (i.e. the files that, if changed, may potentially break the spec);
+To customize the way the execution detection works, pass an object that responds to #detect and returns the paths to the strategy initialization:</p>
+<div class="codehilite"><pre><span></span><span class="no">Crystalball</span><span class="o">::</span><span class="no">MapGenerator</span><span class="o">.</span><span class="n">start!</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+  <span class="c1">#...</span>
+  <span class="n">config</span><span class="o">.</span><span class="n">register</span> <span class="no">Crystalball</span><span class="o">::</span><span class="no">MapGenerator</span><span class="o">::</span><span class="no">CoverageStrategy</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">my_detector</span><span class="p">)</span>
+<span class="k">end</span>
+</pre></div>
+
+
+<p>By default, the execution detector is a <code>Crystalball::MapGenerator::CoverageStrategy::ExecutionDetector</code>, which filters out the paths outside of the project root and converts absolute paths to relative.</p>
+<h3 id="allocatedobjectsstrategy">AllocatedObjectsStrategy<a class="headerlink" href="#allocatedobjectsstrategy" title="Permanent link">&para;</a></h3>
+<p>Looks for the files in which the objects allocated during the spec execution are defined. It is considerably slower than <code>CoverageStrategy</code>.
+To use this strategy, use the convenient method <code>.build</code> which takes two optional keyword arguments: <code>only</code>, used to define the classes or modules to have their descendants tracked (defaults to <code>[]</code>); and <code>root</code>, which is the path where the detection will take place (defaults to <code>Dir.pwd</code>).
+Here's an example that tracks allocation of <code>ActiveRecord::Base</code> objects:</p>
+<div class="codehilite"><pre><span></span><span class="no">Crystalball</span><span class="o">::</span><span class="no">MapGenerator</span><span class="o">.</span><span class="n">start!</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+  <span class="c1">#...</span>
+  <span class="n">config</span><span class="o">.</span><span class="n">register</span> <span class="no">Crystalball</span><span class="o">::</span><span class="no">MapGenerator</span><span class="o">::</span><span class="no">AllocatedObjectsStrategy</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="ss">only</span><span class="p">:</span> <span class="o">[</span><span class="s1">&#39;ActiveRecord::Base&#39;</span><span class="o">]</span><span class="p">)</span>
+<span class="k">end</span>
+</pre></div>
+
+
+<p>That method is fine for most uses, but if you need to further customize the behavior of the strategy, you can directly instantiate the class.</p>
+<div class="codehilite"><pre><span></span><span class="no">Crystalball</span><span class="o">::</span><span class="no">MapGenerator</span><span class="o">.</span><span class="n">start!</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+  <span class="c1">#...</span>
+  <span class="n">config</span><span class="o">.</span><span class="n">register</span> <span class="no">Crystalball</span><span class="o">::</span><span class="no">MapGenerator</span><span class="o">::</span><span class="no">AllocatedObjectsStrategy</span>
+    <span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">execution_detector</span><span class="p">:</span> <span class="n">my_detector</span><span class="p">,</span> <span class="ss">object_tracker</span><span class="p">:</span> <span class="n">my_tracker</span><span class="p">)</span>
+<span class="k">end</span>
+</pre></div>
+
+
+<p>The initialization takes two keyword arguments: <code>execution_detector</code> and <code>object_tracker</code>.
+<code>execution_detector</code> must be an object that responds to <code>#detect</code> receiving a list of objects and returning the paths affected by said objects. <code>object_tracker</code> is something that responds to <code>#used_classes_during</code> which yields to the caller and returns the array of classes of objects allocated during the execution of the block.</p>
+<h3 id="describedclassstrategy">DescribedClassStrategy<a class="headerlink" href="#describedclassstrategy" title="Permanent link">&para;</a></h3>
+<p>This strategy will take each example that has a <code>described_class</code> (i.e. examples inside <code>describe</code> blocks of classes and not strings) and add the paths where the described class and its ancestors are defined to the case map of the example;</p>
+<p>To use it, add to your <code>Crystalball::MapGenerator.start!</code> block:</p>
+<div class="codehilite"><pre><span></span><span class="no">Crystalball</span><span class="o">::</span><span class="no">MapGenerator</span><span class="o">.</span><span class="n">start!</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+  <span class="c1">#...</span>
+  <span class="n">config</span><span class="o">.</span><span class="n">register</span> <span class="no">Crystalball</span><span class="o">::</span><span class="no">MapGenerator</span><span class="o">::</span><span class="no">DescribedClassStrategy</span><span class="o">.</span><span class="n">new</span>
+<span class="k">end</span>
+</pre></div>
+
+
+<p>As with <code>AllocatedObjectsStrategy</code>, you can pass a custom execution detector (an object that responds to <code>#detect</code> and returns the paths) to the initialization:</p>
+<div class="codehilite"><pre><span></span><span class="no">Crystalball</span><span class="o">::</span><span class="no">MapGenerator</span><span class="o">.</span><span class="n">start!</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+  <span class="c1">#...</span>
+  <span class="n">config</span><span class="o">.</span><span class="n">register</span> <span class="no">Crystalball</span><span class="o">::</span><span class="no">MapGenerator</span><span class="o">::</span><span class="no">DescribedClassStrategy</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">my_detector</span><span class="p">)</span>
+<span class="k">end</span>
+</pre></div>
+
+
+<h3 id="parserstrategy">ParserStrategy<a class="headerlink" href="#parserstrategy" title="Permanent link">&para;</a></h3>
+<p>The <code>ParserStrategy</code>, as the name suggests parses the files in order to detect which files are affected by an example.
+It works by first parsing all (<code>.rb</code>) files that match the given pattern under the configured root directory (defaults to current directory) to collect the constants definition paths.
+Then, when each example is executed, the affected files of the current case map are parsed to check for method calls to those constants. For that reason, <code>ParserStrategy</code> <strong>only works when used with other strategies and is placed at the end of the strategies list</strong>.</p>
+<p>To use it, add the <code>parser</code> gem to your <code>Gemfile</code> and:</p>
+<div class="codehilite"><pre><span></span><span class="nb">require</span> <span class="s1">&#39;crystalball/map_generator/parser_strategy&#39;</span>
+<span class="no">Crystalball</span><span class="o">::</span><span class="no">MapGenerator</span><span class="o">.</span><span class="n">start!</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+  <span class="c1">#...</span>
+  <span class="n">config</span><span class="o">.</span><span class="n">register</span> <span class="no">Crystalball</span><span class="o">::</span><span class="no">MapGenerator</span><span class="o">::</span><span class="no">ParserStrategy</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">pattern</span><span class="p">:</span> <span class="sr">/\A(app)|(lib)/</span><span class="p">)</span>
+<span class="k">end</span>
+</pre></div>
+
+
+<h3 id="actionviewstrategy">ActionViewStrategy<a class="headerlink" href="#actionviewstrategy" title="Permanent link">&para;</a></h3>
+<p>To use Rails specific strategies you must first <code>require 'crystalball/rails'</code>.
+This strategy patches <code>ActionView::Template#compile!</code> to map the examples to affected views. Use it as follows:</p>
+<div class="codehilite"><pre><span></span><span class="no">Crystalball</span><span class="o">::</span><span class="no">MapGenerator</span><span class="o">.</span><span class="n">start!</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+  <span class="c1">#...</span>
+  <span class="n">config</span><span class="o">.</span><span class="n">register</span> <span class="no">Crystalball</span><span class="o">::</span><span class="no">MapGenerator</span><span class="o">::</span><span class="no">ActionViewStrategy</span><span class="o">.</span><span class="n">new</span>
+<span class="k">end</span> 
+</pre></div>
+
+
+<h3 id="i18nstrategy">I18nStrategy<a class="headerlink" href="#i18nstrategy" title="Permanent link">&para;</a></h3>
+<p>To use Rails specific strategies you must first <code>require 'crystalball/rails'</code>.
+Patches I18n to have access to the path where the locales are defined, so that those paths can be added to the case map.
+To use it, add to your config:</p>
+<div class="codehilite"><pre><span></span><span class="no">Crystalball</span><span class="o">::</span><span class="no">MapGenerator</span><span class="o">.</span><span class="n">start!</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+  <span class="c1">#...</span>
+  <span class="n">config</span><span class="o">.</span><span class="n">register</span> <span class="no">Crystalball</span><span class="o">::</span><span class="no">MapGenerator</span><span class="o">::</span><span class="no">I18nStrategy</span><span class="o">.</span><span class="n">new</span>
+<span class="k">end</span>
+</pre></div>
+
+
+<h3 id="custom-strategies">Custom strategies<a class="headerlink" href="#custom-strategies" title="Permanent link">&para;</a></h3>
+<p>You can create your own strategy and use it with the map generator. Any object that responds to <code>#call(case_map, example)</code> (where <code>case_map</code> is a <code>Crystalball::CaseMap</code> and <code>example</code> a <code>RSpec::Core::Example</code>) and augmenting its list of affected files using <code>case_map.push(*paths_to_files)</code>.
+Check out the <a href="https://github.com/toptal/crystalball/tree/master/lib/crystalball/map_generator">implementation</a> of the default strategies for examples.</p>
+<p>Keep in mind that all the strategies configured for the map generator will run for each example of your test suite, so it may slow down the generation process considerably.</p>
+<h2 id="tablesmapgenerator">TablesMapGenerator<a class="headerlink" href="#tablesmapgenerator" title="Permanent link">&para;</a></h2>
+<p>TablesMapGenerator is a separate map generator for Rails applications. It collects information about tables-to-models mapping and stores it in a file. The file is used by <code>Crystalball::Rails::Predictor::ModifiedSchema</code>.
+Use <code>Crystalball::Rails::TablesMapGenerator.start!</code> to start it.
+By default TablesMapGenerator will generate <code>tables_map.yml</code> file. You can customize this behavior by setting <code>map_storage_path</code> variable:</p>
+<div class="codehilite"><pre><span></span><span class="no">Crystalball</span><span class="o">::</span><span class="no">TablesMapGenerator</span><span class="o">.</span><span class="n">start!</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+  <span class="c1">#...</span>
+  <span class="n">config</span><span class="o">.</span><span class="n">map_storage_path</span> <span class="o">=</span> <span class="s1">&#39;my_custom_tables_map_name.yml&#39;</span>
+<span class="k">end</span>
+</pre></div>
+                
+                  
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href=".." title="Home" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Home
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../predictors/" title="Predictors" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Predictors
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2013 - 2018 Toptal
+          </div>
+        
+        powered by
+        <a href="http://www.mkdocs.org">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/">
+          Material for MkDocs</a>
+      </div>
+      
+        
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../assets/javascripts/application.b438e6c5.js"></script>
+      
+      <script>app.initialize({version:"0.17.3",url:{base:".."}})</script>
+      
+    
+    
+      
+    
+  </body>
+</html>

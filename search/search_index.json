@@ -1,0 +1,174 @@
+{
+    "docs": [
+        {
+            "location": "/", 
+            "text": "Crystalball\n\n\nCrystalball is a Ruby library which implements \nRegression Test Selection mechanism\n originally published by Aaron Patterson. \nIts main purpose is to select a minimal subset of your test suite which should be run to ensure your changes didn't break anything.\n\n\nInstallation\n\n\nPlease check our \ninstallation instructions\n.\n\n\nBasic Usage\n\n\n\n\nStart MapGenerator in your \nspec_helper\n before you loaded any file of your app. E.g.\n    \nruby\n    Crystalball::MapGenerator.start! do |config|\n      config.register Crystalball::MapGenerator::CoverageStrategy.new\n    end\n\n\nRun your test suite on clean master branch with green build. This step will generate file \nexecution_map.yml\n in your project root. This file contains useful profiling data for Crystalball.\n\n\nMake some changes to your app code\n\n\nRun \nbundle exec crystalball\n to build a prediction and run RSpec with it. Check out \nRSpec runner section\n for customization details.\n\n\n\n\nKeep in mind that as your target branch (usually master) code changes your execution maps will become outdated, \nso you need to regenerate execution maps regularly.\n\n\nAdvanced Usage\n\n\nCrystalball workflow can be divided into 2 parts. \n1. Full build profiling where Crystalball gathers some data about your RSpec suite for later use in predictions. This is where map generators do their job.\n2. Actual predicting where Crystalball uses profiling info from step above and tries to get best prediction possible. This is where predictors do their job.\n\n\nBoth of these steps can be heavily customized and enchanted based on your project specifics and your needs.\n\n\nYou might want to check:\n\n \nmap generators docs\n for details related to suite profiling.\n\n \npredictors docs\n for details related to actual prediction.\n* \nrunner docs\n for runner configuration details. \n\n\nSpring integration\n\n\nIt's very easy to integrate Crystalball with \nSpring\n. Check out \nspring-commands-crystalball\n for details.", 
+            "title": "Home"
+        }, 
+        {
+            "location": "/#crystalball", 
+            "text": "Crystalball is a Ruby library which implements  Regression Test Selection mechanism  originally published by Aaron Patterson. \nIts main purpose is to select a minimal subset of your test suite which should be run to ensure your changes didn't break anything.", 
+            "title": "Crystalball"
+        }, 
+        {
+            "location": "/#installation", 
+            "text": "Please check our  installation instructions .", 
+            "title": "Installation"
+        }, 
+        {
+            "location": "/#basic-usage", 
+            "text": "Start MapGenerator in your  spec_helper  before you loaded any file of your app. E.g.\n     ruby\n    Crystalball::MapGenerator.start! do |config|\n      config.register Crystalball::MapGenerator::CoverageStrategy.new\n    end  Run your test suite on clean master branch with green build. This step will generate file  execution_map.yml  in your project root. This file contains useful profiling data for Crystalball.  Make some changes to your app code  Run  bundle exec crystalball  to build a prediction and run RSpec with it. Check out  RSpec runner section  for customization details.   Keep in mind that as your target branch (usually master) code changes your execution maps will become outdated, \nso you need to regenerate execution maps regularly.", 
+            "title": "Basic Usage"
+        }, 
+        {
+            "location": "/#advanced-usage", 
+            "text": "Crystalball workflow can be divided into 2 parts. \n1. Full build profiling where Crystalball gathers some data about your RSpec suite for later use in predictions. This is where map generators do their job.\n2. Actual predicting where Crystalball uses profiling info from step above and tries to get best prediction possible. This is where predictors do their job.  Both of these steps can be heavily customized and enchanted based on your project specifics and your needs.  You might want to check:   map generators docs  for details related to suite profiling.   predictors docs  for details related to actual prediction.\n*  runner docs  for runner configuration details.", 
+            "title": "Advanced Usage"
+        }, 
+        {
+            "location": "/#spring-integration", 
+            "text": "It's very easy to integrate Crystalball with  Spring . Check out  spring-commands-crystalball  for details.", 
+            "title": "Spring integration"
+        }, 
+        {
+            "location": "/map_generators/", 
+            "text": "Map generators\n\n\nExecution Map Generator\n\n\nThere are different map generator strategies that can (and should) be used together for better predictions. Each one has its own benefits and drawbacks, so they should be configured to best fit your needs.\n\n\nCustom map file name\n\n\nYou can customize resulting map filename with \nmap_storage_path\n value. E.g.\n\n\nCrystalball\n::\nMapGenerator\n.\nstart!\n \ndo\n \n|\nconfig\n|\n\n  \n#...\n\n  \nconfig\n.\nmap_storage_path\n \n=\n \nexecution_map_\n#{\nENV\n[\nTEST_ENV_NUMBER\n].\nto_i\n}\n.yml\n\n\nend\n\n\n\n\n\n\nCoverageStrategy\n\n\nUses coverage information to detect which files are covered by the given spec (i.e. the files that, if changed, may potentially break the spec);\nTo customize the way the execution detection works, pass an object that responds to #detect and returns the paths to the strategy initialization:\n\n\nCrystalball\n::\nMapGenerator\n.\nstart!\n \ndo\n \n|\nconfig\n|\n\n  \n#...\n\n  \nconfig\n.\nregister\n \nCrystalball\n::\nMapGenerator\n::\nCoverageStrategy\n.\nnew\n(\nmy_detector\n)\n\n\nend\n\n\n\n\n\n\nBy default, the execution detector is a \nCrystalball::MapGenerator::CoverageStrategy::ExecutionDetector\n, which filters out the paths outside of the project root and converts absolute paths to relative.\n\n\nAllocatedObjectsStrategy\n\n\nLooks for the files in which the objects allocated during the spec execution are defined. It is considerably slower than \nCoverageStrategy\n.\nTo use this strategy, use the convenient method \n.build\n which takes two optional keyword arguments: \nonly\n, used to define the classes or modules to have their descendants tracked (defaults to \n[]\n); and \nroot\n, which is the path where the detection will take place (defaults to \nDir.pwd\n).\nHere's an example that tracks allocation of \nActiveRecord::Base\n objects:\n\n\nCrystalball\n::\nMapGenerator\n.\nstart!\n \ndo\n \n|\nconfig\n|\n\n  \n#...\n\n  \nconfig\n.\nregister\n \nCrystalball\n::\nMapGenerator\n::\nAllocatedObjectsStrategy\n.\nbuild\n(\nonly\n:\n \n[\nActiveRecord::Base\n]\n)\n\n\nend\n\n\n\n\n\n\nThat method is fine for most uses, but if you need to further customize the behavior of the strategy, you can directly instantiate the class.\n\n\nCrystalball\n::\nMapGenerator\n.\nstart!\n \ndo\n \n|\nconfig\n|\n\n  \n#...\n\n  \nconfig\n.\nregister\n \nCrystalball\n::\nMapGenerator\n::\nAllocatedObjectsStrategy\n\n    \n.\nnew\n(\nexecution_detector\n:\n \nmy_detector\n,\n \nobject_tracker\n:\n \nmy_tracker\n)\n\n\nend\n\n\n\n\n\n\nThe initialization takes two keyword arguments: \nexecution_detector\n and \nobject_tracker\n.\n\nexecution_detector\n must be an object that responds to \n#detect\n receiving a list of objects and returning the paths affected by said objects. \nobject_tracker\n is something that responds to \n#used_classes_during\n which yields to the caller and returns the array of classes of objects allocated during the execution of the block.\n\n\nDescribedClassStrategy\n\n\nThis strategy will take each example that has a \ndescribed_class\n (i.e. examples inside \ndescribe\n blocks of classes and not strings) and add the paths where the described class and its ancestors are defined to the case map of the example;\n\n\nTo use it, add to your \nCrystalball::MapGenerator.start!\n block:\n\n\nCrystalball\n::\nMapGenerator\n.\nstart!\n \ndo\n \n|\nconfig\n|\n\n  \n#...\n\n  \nconfig\n.\nregister\n \nCrystalball\n::\nMapGenerator\n::\nDescribedClassStrategy\n.\nnew\n\n\nend\n\n\n\n\n\n\nAs with \nAllocatedObjectsStrategy\n, you can pass a custom execution detector (an object that responds to \n#detect\n and returns the paths) to the initialization:\n\n\nCrystalball\n::\nMapGenerator\n.\nstart!\n \ndo\n \n|\nconfig\n|\n\n  \n#...\n\n  \nconfig\n.\nregister\n \nCrystalball\n::\nMapGenerator\n::\nDescribedClassStrategy\n.\nnew\n(\nmy_detector\n)\n\n\nend\n\n\n\n\n\n\nParserStrategy\n\n\nThe \nParserStrategy\n, as the name suggests parses the files in order to detect which files are affected by an example.\nIt works by first parsing all (\n.rb\n) files that match the given pattern under the configured root directory (defaults to current directory) to collect the constants definition paths.\nThen, when each example is executed, the affected files of the current case map are parsed to check for method calls to those constants. For that reason, \nParserStrategy\n \nonly works when used with other strategies and is placed at the end of the strategies list\n.\n\n\nTo use it, add the \nparser\n gem to your \nGemfile\n and:\n\n\nrequire\n \ncrystalball/map_generator/parser_strategy\n\n\nCrystalball\n::\nMapGenerator\n.\nstart!\n \ndo\n \n|\nconfig\n|\n\n  \n#...\n\n  \nconfig\n.\nregister\n \nCrystalball\n::\nMapGenerator\n::\nParserStrategy\n.\nnew\n(\npattern\n:\n \n/\\A(app)|(lib)/\n)\n\n\nend\n\n\n\n\n\n\nActionViewStrategy\n\n\nTo use Rails specific strategies you must first \nrequire 'crystalball/rails'\n.\nThis strategy patches \nActionView::Template#compile!\n to map the examples to affected views. Use it as follows:\n\n\nCrystalball\n::\nMapGenerator\n.\nstart!\n \ndo\n \n|\nconfig\n|\n\n  \n#...\n\n  \nconfig\n.\nregister\n \nCrystalball\n::\nMapGenerator\n::\nActionViewStrategy\n.\nnew\n\n\nend\n \n\n\n\n\n\nI18nStrategy\n\n\nTo use Rails specific strategies you must first \nrequire 'crystalball/rails'\n.\nPatches I18n to have access to the path where the locales are defined, so that those paths can be added to the case map.\nTo use it, add to your config:\n\n\nCrystalball\n::\nMapGenerator\n.\nstart!\n \ndo\n \n|\nconfig\n|\n\n  \n#...\n\n  \nconfig\n.\nregister\n \nCrystalball\n::\nMapGenerator\n::\nI18nStrategy\n.\nnew\n\n\nend\n\n\n\n\n\n\nCustom strategies\n\n\nYou can create your own strategy and use it with the map generator. Any object that responds to \n#call(case_map, example)\n (where \ncase_map\n is a \nCrystalball::CaseMap\n and \nexample\n a \nRSpec::Core::Example\n) and augmenting its list of affected files using \ncase_map.push(*paths_to_files)\n.\nCheck out the \nimplementation\n of the default strategies for examples.\n\n\nKeep in mind that all the strategies configured for the map generator will run for each example of your test suite, so it may slow down the generation process considerably.\n\n\nTablesMapGenerator\n\n\nTablesMapGenerator is a separate map generator for Rails applications. It collects information about tables-to-models mapping and stores it in a file. The file is used by \nCrystalball::Rails::Predictor::ModifiedSchema\n.\nUse \nCrystalball::Rails::TablesMapGenerator.start!\n to start it.\nBy default TablesMapGenerator will generate \ntables_map.yml\n file. You can customize this behavior by setting \nmap_storage_path\n variable:\n\n\nCrystalball\n::\nTablesMapGenerator\n.\nstart!\n \ndo\n \n|\nconfig\n|\n\n  \n#...\n\n  \nconfig\n.\nmap_storage_path\n \n=\n \nmy_custom_tables_map_name.yml\n\n\nend", 
+            "title": "Map Generators"
+        }, 
+        {
+            "location": "/map_generators/#map-generators", 
+            "text": "", 
+            "title": "Map generators"
+        }, 
+        {
+            "location": "/map_generators/#execution-map-generator", 
+            "text": "There are different map generator strategies that can (and should) be used together for better predictions. Each one has its own benefits and drawbacks, so they should be configured to best fit your needs.", 
+            "title": "Execution Map Generator"
+        }, 
+        {
+            "location": "/map_generators/#custom-map-file-name", 
+            "text": "You can customize resulting map filename with  map_storage_path  value. E.g.  Crystalball :: MapGenerator . start!   do   | config | \n   #... \n   config . map_storage_path   =   execution_map_ #{ ENV [ TEST_ENV_NUMBER ]. to_i } .yml  end", 
+            "title": "Custom map file name"
+        }, 
+        {
+            "location": "/map_generators/#coveragestrategy", 
+            "text": "Uses coverage information to detect which files are covered by the given spec (i.e. the files that, if changed, may potentially break the spec);\nTo customize the way the execution detection works, pass an object that responds to #detect and returns the paths to the strategy initialization:  Crystalball :: MapGenerator . start!   do   | config | \n   #... \n   config . register   Crystalball :: MapGenerator :: CoverageStrategy . new ( my_detector )  end   By default, the execution detector is a  Crystalball::MapGenerator::CoverageStrategy::ExecutionDetector , which filters out the paths outside of the project root and converts absolute paths to relative.", 
+            "title": "CoverageStrategy"
+        }, 
+        {
+            "location": "/map_generators/#allocatedobjectsstrategy", 
+            "text": "Looks for the files in which the objects allocated during the spec execution are defined. It is considerably slower than  CoverageStrategy .\nTo use this strategy, use the convenient method  .build  which takes two optional keyword arguments:  only , used to define the classes or modules to have their descendants tracked (defaults to  [] ); and  root , which is the path where the detection will take place (defaults to  Dir.pwd ).\nHere's an example that tracks allocation of  ActiveRecord::Base  objects:  Crystalball :: MapGenerator . start!   do   | config | \n   #... \n   config . register   Crystalball :: MapGenerator :: AllocatedObjectsStrategy . build ( only :   [ ActiveRecord::Base ] )  end   That method is fine for most uses, but if you need to further customize the behavior of the strategy, you can directly instantiate the class.  Crystalball :: MapGenerator . start!   do   | config | \n   #... \n   config . register   Crystalball :: MapGenerator :: AllocatedObjectsStrategy \n     . new ( execution_detector :   my_detector ,   object_tracker :   my_tracker )  end   The initialization takes two keyword arguments:  execution_detector  and  object_tracker . execution_detector  must be an object that responds to  #detect  receiving a list of objects and returning the paths affected by said objects.  object_tracker  is something that responds to  #used_classes_during  which yields to the caller and returns the array of classes of objects allocated during the execution of the block.", 
+            "title": "AllocatedObjectsStrategy"
+        }, 
+        {
+            "location": "/map_generators/#describedclassstrategy", 
+            "text": "This strategy will take each example that has a  described_class  (i.e. examples inside  describe  blocks of classes and not strings) and add the paths where the described class and its ancestors are defined to the case map of the example;  To use it, add to your  Crystalball::MapGenerator.start!  block:  Crystalball :: MapGenerator . start!   do   | config | \n   #... \n   config . register   Crystalball :: MapGenerator :: DescribedClassStrategy . new  end   As with  AllocatedObjectsStrategy , you can pass a custom execution detector (an object that responds to  #detect  and returns the paths) to the initialization:  Crystalball :: MapGenerator . start!   do   | config | \n   #... \n   config . register   Crystalball :: MapGenerator :: DescribedClassStrategy . new ( my_detector )  end", 
+            "title": "DescribedClassStrategy"
+        }, 
+        {
+            "location": "/map_generators/#parserstrategy", 
+            "text": "The  ParserStrategy , as the name suggests parses the files in order to detect which files are affected by an example.\nIt works by first parsing all ( .rb ) files that match the given pattern under the configured root directory (defaults to current directory) to collect the constants definition paths.\nThen, when each example is executed, the affected files of the current case map are parsed to check for method calls to those constants. For that reason,  ParserStrategy   only works when used with other strategies and is placed at the end of the strategies list .  To use it, add the  parser  gem to your  Gemfile  and:  require   crystalball/map_generator/parser_strategy  Crystalball :: MapGenerator . start!   do   | config | \n   #... \n   config . register   Crystalball :: MapGenerator :: ParserStrategy . new ( pattern :   /\\A(app)|(lib)/ )  end", 
+            "title": "ParserStrategy"
+        }, 
+        {
+            "location": "/map_generators/#actionviewstrategy", 
+            "text": "To use Rails specific strategies you must first  require 'crystalball/rails' .\nThis strategy patches  ActionView::Template#compile!  to map the examples to affected views. Use it as follows:  Crystalball :: MapGenerator . start!   do   | config | \n   #... \n   config . register   Crystalball :: MapGenerator :: ActionViewStrategy . new  end", 
+            "title": "ActionViewStrategy"
+        }, 
+        {
+            "location": "/map_generators/#i18nstrategy", 
+            "text": "To use Rails specific strategies you must first  require 'crystalball/rails' .\nPatches I18n to have access to the path where the locales are defined, so that those paths can be added to the case map.\nTo use it, add to your config:  Crystalball :: MapGenerator . start!   do   | config | \n   #... \n   config . register   Crystalball :: MapGenerator :: I18nStrategy . new  end", 
+            "title": "I18nStrategy"
+        }, 
+        {
+            "location": "/map_generators/#custom-strategies", 
+            "text": "You can create your own strategy and use it with the map generator. Any object that responds to  #call(case_map, example)  (where  case_map  is a  Crystalball::CaseMap  and  example  a  RSpec::Core::Example ) and augmenting its list of affected files using  case_map.push(*paths_to_files) .\nCheck out the  implementation  of the default strategies for examples.  Keep in mind that all the strategies configured for the map generator will run for each example of your test suite, so it may slow down the generation process considerably.", 
+            "title": "Custom strategies"
+        }, 
+        {
+            "location": "/map_generators/#tablesmapgenerator", 
+            "text": "TablesMapGenerator is a separate map generator for Rails applications. It collects information about tables-to-models mapping and stores it in a file. The file is used by  Crystalball::Rails::Predictor::ModifiedSchema .\nUse  Crystalball::Rails::TablesMapGenerator.start!  to start it.\nBy default TablesMapGenerator will generate  tables_map.yml  file. You can customize this behavior by setting  map_storage_path  variable:  Crystalball :: TablesMapGenerator . start!   do   | config | \n   #... \n   config . map_storage_path   =   my_custom_tables_map_name.yml  end", 
+            "title": "TablesMapGenerator"
+        }, 
+        {
+            "location": "/predictors/", 
+            "text": "Predictors\n\n\nBasic usage\n\n\nBy default\n Crystalball uses \nCrystaball::RSpec::StandardPredictionBuilder\n which uses\njust two strategies for prediction \nModifiedExecutionPaths\n and \nModifiedSpecs\n.\nThis is more than enough for first time use.\n\n\nAdvanced usage\n\n\nIf you want to squeeze out the most out of Crystalball you might want to add additional available prediction strategies or even add your own.\nTo do that you should create a class inherited from \nCrystalball::RSpec::PredictionBuilder\n and overload \npredictor\n method with your custom predictor setup similar\nto what we have in \nStandardPredictionBuilder\n\n\nE.g. \n\n\nclass\n \nMyPredictionBuilder\n \n \nCrystalball\n::\nRSpec\n::\nPredictionBuilder\n\n    \ndef\n \npredictor\n\n      \nsuper\n \ndo\n \n|\np\n|\n\n        \np\n.\nuse\n \nCrystalball\n::\nPredictor\n::\nModifiedSpecs\n.\nnew\n\n        \np\n.\nuse\n \nCrystalball\n::\nPredictor\n::\nModifiedExecutionPaths\n.\nnew\n\n        \np\n.\nuse\n \nCrystalball\n::\nPredictor\n::\nModifiedSupportSpecs\n.\nnew\n\n      \nend\n\n    \nend\n\n\nend\n\n\n\n\n\n\ncreates a predictor with additional \nModifiedSupportSpecs\n strategy enabled.\n\n\nYou also must let our runner know about your new prediction builder by adding it to configuration. Please see \nrunner configuration\n page for details.\n\n\nStrategies\n\n\nAssociatedSpecs\n\n\nNeeds to be configured with rules for detecting which specs should be on the prediction.\n\npredictor.use Crystalball::Predictor::AssociatedSpecs.new(from: %r{models/(.*).rb}, to: \"./spec/models/%s_spec.rb\")\n\nwill add \n./spec/models/foo_spec.rb\n to prediction when \nmodels/foo.rb\n changes.\nThis strategy does not depend on a previously generated case map.\n\n\nModifiedExecutionPaths\n\n\nChecks the case map and the diff to see which specs are affected by the new or modified files.\n\n\nModifiedSpecs\n\n\nAs the name implies, checks for modified specs. The scope can be modified by passing a regex as argument, which defaults to \n%r{spec/.*_spec\\.rb\\z}\n.\nThis strategy does not depend on a previously generated case map.\n\n\nModifiedSupportSpecs\n\n\nChecks for modified support files used in specs and predicts full spec file. The scope can be modified by passing a regex as argument, which defaults to \n%r{spec/support/.*\\.rb\\z}\n.\nMostly usable for shared_contexts and shared_examples.\n\n\nModifiedSchema\n\n\nChecks for modified db schema in rails application. You need to specify a path to a file with tables map generated by \nTablesMapGenerator\n. It checks schema diff to see which models are affected by modified tables and which specs are affected by this models.\n\npredictor.use Crystalball::Rails::Predictor::ModifiedSchema.new(tables_map_path: './tables_map.yml')\n\n\nNote\n: You may meet a warning like \"WARNING: there are no model files for changed table ...\". Usually, such tables are leftovers or a relation table for \nhas-and-belongs-to-many\n associations. For the first case - nothing to worry about. For the second case - it means you want to change the default relation table.\n\n\nCustom strategies\n\n\nAs with the map generator you may define custom strategies for prediction. It must be an object that responds to \n#call(diff, case_map)\n (where \ndiff\n is a \nCrystalball::SourceDiff\n and \ncase_map\n is a \nCrystalball::CaseMap\n) and returns an array of paths.\n\n\nCheck out \ndefault strategies implementation\n for examples.", 
+            "title": "Predictors"
+        }, 
+        {
+            "location": "/predictors/#predictors", 
+            "text": "", 
+            "title": "Predictors"
+        }, 
+        {
+            "location": "/predictors/#basic-usage", 
+            "text": "By default  Crystalball uses  Crystaball::RSpec::StandardPredictionBuilder  which uses\njust two strategies for prediction  ModifiedExecutionPaths  and  ModifiedSpecs .\nThis is more than enough for first time use.", 
+            "title": "Basic usage"
+        }, 
+        {
+            "location": "/predictors/#advanced-usage", 
+            "text": "If you want to squeeze out the most out of Crystalball you might want to add additional available prediction strategies or even add your own.\nTo do that you should create a class inherited from  Crystalball::RSpec::PredictionBuilder  and overload  predictor  method with your custom predictor setup similar\nto what we have in  StandardPredictionBuilder  E.g.   class   MyPredictionBuilder     Crystalball :: RSpec :: PredictionBuilder \n     def   predictor \n       super   do   | p | \n         p . use   Crystalball :: Predictor :: ModifiedSpecs . new \n         p . use   Crystalball :: Predictor :: ModifiedExecutionPaths . new \n         p . use   Crystalball :: Predictor :: ModifiedSupportSpecs . new \n       end \n     end  end   creates a predictor with additional  ModifiedSupportSpecs  strategy enabled.  You also must let our runner know about your new prediction builder by adding it to configuration. Please see  runner configuration  page for details.", 
+            "title": "Advanced usage"
+        }, 
+        {
+            "location": "/predictors/#strategies", 
+            "text": "", 
+            "title": "Strategies"
+        }, 
+        {
+            "location": "/predictors/#associatedspecs", 
+            "text": "Needs to be configured with rules for detecting which specs should be on the prediction. predictor.use Crystalball::Predictor::AssociatedSpecs.new(from: %r{models/(.*).rb}, to: \"./spec/models/%s_spec.rb\") \nwill add  ./spec/models/foo_spec.rb  to prediction when  models/foo.rb  changes.\nThis strategy does not depend on a previously generated case map.", 
+            "title": "AssociatedSpecs"
+        }, 
+        {
+            "location": "/predictors/#modifiedexecutionpaths", 
+            "text": "Checks the case map and the diff to see which specs are affected by the new or modified files.", 
+            "title": "ModifiedExecutionPaths"
+        }, 
+        {
+            "location": "/predictors/#modifiedspecs", 
+            "text": "As the name implies, checks for modified specs. The scope can be modified by passing a regex as argument, which defaults to  %r{spec/.*_spec\\.rb\\z} .\nThis strategy does not depend on a previously generated case map.", 
+            "title": "ModifiedSpecs"
+        }, 
+        {
+            "location": "/predictors/#modifiedsupportspecs", 
+            "text": "Checks for modified support files used in specs and predicts full spec file. The scope can be modified by passing a regex as argument, which defaults to  %r{spec/support/.*\\.rb\\z} .\nMostly usable for shared_contexts and shared_examples.", 
+            "title": "ModifiedSupportSpecs"
+        }, 
+        {
+            "location": "/predictors/#modifiedschema", 
+            "text": "Checks for modified db schema in rails application. You need to specify a path to a file with tables map generated by  TablesMapGenerator . It checks schema diff to see which models are affected by modified tables and which specs are affected by this models. predictor.use Crystalball::Rails::Predictor::ModifiedSchema.new(tables_map_path: './tables_map.yml')  Note : You may meet a warning like \"WARNING: there are no model files for changed table ...\". Usually, such tables are leftovers or a relation table for  has-and-belongs-to-many  associations. For the first case - nothing to worry about. For the second case - it means you want to change the default relation table.", 
+            "title": "ModifiedSchema"
+        }, 
+        {
+            "location": "/predictors/#custom-strategies", 
+            "text": "As with the map generator you may define custom strategies for prediction. It must be an object that responds to  #call(diff, case_map)  (where  diff  is a  Crystalball::SourceDiff  and  case_map  is a  Crystalball::CaseMap ) and returns an array of paths.  Check out  default strategies implementation  for examples.", 
+            "title": "Custom strategies"
+        }, 
+        {
+            "location": "/runner/", 
+            "text": "RSpec Runner\n\n\nCrystalball has a custom RSpec runner you can use in your development with \nbundle exec crystalball\n command. It builds a prediction and runs it.\n\n\nRunner Configuration\n\n\nConfig file\n\n\nCreate a YAML file for the runner. Default locations are \n./crystalball.yml\n and \n./config/crystalball.yml\n.\nPlease check an \nexample of a config file\n and \nconfiguration defaults\n for available options.\nPlease keep in mind that additional generator\\prediction strategies can introduce additional configuration options.\n\n\nOverriding config file\n\n\nIf you want to override the path to config file please set \nCRYSTALBALL_CONFIG=path/to/crystalball.yml\n env variable.\n\n\nAny specific configuration option in \ncrystalball.yml\n can be overridden by providing ENV variable with \"CRYSTALBALL_\" prefix. \nE.g. \"CRYSTALBALL_EXAMPLES_LIMIT=10\" will set \nexamples_limit\n value to 10 regardless of what you have in config file.\nMore examples:\n\n \nCRYSTALBALL_EXAMPLES_LIMIT=0\n sets no limit on prediction size\n\n \nCRYSTALBALL_MAP_EXPIRATION_PERIOD=0\n sets no expiration period for maps\n* \nCRYSTALBALL_DIFF_FROM=origin/master\n changes diff building to be \ngit diff origin/master", 
+            "title": "Runner"
+        }, 
+        {
+            "location": "/runner/#rspec-runner", 
+            "text": "Crystalball has a custom RSpec runner you can use in your development with  bundle exec crystalball  command. It builds a prediction and runs it.", 
+            "title": "RSpec Runner"
+        }, 
+        {
+            "location": "/runner/#runner-configuration", 
+            "text": "", 
+            "title": "Runner Configuration"
+        }, 
+        {
+            "location": "/runner/#config-file", 
+            "text": "Create a YAML file for the runner. Default locations are  ./crystalball.yml  and  ./config/crystalball.yml .\nPlease check an  example of a config file  and  configuration defaults  for available options.\nPlease keep in mind that additional generator\\prediction strategies can introduce additional configuration options.", 
+            "title": "Config file"
+        }, 
+        {
+            "location": "/runner/#overriding-config-file", 
+            "text": "If you want to override the path to config file please set  CRYSTALBALL_CONFIG=path/to/crystalball.yml  env variable.  Any specific configuration option in  crystalball.yml  can be overridden by providing ENV variable with \"CRYSTALBALL_\" prefix. \nE.g. \"CRYSTALBALL_EXAMPLES_LIMIT=10\" will set  examples_limit  value to 10 regardless of what you have in config file.\nMore examples:   CRYSTALBALL_EXAMPLES_LIMIT=0  sets no limit on prediction size   CRYSTALBALL_MAP_EXPIRATION_PERIOD=0  sets no expiration period for maps\n*  CRYSTALBALL_DIFF_FROM=origin/master  changes diff building to be  git diff origin/master", 
+            "title": "Overriding config file"
+        }
+    ]
+}
