@@ -10,11 +10,11 @@ Please check our [installation instructions](https://github.com/toptal/crystalba
 ## Basic Usage
 
 1. Start MapGenerator in your `spec_helper` before you loaded any file of your app. E.g.
-    ```ruby
-    Crystalball::MapGenerator.start! do |config|
-      config.register Crystalball::MapGenerator::CoverageStrategy.new
-    end
-    ```
+
+        Crystalball::MapGenerator.start! do |config|
+          config.register Crystalball::MapGenerator::CoverageStrategy.new
+        end
+
 1. Run your test suite on clean master branch with green build. This step will generate file `execution_map.yml` in your project root. This file contains useful profiling data for Crystalball.
 1. Make some changes to your app code
 1. Run `bundle exec crystalball` to build a prediction and run RSpec with it. Check out [RSpec runner section](runner.md) for customization details.
