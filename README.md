@@ -27,7 +27,7 @@ Or install it yourself as:
 
 ## Usage
 
-Please see our [official documentation](docs/index.md).
+Please see our [official documentation](https://toptal.github.io/crystalball/).
 
 ### Versioning
 
