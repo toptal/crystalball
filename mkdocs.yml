@@ -1,0 +1,23 @@
+site_name: Crystalball Manual
+repo_url: https://github.com/toptal/crystalball
+edit_uri: edit/master/docs/
+#google_analytics: ['-', 'auto']
+theme:
+  name: material
+  logo: img/logo.png
+  favicon: img/favicon.ico
+  palette:
+    primary: indigo
+    accent: pink
+markdown_extensions:
+  - admonition
+  - codehilite:
+      guess_lang: false
+  - toc:
+      permalink: true
+copyright: 'Copyright &copy; 2013 - 2018 Toptal'
+pages:
+  - Home: index.md
+  - "Map Generators": map_generators.md
+  - "Predictors": predictors.md
+  - "Runner": runner.md
