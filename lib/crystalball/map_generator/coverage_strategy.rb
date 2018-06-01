@@ -27,7 +27,7 @@ module Crystalball
         before = Coverage.peek_result
         yield case_map
         after = Coverage.peek_result
-        case_map.push(*execution_detector.detect(before, after))
+        case_map.push(*execution_detector.detect(before, after), strategy: name)
       end
     end
   end

@@ -11,7 +11,13 @@ module Crystalball
         # @return [Array<String>] list of affected examples
         def detect_examples(files, map)
           map.cases.map do |uid, case_map|
-            uid if files.any? { |file| case_map.include?(file) }
+            uid if files.any? do |file|
+              if case_map.is_a?(Array) # support old version of map. TODO: remove it.
+                case_map.include?(file)
+              else
+                case_map.values.flatten.include?(file)
+              end
+            end
           end.compact
         end
       end

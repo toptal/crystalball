@@ -38,7 +38,7 @@ module Crystalball
           used = const_definition_paths.select { |k, _| consts.include?(k) }.values
           paths.push(*used.flatten)
         end
-        case_map.push(*filter(paths))
+        case_map.push(*filter(paths), strategy: name)
       end
 
       private

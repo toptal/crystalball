@@ -28,7 +28,7 @@ module Crystalball
 
         described_class = example.metadata[:described_class]
 
-        case_map.push(*execution_detector.detect([described_class])) if described_class
+        case_map.push(*execution_detector.detect([described_class]), strategy: name) if described_class
       end
     end
   end

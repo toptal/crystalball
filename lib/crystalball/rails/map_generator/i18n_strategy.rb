@@ -39,7 +39,7 @@ module Crystalball
         def call(case_map, _)
           self.class.reset_locale_files
           yield case_map
-          case_map.push(*filter(self.class.locale_files.compact))
+          case_map.push(*filter(self.class.locale_files.compact), strategy: name)
         end
       end
     end

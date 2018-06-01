@@ -26,16 +26,15 @@ describe Crystalball::Rails::MapGenerator::I18nStrategy do
   end
 
   describe '#call' do
-    let(:case_map) { [] }
+    let(:case_map) { instance_double('Crystalball::CaseMap', push: nil) }
 
     it 'pushes affected files to case map' do
       allow(strategy).to receive(:filter).with(['view']).and_return([1, 2, 3])
+      expect(case_map).to receive(:push).with(1, 2, 3, strategy: 'i18n_strategy')
 
-      expect do
-        subject.call(case_map, nil) do
-          Crystalball::Rails::MapGenerator::I18nStrategy.locale_files.push 'view'
-        end
-      end.to change { case_map }.to [1, 2, 3]
+      subject.call(case_map, nil) do
+        Crystalball::Rails::MapGenerator::I18nStrategy.locale_files.push 'view'
+      end
     end
 
     it 'yields case_map to a block' do
