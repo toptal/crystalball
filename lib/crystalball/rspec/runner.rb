@@ -12,6 +12,10 @@ module Crystalball
         def run(args, err = $stderr, out = $stdout)
           return config['runner_class'].run(args, err, out) unless config['runner_class'] == self
 
+          ::RSpec.configure do |c|
+            c.silence_filter_announcements = true
+          end
+
           out.puts "Crystalball starts to glow..."
           prediction = build_prediction(out)
 
