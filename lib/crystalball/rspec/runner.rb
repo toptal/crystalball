@@ -2,6 +2,7 @@
 
 require 'rspec/core'
 require 'crystalball/rspec/prediction_builder'
+require 'crystalball/rspec/examples_pruner'
 
 module Crystalball
   module RSpec
@@ -14,7 +15,8 @@ module Crystalball
           out.puts "Crystalball starts to glow..."
           prediction = build_prediction(out)
 
-          check_limit(out) { prediction.size } # Actual examples size is not less than prediction size.
+          out.puts "Prediction: #{prediction.first(5).join(' ')}#{'...' if prediction.size > 5}"
+          out.puts "Starting RSpec."
 
           super(args + prediction, err, out)
         end
@@ -45,18 +47,6 @@ module Crystalball
           end
         end
 
-        def check_limit(out)
-          limit = config['examples_limit'].to_i
-          return unless limit.positive?
-
-          examples_count = yield
-          return if examples_count <= limit
-
-          out.puts "Example group size (#{examples_count}) is over the limit (#{limit})"
-          out.puts "Aborting spec run"
-          exit
-        end
-
         protected
 
         def load_execution_map
@@ -76,10 +66,19 @@ module Crystalball
 
         def build_prediction(out)
           check_map(out)
-          prediction = prediction_builder.prediction.sort_by(&:length)
-          out.puts "Prediction: #{prediction.first(5).join(' ')}#{'...' if prediction.size > 5}"
-          out.puts "Starting RSpec."
-          prediction
+          # Actual examples size is not less than prediction size.
+          prune_prediction_to_limit(prediction_builder.prediction.sort_by(&:length), out)
+        end
+
+        def prune_prediction_to_limit(prediction, out)
+          limit = config['examples_limit'].to_i
+
+          return prediction if !limit.positive? || prediction.size <= limit
+
+          out.puts "Prediction size #{prediction.size} is over the limit (#{limit})"
+          out.puts "Prediction is pruned to fit the limit!"
+
+          prediction.first(limit)
         end
 
         def check_map(out)
@@ -87,13 +86,24 @@ module Crystalball
         end
       end
 
-      def run_specs(example_groups)
-        check_examples_limit(example_groups)
-        super
+      def run(err, out)
+        setup(err, out)
+        run_specs(prediction_example_groups(out)).tap do
+          persist_example_statuses
+        end
       end
 
-      def check_examples_limit(example_groups)
-        self.class.check_limit(@configuration.output_stream) { @world.example_count(example_groups) }
+      def prediction_example_groups(out)
+        limit = self.class.config['examples_limit'].to_i
+
+        pruner = ExamplesPruner.new(@world, to: limit)
+
+        return pruner.world_groups if !limit.positive? || @world.example_count(pruner.world_groups) <= limit
+
+        out.puts "Prediction examples size #{@world.example_count(pruner.world_groups)} is over the limit (#{limit})"
+        out.puts "Prediction is pruned to fit the limit!"
+
+        pruner.pruned_groups
       end
     end
   end
