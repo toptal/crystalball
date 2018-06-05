@@ -20,7 +20,7 @@ describe Crystalball::Prediction do
           ./dir/
           ./file2_spec.rb
           ./file2_spec.rb[1:1]
-        ]
+        ] * 1293000
       end
 
       it { is_expected.to match_array(%w[./dir/ ./file2_spec.rb]) }

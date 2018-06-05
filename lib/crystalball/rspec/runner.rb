@@ -12,7 +12,7 @@ module Crystalball
           return config['runner_class'].run(args, err, out) unless config['runner_class'] == self
 
           out.puts "Crystalball starts to glow..."
-          prediction = build_prediction(out)
+          prediction = %w[./spec/apq/actions/ba/flag/create_spec.rb ./spec/apq/actions/ba/flag/create_spec.rb[1:2:2]]#build_prediction(out)
 
           check_limit(out) { prediction.size } # Actual examples size is not less than prediction size.
 
