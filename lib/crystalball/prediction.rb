@@ -11,7 +11,15 @@ module Crystalball
     #   ./spec/foo ./spec/foo/bar_spec.rb
     # this returns just ./spec/foo
     def compact
-      sort_by(&:length).uniq { |c| c.match(/(\.\/)|(.+)\//)[0] }
+      sorted = cases.sort_by(&:length)
+      return %w[./] if sorted.first == './'
+      sorted.uniq { |c| c.match(/(\.\/.+\/)|(\.\/.+\.rb)/)[0] }
+    end
+
+    def compact2
+      sort_by(&:length).each_with_object([]) do |c, result|
+        result << c unless result.any? { |r| c.start_with?(r) }
+      end.compact
     end
 
     def to_a

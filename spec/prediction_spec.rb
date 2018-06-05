@@ -12,7 +12,7 @@ describe Crystalball::Prediction do
   end
 
   describe '#compact' do
-    subject { prediction.compact }
+    subject { prediction.compact2 }
     context 'when one part is included into other part' do
       let(:raw_cases) do
         %w[
