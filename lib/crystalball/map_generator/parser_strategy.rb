@@ -11,8 +11,10 @@ module Crystalball
       include BaseStrategy
       include Helpers::PathFilter
 
+      attr_reader :const_definition_paths
+
       def initialize(root = Dir.pwd, pattern:)
-        @root_path = Pathname(root).realpath.to_s
+        @root_path = Pathname.new(root).realpath.to_s
         @processor = Processor.new
         @const_definition_paths = {}
         @pattern = pattern
@@ -34,16 +36,19 @@ module Crystalball
         yield case_map
         case_map.each do |path|
           next unless path.end_with?('.rb')
-          consts = processor.consts_interacted_with_in(path)
-          used = const_definition_paths.select { |k, _| consts.include?(k) }.values
-          paths.push(*used.flatten)
+          used_consts = processor.consts_interacted_with_in(path)
+          paths.push(*used_files(used_consts))
         end
         case_map.push(*filter(paths))
       end
 
       private
 
-      attr_reader :const_definition_paths, :processor, :pattern, :root_path
+      attr_reader :processor, :pattern, :root_path
+
+      def used_files(used_consts)
+        const_definition_paths.select { |k, _| Array(used_consts).include?(k) }.values.flatten
+      end
 
       def files_to_inspect
         Dir.glob(File.join(root_path, '**/*.rb')).grep(pattern)
