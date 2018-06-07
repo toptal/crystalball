@@ -38,7 +38,7 @@ module Crystalball
         def call(case_map, _)
           self.class.reset_views
           yield case_map
-          case_map.push(*filter(self.class.views))
+          case_map.push(*filter(self.class.views), strategy: name)
         end
       end
     end

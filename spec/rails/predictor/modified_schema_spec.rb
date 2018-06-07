@@ -30,7 +30,7 @@ describe Crystalball::Rails::Predictor::ModifiedSchema do
       let(:repository_lib) { spy }
       let(:schema_path) { 'db/schema.rb' }
       let(:execution_map) { instance_double('Crystalball::MapGenerator::ExecutionMap', cases: cases) }
-      let(:cases) { {spec_file: [model_path]} }
+      let(:cases) { {spec_file: {some_strategy: model_path} }}
       let(:model_path) { 'dummy.rb' }
 
       before do

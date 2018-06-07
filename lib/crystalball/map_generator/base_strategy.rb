@@ -10,6 +10,12 @@ module Crystalball
 
       def before_finalize; end
 
+      def name
+        self.class.name.split('::').last
+          .gsub(/(.)([A-Z])/,'\1_\2')
+          .downcase
+      end
+
       # Each strategy must implement #call augmenting the affected_files list and
       # yielding back the CaseMap.
       # @param [Crystalball::CaseMap] _case_map - object holding example metadata and affected files

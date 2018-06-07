@@ -12,7 +12,7 @@ describe Crystalball::MapGenerator::DescribedClassStrategy do
   describe '#call' do
     subject { strategy.call(case_map, example) {} }
 
-    let(:case_map) { [] }
+    let(:case_map) { instance_double('Crystalball::CaseMap', push: nil) }
     let(:objects) { [Dummy] }
     let(:example) { double(metadata: {described_class: Dummy}) }
 
@@ -28,9 +28,8 @@ describe Crystalball::MapGenerator::DescribedClassStrategy do
     end
 
     it 'pushes affected files detected by detector to case map' do
-      expect do
-        subject
-      end.to change { case_map }.to [1, 2, 3]
+      expect(case_map).to receive(:push).with(1, 2, 3, strategy: 'described_class_strategy')
+      subject
     end
   end
 end

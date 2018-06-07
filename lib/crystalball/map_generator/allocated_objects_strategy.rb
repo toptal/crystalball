@@ -37,7 +37,7 @@ module Crystalball
         classes = object_tracker.used_classes_during do
           yield case_map, example
         end
-        case_map.push(*execution_detector.detect(classes))
+        case_map.push(*execution_detector.detect(classes), strategy: name)
       end
     end
   end

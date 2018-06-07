@@ -16,7 +16,7 @@ describe Crystalball::MapGenerator::CoverageStrategy do
   end
 
   describe '#call' do
-    let(:case_map) { [] }
+    let(:case_map) { instance_double('Crystalball::CaseMap', push: nil) }
     before do
       before = double
       after = double
@@ -26,9 +26,8 @@ describe Crystalball::MapGenerator::CoverageStrategy do
     end
 
     it 'pushes affected files detected by detector to case map' do
-      expect do
-        subject.call(case_map, 'example') {}
-      end.to change { case_map }.to [1, 2, 3]
+      expect(case_map).to receive(:push).with(1, 2, 3, strategy: 'coverage_strategy')
+      subject.call(case_map, 'example') {}
     end
 
     it 'yields case_map to a block' do

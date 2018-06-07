@@ -41,7 +41,7 @@ module Crystalball
     #
     # @param [Crystalball::CaseMap] case_map
     def <<(case_map)
-      cases[case_map.uid] = case_map.affected_files.uniq
+      cases[case_map.uid] = case_map.affected_files.select { |_, v| v.any? }
     end
 
     # Remove all cases

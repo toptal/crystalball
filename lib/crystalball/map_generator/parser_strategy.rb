@@ -39,7 +39,7 @@ module Crystalball
           used_consts = processor.consts_interacted_with_in(path)
           paths.push(*used_files(used_consts))
         end
-        case_map.push(*filter(paths))
+        case_map.push(*filter(paths), strategy: name)
       end
 
       private

@@ -9,7 +9,7 @@ describe Crystalball::Predictor::ModifiedSupportSpecs do
   let(:file_diff1) { Crystalball::SourceDiff::FileDiff.new(Git::Diff::DiffFile.new(repository, path: path1)) }
   let(:diff) { [file_diff1] }
   let(:map) { instance_double('Crystalball::MapGenerator::StandardMap', cases: cases) }
-  let(:cases) { {'spec_file[1:2]': [path1]} }
+  let(:cases) { {'spec_file[1:2]': {some_strategy: [path1]} } }
 
   describe '#call' do
     subject { predictor.call(diff, map) }
