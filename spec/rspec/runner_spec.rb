@@ -73,32 +73,32 @@ describe Crystalball::RSpec::Runner do
   end
 
   describe '.run' do
+    subject { described_class.run([]) }
     let(:prediction_builder) do
       instance_double('Crystalball::RSpec::PredictionBuilder', prediction: compact_prediction, expired_map?: false)
     end
-    let(:compact_prediction) { ['test'] }
+    let(:compact_prediction) { %w[test test2] }
 
     before do
       allow(described_class).to receive(:prediction_builder).and_return prediction_builder
     end
 
     it 'runs rspec with prediction' do
-      expect(RSpec::Core::ConfigurationOptions).to receive(:new).with(['test']).and_call_original
+      expect(RSpec::Core::ConfigurationOptions).to receive(:new).with(%w[test test2]).and_call_original
 
-      described_class.run([])
+      subject
     end
 
     context 'with examples_limit set' do
       before do
-        allow_any_instance_of(RSpec::Core::World).to receive(:example_count).and_call_original
-        allow_any_instance_of(RSpec::Core::World).to receive(:example_count).with([RSpec::ExampleGroups::CrystalballRSpecRunner]) { 2 }
         ENV['CRYSTALBALL_CONFIG'] = 'spec/fixtures/crystalball.yml'
       end
 
       after { ENV.delete('CRYSTALBALL_CONFIG') }
 
-      it 'exits RSpec' do
-        expect { described_class.run([]) }.to raise_error SystemExit
+      it 'runs pruned prediction matching the limit' do
+        expect(RSpec::Core::ConfigurationOptions).to receive(:new).with(['test']).and_call_original
+        subject
       end
     end
 
@@ -110,6 +110,41 @@ describe Crystalball::RSpec::Runner do
       it 'prints out warning' do
         expect(out_stream).to receive(:puts).with('Maps are outdated!')
         described_class.run([], STDERR, out_stream)
+      end
+    end
+  end
+
+  describe '#run' do
+    subject(:runner) { described_class.new({}, RSpec.configuration, world) }
+    let(:world) { instance_double('RSpec::Core::World') }
+    let(:options) { ConfigurationOptions.new('test', 'test2') }
+
+    before do
+      allow(subject).to receive(:persist_example_statuses).and_return false
+      allow(world).to receive(:ordered_example_groups).and_return(%w[a b])
+    end
+
+    context 'without examples_limit set' do
+      it 'runs with world ordered example groups' do
+        expect(runner).to receive(:run_specs).with(%w[a b]).and_return(true)
+        runner.run(STDOUT, STDOUT)
+      end
+    end
+
+    context 'with examples_limit set' do
+      before do
+        ENV['CRYSTALBALL_CONFIG'] = 'spec/fixtures/crystalball.yml'
+      end
+
+      after { ENV.delete('CRYSTALBALL_CONFIG') }
+
+      it 'returns whatever ExamplesPruner returns' do
+        pruner = double(world_groups: %w[a b], pruned_groups: ['pruned_groups'])
+        allow(Crystalball::RSpec::ExamplesPruner).to receive(:new).with(world, to: 1).and_return pruner
+        allow(world).to receive(:example_count).and_return(2)
+
+        expect(runner).to receive(:run_specs).with(['pruned_groups']).and_return(true)
+        runner.run(STDOUT, STDOUT)
       end
     end
   end
