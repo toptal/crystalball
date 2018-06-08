@@ -84,6 +84,24 @@ describe 'Changing source file' do
     expect(forecast).to include(*model1_examples)
   end
 
+  it 'adds mapped examples to a prediction list for Model1 factory' do
+    change model1_factory_path
+
+    expect(forecast).to match_array([
+                                      './spec/models/model1_spec.rb[1:3:1]',
+                                      './spec/models/model1_spec.rb[1:4:1]'
+                                    ])
+  end
+
+  it 'adds mapped examples to a prediction list for Model1 factory modification' do
+    change model1_factory_modification_path
+
+    expect(forecast).to match_array([
+                                      './spec/models/model1_spec.rb[1:3:1]',
+                                      './spec/models/model1_spec.rb[1:4:1]'
+                                    ])
+  end
+
   it 'adds mapped examples to a prediction list for _item view' do
     change item_view_path
 

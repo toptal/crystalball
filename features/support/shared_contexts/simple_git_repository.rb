@@ -21,6 +21,9 @@ shared_context 'simple git repository' do
   let(:schema_path) { root.join('db', 'schema.rb') }
   let(:spec_path) { root.join('spec') }
   let(:class1_spec_path) { spec_path.join('class1_spec.rb') }
+  let(:factories_path) { spec_path.join('factories') }
+  let(:model1_factory_path) { factories_path.join('model1s.rb') }
+  let(:model1_factory_modification_path) { factories_path.join('model1s_modification.rb') }
   let(:action_view_shared_context) { spec_path.join('support', 'shared_contexts', 'action_view.rb') }
   let(:git) { Git.init(root.to_s) }
 
