@@ -10,7 +10,7 @@ module Crystalball
       end
 
       def moved?
-        git_diff.patch =~ /rename from.*\nrename to/
+        !(git_diff.patch =~ /rename from.*\nrename to/).nil?
       end
 
       def modified?
