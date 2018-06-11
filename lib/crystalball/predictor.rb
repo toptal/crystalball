@@ -32,7 +32,10 @@ module Crystalball
     alias cases prediction
 
     def diff
-      repo.diff(from, to)
+      @diff ||= begin
+                  ancestor = repo.merge_base(from, to || 'HEAD').sha
+                  repo.diff(ancestor, to)
+                end
     end
 
     private

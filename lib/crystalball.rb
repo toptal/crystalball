@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'crystalball/git_repo'
+require 'crystalball/extensions/git'
 require 'crystalball/rspec/prediction_builder'
 require 'crystalball/rspec/runner'
 require 'crystalball/prediction'
