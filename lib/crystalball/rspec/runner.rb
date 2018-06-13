@@ -3,6 +3,7 @@
 require 'rspec/core'
 require 'crystalball/rspec/prediction_builder'
 require 'crystalball/rspec/examples_pruner'
+require 'crystalball/rspec/filtering'
 
 module Crystalball
   module RSpec
@@ -108,6 +109,29 @@ module Crystalball
         out.puts "Prediction is pruned to fit the limit!"
 
         pruner.pruned_groups
+      end
+
+      def setup(err, out)
+        configure(err, out)
+        @configuration.load_spec_files
+
+        # Since prediction compacting is disabled we need to remove filtering
+        # in cases like './spec/foo.rb ./spec/foo.rb[1:1:2]'
+        remove_unnecessary_filters(@options.options[:files_or_directories_to_run])
+
+        @world.announce_filters
+      end
+
+      def configure(err, out)
+        @configuration.error_stream = err
+        @configuration.output_stream = out if @configuration.output_stream == $stdout
+        @options.configure(@configuration)
+      end
+
+      private
+
+      def remove_unnecessary_filters(files_or_directories)
+        Filtering.remove_unnecessary_filters(@configuration, files_or_directories)
       end
     end
   end

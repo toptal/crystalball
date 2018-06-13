@@ -66,7 +66,7 @@ module Crystalball
         attr_reader :values
 
         def run_requires
-          self['requires'].each { |f| require f }
+          Array(self['requires']).each { |f| require f }
         end
       end
     end

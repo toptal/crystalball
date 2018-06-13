@@ -10,8 +10,7 @@ describe Crystalball::RSpec::Runner do
   before do
     described_class.reset!
     allow(Crystalball::MapStorage::YAMLStorage).to receive(:load).and_return(map)
-    allow_any_instance_of(described_class).to receive(:setup).and_return 0
-    allow(RSpec::Core::ExampleGroup).to receive(:run).and_return 0
+    allow(RSpec::Core::ExampleGroup).to receive(:run)
   end
 
   describe '.prepare' do
@@ -20,6 +19,7 @@ describe Crystalball::RSpec::Runner do
 
     before do
       allow(Pathname).to receive(:new).and_call_original
+      allow_any_instance_of(described_class).to receive(:setup)
       allow_any_instance_of(Crystalball::RSpec::PredictionBuilder).to receive(:expired_map?).and_return(false)
     end
 
@@ -80,6 +80,7 @@ describe Crystalball::RSpec::Runner do
     let(:compact_prediction) { %w[test test2] }
 
     before do
+      allow_any_instance_of(described_class).to receive(:setup)
       allow(described_class).to receive(:prediction_builder).and_return prediction_builder
     end
 
@@ -115,12 +116,15 @@ describe Crystalball::RSpec::Runner do
   end
 
   describe '#run' do
-    subject(:runner) { described_class.new({}, RSpec.configuration, world) }
-    let(:world) { instance_double('RSpec::Core::World') }
-    let(:options) { ConfigurationOptions.new('test', 'test2') }
+    subject(:runner) { described_class.new(options, configuration, world) }
+    let(:configuration) { instance_double('RSpec::Core::Configuration').as_null_object }
+    let(:world) { instance_double('RSpec::Core::World').as_null_object }
+    let(:options) { double.as_null_object }
+    let(:files) { [] }
 
     before do
       allow(subject).to receive(:persist_example_statuses).and_return false
+      allow(subject).to receive(:setup)
       allow(world).to receive(:ordered_example_groups).and_return(%w[a b])
     end
 
@@ -146,6 +150,22 @@ describe Crystalball::RSpec::Runner do
         expect(runner).to receive(:run_specs).with(['pruned_groups']).and_return(true)
         runner.run(STDOUT, STDOUT)
       end
+    end
+  end
+
+  describe '#setup' do
+    subject(:setup) { runner.setup(instance_double('IO'), instance_double('IO')) }
+    let(:runner) { described_class.new(options, configuration, world) }
+    let(:options) { double(options: {files_or_directories_to_run: files}).as_null_object }
+    let(:world) { instance_double('RSpec::Core::World').as_null_object }
+    let(:files) { %w[./spec/foo_spec.rb[1:1] ./spec/foo_spec.rb] }
+    let(:configuration) { instance_double('RSpec::Core::Configuration').as_null_object }
+
+    it 'removes the unecessary filters' do
+      expect(Crystalball::RSpec::Filtering).to receive(:remove_unnecessary_filters)
+        .with(configuration, files)
+
+      setup
     end
   end
 end
