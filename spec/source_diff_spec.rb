@@ -6,8 +6,8 @@ describe Crystalball::SourceDiff do
   subject(:source_diff) { described_class.new(diff) }
   let(:diff) { Git::Diff.new(repo) }
   let(:repo) { Crystalball::GitRepo.new('.') }
-  let(:diff_file1) { Git::Diff::DiffFile.new(repo, path: 'file1.rb') }
-  let(:diff_file2) { Git::Diff::DiffFile.new(repo, path: 'file2.rb') }
+  let(:diff_file1) { instance_double('Git::Diff::DiffFile', path: 'file1.rb', type: 'modified', patch: "+ 's'") }
+  let(:diff_file2) { instance_double('Git::Diff::DiffFile', path: 'file2.rb', type: 'modified', patch: "+ 's'") }
 
   before do
     allow(diff).to receive(:each).with(no_args).and_yield(diff_file1).and_yield(diff_file2)
@@ -18,6 +18,16 @@ describe Crystalball::SourceDiff do
       paths = []
       subject.each { |file_diff| paths << file_diff.relative_path }
       expect(paths).to contain_exactly('file1.rb', 'file2.rb')
+    end
+
+    context 'when one of diff is formatting only' do
+      let(:diff_file2) { instance_double('Git::Diff::DiffFile', path: 'file2.rb', type: 'modified', patch: '') }
+
+      it 'yields all changed files' do
+        paths = []
+        subject.each { |file_diff| paths << file_diff.relative_path }
+        expect(paths).to contain_exactly('file1.rb')
+      end
     end
   end
 

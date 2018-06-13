@@ -2,13 +2,13 @@
 
 require_relative '../feature_helper'
 
-describe 'Changing source file' do
+describe 'Changing source file with a class method call' do
   include_context 'base forecast'
   include_context 'simple git repository'
 
   let(:strategies) { [Crystalball::Predictor::ModifiedExecutionPaths.new] }
 
-  it 'adds class2 example when class1 changes because of class method call' do
+  it 'adds class2 example when class1 changes' do
     change class1_path
 
     expect(forecast).to include(
