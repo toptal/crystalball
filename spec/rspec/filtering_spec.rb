@@ -16,6 +16,15 @@ describe Crystalball::RSpec::Filtering do
       ).as_null_object
     end
 
+    context 'when filter manager has no inclusions defined' do
+      let(:files) { %w[./spec/foo_spec.rb] }
+      let(:inclusions) { {} }
+
+      it 'does not change any filtering rules' do
+        expect { remove_unnecessary_filters }.not_to change { inclusions[:ids] }
+      end
+    end
+
     context 'when the same file is passed with and without an id' do
       let(:files) { %w[./spec/foo_spec.rb ./spec/foo_spec.rb[1:1]] }
 
