@@ -7,7 +7,7 @@ module Crystalball
     class Runner
       # Class for storing local runner configuration
       class Configuration
-        def initialize(config = {})
+        def initialize(config = {}) # rubocop:disable Metrics/MethodLength
           @values = {
             'execution_map_path' => 'tmp/execution_map.yml',
             'map_expiration_period' => 86_400,
@@ -16,7 +16,9 @@ module Crystalball
             'diff_from' => 'HEAD',
             'diff_to' => nil,
             'runner_class_name' => 'Crystalball::RSpec::Runner',
-            'prediction_builder_class_name' => 'Crystalball::RSpec::StandardPredictionBuilder'
+            'prediction_builder_class_name' => 'Crystalball::RSpec::StandardPredictionBuilder',
+            'log_level' => :info,
+            'log_file' => 'log/crystalball.log'
           }.merge(config)
         end
 

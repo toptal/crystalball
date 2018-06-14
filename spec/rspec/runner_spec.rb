@@ -11,7 +11,10 @@ describe Crystalball::RSpec::Runner do
     described_class.reset!
     allow(Crystalball::MapStorage::YAMLStorage).to receive(:load).and_return(map)
     allow(RSpec::Core::ExampleGroup).to receive(:run)
+    ENV['CRYSTALBALL_LOG_FILE'] = '/dev/null'
   end
+
+  after { ENV.delete('CRYSTALBALL_LOG_FILE') }
 
   describe '.prepare' do
     let(:expected_config) { {'execution_map_path' => 'map.yml', 'map_expiration_period' => 0, 'prediction_builder_class_name' => 'Crystalball::RSpec::PredictionBuilder'} }
@@ -105,13 +108,14 @@ describe Crystalball::RSpec::Runner do
     end
 
     context 'with expired map' do
-      before { allow(prediction_builder).to receive(:expired_map?).and_return true }
-
-      let(:out_stream) { double(puts: true) }
+      before do
+        allow(prediction_builder).to receive(:expired_map?).and_return true
+        allow(Crystalball).to receive(:log)
+      end
 
       it 'prints out warning' do
-        expect(out_stream).to receive(:puts).with('Maps are outdated!')
-        described_class.run([], STDERR, out_stream)
+        expect(Crystalball).to receive(:log).with(:warn, 'Maps are outdated!')
+        described_class.run([], STDERR, STDOUT)
       end
     end
   end

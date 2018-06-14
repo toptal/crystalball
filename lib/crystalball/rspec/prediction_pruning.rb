@@ -18,11 +18,11 @@ module Crystalball
 
         private
 
-        def prune_prediction_to_limit(prediction, out)
+        def prune_prediction_to_limit(prediction)
           return prediction if !examples_limit.positive? || prediction.size <= examples_limit
 
-          out.puts "Prediction size #{prediction.size} is over the limit (#{examples_limit})"
-          out.puts "Prediction is pruned to fit the limit!"
+          Crystalball.log :warn, "Prediction size #{prediction.size} is over the limit (#{examples_limit})"
+          Crystalball.log :warn, "Prediction is pruned to fit the limit!"
 
           # Actual examples size is not less than prediction size.
           prediction.first(examples_limit)

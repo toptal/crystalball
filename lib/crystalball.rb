@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'crystalball/logging'
 require 'crystalball/git_repo'
 require 'crystalball/extensions/git'
 require 'crystalball/rspec/prediction_builder'
@@ -37,4 +38,6 @@ module Crystalball
     map = MapStorage::YAMLStorage.load(Pathname(map_path))
     Predictor.new(map, GitRepo.open(Pathname(workdir)), from: map.commit, &block).prediction.compact
   end
+
+  extend Logging
 end
