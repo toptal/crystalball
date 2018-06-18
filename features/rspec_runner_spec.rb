@@ -21,7 +21,7 @@ describe 'RSpec runner' do
 
     is_expected.to match(/Prediction size \d+ is over the limit \(1\)/)
       .and match(/Prediction is pruned to fit the limit!/)
-      .and match(/\d+ examples?, 0 failures/)
+      .and match(/1 example, 0 failures/)
   end
 
   context 'when file, spec id, and directory are predicted' do

@@ -20,3 +20,5 @@ Lint/SplatKeywordArguments:
   Enabled: false
 Style/MethodMissingSuper:
   Enabled: false
+Lint/AmbiguousBlockAssociation:
+  Enabled: false

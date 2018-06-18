@@ -19,8 +19,8 @@ describe Crystalball::RSpec::Runner do
 
     before do
       allow(Pathname).to receive(:new).and_call_original
-      allow_any_instance_of(described_class).to receive(:setup)
       allow_any_instance_of(Crystalball::RSpec::PredictionBuilder).to receive(:expired_map?).and_return(false)
+      allow_any_instance_of(described_class).to receive(:setup)
     end
 
     context 'with CRYSTALBALL_CONFIG env variable set' do
@@ -82,6 +82,7 @@ describe Crystalball::RSpec::Runner do
     before do
       allow_any_instance_of(described_class).to receive(:setup)
       allow(described_class).to receive(:prediction_builder).and_return prediction_builder
+      allow_any_instance_of(described_class).to receive(:setup)
     end
 
     it 'runs rspec with prediction' do
@@ -92,10 +93,10 @@ describe Crystalball::RSpec::Runner do
 
     context 'with examples_limit set' do
       before do
-        ENV['CRYSTALBALL_CONFIG'] = 'spec/fixtures/crystalball.yml'
+        ENV['CRYSTALBALL_EXAMPLES_LIMIT'] = '1'
       end
 
-      after { ENV.delete('CRYSTALBALL_CONFIG') }
+      after { ENV.delete('CRYSTALBALL_EXAMPLES_LIMIT') }
 
       it 'runs pruned prediction matching the limit' do
         expect(RSpec::Core::ConfigurationOptions).to receive(:new).with(['test']).and_call_original
@@ -115,57 +116,52 @@ describe Crystalball::RSpec::Runner do
     end
   end
 
-  describe '#run' do
-    subject(:runner) { described_class.new(options, configuration, world) }
+  describe '#setup' do
+    subject { runner.setup(STDOUT, STDOUT) }
+    let!(:runner) { described_class.new(options, configuration, world) }
+    let(:options) { instance_double('RSpec::Core::ConfigurationOptions', options: {files_or_directories_to_run: files}).as_null_object }
+    let(:world) { instance_double('RSpec::Core::World', filtered_examples: []).as_null_object }
     let(:configuration) { instance_double('RSpec::Core::Configuration').as_null_object }
-    let(:world) { instance_double('RSpec::Core::World').as_null_object }
-    let(:options) { double.as_null_object }
-    let(:files) { [] }
+    let(:files) { %w[./spec/foo_spec.rb[1:1] ./spec/foo_spec.rb] }
 
     before do
-      allow(subject).to receive(:persist_example_statuses).and_return false
-      allow(subject).to receive(:setup)
-      allow(world).to receive(:ordered_example_groups).and_return(%w[a b])
+      allow(Crystalball::RSpec::Filtering).to receive(:remove_unnecessary_filters).with(configuration, files)
+    end
+
+    it 'removes the unecessary filters' do
+      expect(Crystalball::RSpec::Filtering)
+        .to receive(:remove_unnecessary_filters).with(configuration, files)
+      subject
     end
 
     context 'without examples_limit set' do
       it 'runs with world ordered example groups' do
-        expect(runner).to receive(:run_specs).with(%w[a b]).and_return(true)
-        runner.run(STDOUT, STDOUT)
+        expect(runner).not_to receive(:reconfigure_to_limit)
+        subject
       end
     end
 
     context 'with examples_limit set' do
       before do
-        ENV['CRYSTALBALL_CONFIG'] = 'spec/fixtures/crystalball.yml'
-      end
+        ENV['CRYSTALBALL_EXAMPLES_LIMIT'] = '1'
 
-      after { ENV.delete('CRYSTALBALL_CONFIG') }
-
-      it 'returns whatever ExamplesPruner returns' do
-        pruner = double(world_groups: %w[a b], pruned_groups: ['pruned_groups'])
-        allow(Crystalball::RSpec::ExamplesPruner).to receive(:new).with(world, to: 1).and_return pruner
+        allow(Crystalball::RSpec::PredictionPruning::ExamplesPruner)
+          .to receive(:new).with(world, to: 1).and_return double(pruned_set: ['pruned_set'])
         allow(world).to receive(:example_count).and_return(2)
-
-        expect(runner).to receive(:run_specs).with(['pruned_groups']).and_return(true)
-        runner.run(STDOUT, STDOUT)
       end
-    end
-  end
+      after { ENV.delete('CRYSTALBALL_EXAMPLES_LIMIT') }
 
-  describe '#setup' do
-    subject(:setup) { runner.setup(instance_double('IO'), instance_double('IO')) }
-    let(:runner) { described_class.new(options, configuration, world) }
-    let(:options) { double(options: {files_or_directories_to_run: files}).as_null_object }
-    let(:world) { instance_double('RSpec::Core::World').as_null_object }
-    let(:files) { %w[./spec/foo_spec.rb[1:1] ./spec/foo_spec.rb] }
-    let(:configuration) { instance_double('RSpec::Core::Configuration').as_null_object }
+      it 'reconfigures RSpec env with new set from ExamplesPruner' do
+        expect(::RSpec::Core::ConfigurationOptions).to receive(:new).with(['pruned_set']).and_return(double.as_null_object)
+        expect(world.filtered_examples).to receive(:clear)
+        expect(world).to receive(:reset)
+        world.instance_variable_set(:@example_group_counts_by_spec_file, [])
+        expect(world.instance_variable_get(:@example_group_counts_by_spec_file)).to receive(:clear)
 
-    it 'removes the unecessary filters' do
-      expect(Crystalball::RSpec::Filtering).to receive(:remove_unnecessary_filters)
-        .with(configuration, files)
-
-      setup
+        expect(configuration).to receive(:reset)
+        expect(configuration).to receive(:reset_filters)
+        subject
+      end
     end
   end
 end
