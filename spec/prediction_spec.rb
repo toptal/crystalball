@@ -3,18 +3,18 @@
 require 'spec_helper'
 
 describe Crystalball::Prediction do
-  subject(:prediction) { described_class.new(raw_cases) }
-  let(:raw_cases) { [] }
+  subject(:prediction) { described_class.new(raw_example_groups) }
+  let(:raw_example_groups) { [] }
 
   describe '#to_a' do
     subject { prediction.to_a }
-    it { is_expected.to eq raw_cases }
+    it { is_expected.to eq raw_example_groups }
   end
 
   describe '#compact' do
     subject { prediction.compact }
     context 'when one part is included into other part' do
-      let(:raw_cases) do
+      let(:raw_example_groups) do
         %w[
           ./dir/file1_spec.rb
           ./dir/
@@ -27,7 +27,7 @@ describe Crystalball::Prediction do
     end
 
     context 'when prediction includes root' do
-      let(:raw_cases) do
+      let(:raw_example_groups) do
         %w[
           ./
           ./dir/file1_spec.rb
@@ -42,14 +42,14 @@ describe Crystalball::Prediction do
   end
 
   describe '#method_missing' do
-    it 'is delegated to raw_cases' do
-      expect(raw_cases).to receive(:size).once
+    it 'is delegated to raw_example_groups' do
+      expect(raw_example_groups).to receive(:size).once
       subject.size
     end
   end
 
   describe '#respond_to_missing?' do
-    it 'is delegated to raw_cases' do
+    it 'is delegated to raw_example_groups' do
       expect(subject).to respond_to(:size)
     end
   end

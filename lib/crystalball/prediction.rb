@@ -3,11 +3,11 @@
 module Crystalball
   # Class for Crystalball prediction results
   class Prediction
-    def initialize(cases)
-      @cases = cases
+    def initialize(records)
+      @records = records
     end
 
-    # When the cases are something like:
+    # When the records are something like:
     #   ./spec/foo ./spec/foo/bar_spec.rb
     # this returns just ./spec/foo
     def compact
@@ -17,19 +17,19 @@ module Crystalball
     end
 
     def to_a
-      cases
+      records
     end
 
     def method_missing(*args, &block)
-      cases.respond_to?(*args) ? cases.public_send(*args, &block) : super
+      records.respond_to?(*args) ? records.public_send(*args, &block) : super
     end
 
     def respond_to_missing?(*args)
-      cases.respond_to?(*args)
+      records.respond_to?(*args)
     end
 
     private
 
-    attr_reader :cases
+    attr_reader :records
   end
 end

@@ -28,18 +28,19 @@ module Crystalball
         end
       end
 
-      # Parses the current case map seeking calls to class methods and adds
+      # Parses the current example group map seeking calls to class methods and adds
       #   the classes to the map.
-      # @param [Crystalball::CaseMap] case_map - object holding example metadata and affected files
-      def call(case_map, *_args)
+      # @param [Crystalball::ExampleGroupMap] example_map - object holding example metadata and used files
+      # @param [RSpec::Core::Example] example - a RSpec example
+      def call(example_map, example)
         paths = []
-        yield case_map
-        case_map.each do |path|
+        yield example_map, example
+        example_map.each do |path|
           next unless path.end_with?('.rb')
           used_consts = processor.consts_interacted_with_in(path)
           paths.push(*used_files(used_consts))
         end
-        case_map.push(*filter(paths))
+        example_map.push(*filter(paths))
       end
 
       private

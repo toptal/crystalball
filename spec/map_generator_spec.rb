@@ -63,8 +63,8 @@ describe Crystalball::MapGenerator do
   context 'configured' do
     let(:dummy_strategy) do
       double.as_null_object.tap do |s|
-        def s.call(case_map, _example)
-          yield case_map
+        def s.call(example_group_map, _example)
+          yield example_group_map
         end
       end
     end
@@ -144,7 +144,7 @@ describe Crystalball::MapGenerator do
       end
 
       def example_map(uid)
-        instance_double('Crystalball::CaseMap', uid: uid, affected_files: [])
+        instance_double('Crystalball::ExampleGroupMap', uid: uid, used_files: [])
       end
 
       it 'runs the example' do
@@ -156,7 +156,7 @@ describe Crystalball::MapGenerator do
 
       it 'adds execution map for given case' do
         rspec_case = rspec_example
-        allow(configuration.strategies).to receive(:run).with(kind_of(Crystalball::CaseMap), rspec_case)
+        allow(configuration.strategies).to receive(:run).with(kind_of(Crystalball::ExampleGroupMap), rspec_case)
                                                         .and_return(example_map('1'))
         expect do
           subject.refresh_for_case(rspec_case)
@@ -166,8 +166,8 @@ describe Crystalball::MapGenerator do
       context 'with threshold' do
         let(:threshold) { 2 }
 
-        it 'dumps map cases and clears the map if map size is over threshold' do
-          allow(configuration.strategies).to receive(:run).with(kind_of(Crystalball::CaseMap), any_args)
+        it 'dumps map example_groups and clears the map if map size is over threshold' do
+          allow(configuration.strategies).to receive(:run).with(kind_of(Crystalball::ExampleGroupMap), any_args)
                                                           .and_return(example_map('1'), example_map('2'), example_map('3'))
 
           expect(storage).to receive(:dump).with('1' => [], '2' => []).once

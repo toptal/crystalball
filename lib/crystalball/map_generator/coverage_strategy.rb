@@ -20,14 +20,15 @@ module Crystalball
         Coverage.start
       end
 
-      # Adds to the case_map's affected files the ones the ones in which
+      # Adds to the example_map's used files the ones the ones in which
       # the coverage has changed after the tests runs.
-      # @param [Crystalball::CaseMap] case_map - object holding example metadata and affected files
-      def call(case_map, _)
+      # @param [Crystalball::ExampleGroupMap] example_map - object holding example metadata and used files
+      # @param [RSpec::Core::Example] example - a RSpec example
+      def call(example_map, example)
         before = Coverage.peek_result
-        yield case_map
+        yield example_map, example
         after = Coverage.peek_result
-        case_map.push(*execution_detector.detect(before, after))
+        example_map.push(*execution_detector.detect(before, after))
       end
     end
   end

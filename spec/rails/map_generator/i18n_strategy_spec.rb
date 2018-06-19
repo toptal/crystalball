@@ -26,24 +26,24 @@ describe Crystalball::Rails::MapGenerator::I18nStrategy do
   end
 
   describe '#call' do
-    let(:case_map) { [] }
+    let(:example_group_map) { [] }
 
-    it 'pushes affected files to case map' do
+    it 'pushes used files to example group map' do
       allow(strategy).to receive(:filter).with(['view']).and_return([1, 2, 3])
 
       expect do
-        subject.call(case_map, nil) do
+        subject.call(example_group_map, nil) do
           Crystalball::Rails::MapGenerator::I18nStrategy.locale_files.push 'view'
         end
-      end.to change { case_map }.to [1, 2, 3]
+      end.to change { example_group_map }.to [1, 2, 3]
     end
 
-    it 'yields case_map to a block' do
+    it 'yields example_group_map to a block' do
       allow(strategy).to receive(:filter).with([]).and_return([])
 
       expect do |b|
-        subject.call(case_map, nil, &b)
-      end.to yield_with_args(case_map)
+        subject.call(example_group_map, nil, &b)
+      end.to yield_with_args(example_group_map)
     end
   end
 end

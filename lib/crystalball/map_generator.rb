@@ -43,7 +43,7 @@ module Crystalball
 
     # Runs example and collects execution map for it
     def refresh_for_case(example)
-      map << strategies.run(CaseMap.new(example), example) { example.run }
+      map << strategies.run(ExampleGroupMap.new(example), example) { example.run }
       check_dump_threshold
     end
 
@@ -52,7 +52,7 @@ module Crystalball
       return unless started
 
       strategies.each(&:before_finalize)
-      map_storage.dump(map.cases) if map.size.positive?
+      map_storage.dump(map.example_groups) if map.size.positive?
     end
 
     def map
@@ -72,7 +72,7 @@ module Crystalball
     def check_dump_threshold
       return unless dump_threshold.positive? && map.size >= dump_threshold
 
-      map_storage.dump(map.cases)
+      map_storage.dump(map.example_groups)
       map.clear!
     end
   end

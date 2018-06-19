@@ -3,11 +3,11 @@
 require 'spec_helper'
 
 describe Crystalball::Predictor do
-  subject(:predictor) { described_class.new(instance_double('Crystalball::ExecutionMap', cases: cases), repository) }
-  let(:cases) { {spec_file: %w[file1.rb]} }
+  subject(:predictor) { described_class.new(instance_double('Crystalball::ExecutionMap', example_groups: example_groups), repository) }
+  let(:example_groups) { {spec_file: %w[file1.rb]} }
   let(:repository) { double('Crystalball::GitRepo', merge_base: double(sha: nil), repo_path: Pathname('.')) }
-  let(:map) { instance_double('Crystalball::MapGenerator::ExecutionMap', cases: cases) }
-  let(:cases) { {'spec_file' => %w[file1.rb]} }
+  let(:map) { instance_double('Crystalball::MapGenerator::ExecutionMap', example_groups: example_groups) }
+  let(:example_groups) { {'spec_file' => %w[file1.rb]} }
 
   describe '#initialize' do
     it 'yields block with self' do
@@ -29,7 +29,7 @@ describe Crystalball::Predictor do
     it { is_expected.to eq([]) }
 
     context 'with predictor' do
-      before { predictor.use ->(_source_diff, map) { map.cases.keys } }
+      before { predictor.use ->(_source_diff, map) { map.example_groups.keys } }
 
       context 'when file is present' do
         before do

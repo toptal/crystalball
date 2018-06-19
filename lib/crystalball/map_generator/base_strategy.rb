@@ -10,10 +10,11 @@ module Crystalball
 
       def before_finalize; end
 
-      # Each strategy must implement #call augmenting the affected_files list and
-      # yielding back the CaseMap.
-      # @param [Crystalball::CaseMap] _case_map - object holding example metadata and affected files
-      def call(_case_map, _example)
+      # Each strategy must implement #call augmenting the used_files list and
+      # yielding back the ExampleGroupMap.
+      # @param [Crystalball::ExampleGroupMap] _example_map - object holding example metadata and used files
+      # @param [RSpec::Core::Example] _example - a RSpec example
+      def call(_example_map, _example)
         raise NotImplementedError
       end
     end

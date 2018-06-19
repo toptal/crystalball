@@ -16,7 +16,7 @@ describe Crystalball::MapGenerator::CoverageStrategy do
   end
 
   describe '#call' do
-    let(:case_map) { [] }
+    let(:example_group_map) { [] }
     before do
       before = double
       after = double
@@ -25,16 +25,16 @@ describe Crystalball::MapGenerator::CoverageStrategy do
       allow(execution_detector).to receive(:detect).with(before, after).and_return(example_map)
     end
 
-    it 'pushes affected files detected by detector to case map' do
+    it 'pushes used files detected by detector to example group map' do
       expect do
-        subject.call(case_map, 'example') {}
-      end.to change { case_map }.to [1, 2, 3]
+        subject.call(example_group_map, 'example') {}
+      end.to change { example_group_map }.to [1, 2, 3]
     end
 
-    it 'yields case_map to a block' do
+    it 'yields example_group_map to a block' do
       expect do |b|
-        subject.call(case_map, 'example', &b)
-      end.to yield_with_args(case_map)
+        subject.call(example_group_map, 'example', &b)
+      end.to yield_with_args(example_group_map, 'example')
     end
   end
 end

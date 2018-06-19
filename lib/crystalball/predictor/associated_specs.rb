@@ -17,7 +17,7 @@ module Crystalball
         @to = to
       end
 
-      # This strategy does not depend on a previously generated case map.
+      # This strategy does not depend on a previously generated example group map.
       # It uses the defined regex rules to infer which specs to run.
       # @param [Crystalball::SourceDiff] diff - the diff from which to predict
       #   which specs should run

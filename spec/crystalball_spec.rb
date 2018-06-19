@@ -6,7 +6,7 @@ describe Crystalball do
   describe '.foresee' do
     let(:map) { instance_double(Crystalball::ExecutionMap, commit: commit) }
     let(:repo) { instance_double(Crystalball::GitRepo, diff: nil) }
-    let(:predictor) { instance_double(Crystalball::Predictor, cases: double) }
+    let(:predictor) { instance_double(Crystalball::Predictor, prediction: double) }
     let(:commit) { double }
 
     before do
@@ -14,7 +14,7 @@ describe Crystalball do
       allow(Crystalball::GitRepo).to receive(:new).with(Pathname('.')).and_return(repo)
     end
 
-    it 'initializes predictor and returns cases' do
+    it 'initializes predictor and returns example_groups' do
       allow(Crystalball::Predictor).to receive(:new).with(map, repo, from: commit).and_return(predictor)
       compact_prediction = double
       allow(predictor).to receive(:prediction).and_return(double(compact: compact_prediction))

@@ -41,16 +41,16 @@ predictor.use Crystalball::Predictor::AssociatedSpecs.new(
   )
 ```
 will add `./spec/models/foo_spec.rb` to prediction when `models/foo.rb` changes.
-This strategy does not depend on a previously generated case map.
+This strategy does not depend on a previously generated example group map.
 
 #### ModifiedExecutionPaths
 
-Checks the case map and the diff to see which specs are affected by the new or modified files.
+Checks the example group map and the diff to see which specs are affected by the new or modified files.
 
 #### ModifiedSpecs
 
 As the name implies, checks for modified specs. The scope can be modified by passing a regex as argument, which defaults to `%r{spec/.*_spec\.rb\z}`.
-This strategy does not depend on a previously generated case map.
+This strategy does not depend on a previously generated example group map.
 
 #### ModifiedSupportSpecs
 
@@ -70,6 +70,6 @@ _**Note**_: You may meet a warning like "WARNING: there are no model files for c
 
 ### Custom strategies
 
-As with the map generator you may define custom strategies for prediction. It must be an object that responds to `#call(diff, case_map)` (where `diff` is a `Crystalball::SourceDiff` and `case_map` is a `Crystalball::CaseMap`) and returns an array of paths.
+As with the map generator you may define custom strategies for prediction. It must be an object that responds to `#call(diff, example_group_map)` (where `diff` is a `Crystalball::SourceDiff` and `example_group_map` is a `Crystalball::ExampleGroupMap`) and returns an array of paths.
 
 Check out [default strategies implementation](https://github.com/toptal/crystalball/tree/master/lib/crystalball/predictor) for examples.

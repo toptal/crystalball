@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'crystalball/rails/helpers/schema_definition_parser'
-require 'crystalball/predictor/helpers/affected_examples_detector'
+require 'crystalball/predictor/helpers/affected_example_groups_detector'
 
 module Crystalball
   module Rails
@@ -10,7 +10,7 @@ module Crystalball
       # When used will check db/schema.rb for changes and add specs which depend on files affected
       # by changed tables
       class ModifiedSchema
-        include ::Crystalball::Predictor::Helpers::AffectedExamplesDetector
+        include ::Crystalball::Predictor::Helpers::AffectedExampleGroupsDetector
         SCHEMA_PATH = 'db/schema.rb'
 
         attr_reader :tables_map_path
@@ -23,7 +23,7 @@ module Crystalball
         # @param [Crystalball::SourceDiff] diff - the diff from which to predict
         #   which specs should run
         # @param [Crystalball::ExecutionMap] map - the map with the relations of
-        #   examples and affected files
+        #   examples and used files
         # @return [Array<String>] the spec paths associated with the changes
         def call(diff, map)
           return [] if schema_diff(diff).nil?

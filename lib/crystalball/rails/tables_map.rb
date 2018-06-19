@@ -22,32 +22,32 @@ module Crystalball
         end
       end
 
-      attr_reader :cases, :metadata
+      attr_reader :example_groups, :metadata
 
       delegate %i[commit version] => :metadata
-      delegate %i[size [] []=] => :cases
+      delegate %i[size [] []=] => :example_groups
 
       # @param [Hash] metadata - add or override metadata of execution map
-      # @param [Hash] cases - initial list of tables
-      def initialize(metadata: {}, cases: {})
+      # @param [Hash] example_groups - initial list of tables
+      def initialize(metadata: {}, example_groups: {})
         @metadata = Metadata.new(**metadata)
-        @cases = cases
+        @example_groups = example_groups
       end
 
-      # Remove all cases
+      # Remove all example_groups
       def clear!
-        self.cases = {}
+        self.example_groups = {}
       end
 
       def add(files:, for_table:)
-        cases[for_table] ||= []
-        cases[for_table] += files
-        cases[for_table].uniq!
+        example_groups[for_table] ||= []
+        example_groups[for_table] += files
+        example_groups[for_table].uniq!
       end
 
       private
 
-      attr_writer :cases, :metadata
+      attr_writer :example_groups, :metadata
     end
   end
 end

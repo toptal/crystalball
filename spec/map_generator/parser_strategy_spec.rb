@@ -59,9 +59,9 @@ RSpec.describe Crystalball::MapGenerator::ParserStrategy do
 
     it 'adds the definition file to the map' do
       strategy.after_register
-      case_map = %w[some_dir/some_file.rb]
-      strategy.call(case_map) {}
-      expect(case_map).to match_array(%w[some_dir/some_file.rb something.rb])
+      example_group_map = %w[some_dir/some_file.rb]
+      strategy.call(example_group_map, 'example') {}
+      expect(example_group_map).to match_array(%w[some_dir/some_file.rb something.rb])
     end
   end
 end

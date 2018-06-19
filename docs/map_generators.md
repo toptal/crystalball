@@ -56,7 +56,7 @@ The initialization takes two keyword arguments: `execution_detector` and `object
 
 ### DescribedClassStrategy
 
-This strategy will take each example that has a `described_class` (i.e. examples inside `describe` blocks of classes and not strings) and add the paths where the described class and its ancestors are defined to the case map of the example;
+This strategy will take each example that has a `described_class` (i.e. examples inside `describe` blocks of classes and not strings) and add the paths where the described class and its ancestors are defined to the example group map of the example;
 
 To use it, add to your `Crystalball::MapGenerator.start!` block:
 
@@ -80,7 +80,7 @@ end
 
 The `ParserStrategy`, as the name suggests parses the files in order to detect which files are affected by an example.
 It works by first parsing all (`.rb`) files that match the given pattern under the configured root directory (defaults to current directory) to collect the constants definition paths.
-Then, when each example is executed, the affected files of the current case map are parsed to check for method calls to those constants. For that reason, `ParserStrategy` **only works when used with other strategies and is placed at the end of the strategies list**.
+Then, when each example is executed, the used files of the current example group map are parsed to check for method calls to those constants. For that reason, `ParserStrategy` **only works when used with other strategies and is placed at the end of the strategies list**.
 
 To use it, add the `parser` gem to your `Gemfile` and:
 
@@ -107,7 +107,7 @@ end
 ### I18nStrategy
 
 To use Rails specific strategies you must first `require 'crystalball/rails'`.
-Patches I18n to have access to the path where the locales are defined, so that those paths can be added to the case map.
+Patches I18n to have access to the path where the locales are defined, so that those paths can be added to the example group map.
 To use it, add to your config:
 
 ```ruby
@@ -119,7 +119,7 @@ end
 
 ### Custom strategies
 
-You can create your own strategy and use it with the map generator. Any object that responds to `#call(case_map, example)` (where `case_map` is a `Crystalball::CaseMap` and `example` a `RSpec::Core::Example`) and augmenting its list of affected files using `case_map.push(*paths_to_files)`.
+You can create your own strategy and use it with the map generator. Any object that responds to `#call(example_group_map, example)` (where `example_group_map` is a `Crystalball::ExampleGroupMap` and `example` a `RSpec::Core::Example`) and augmenting its list of used files using `example_group_map.push(*paths_to_files)`.
 Check out the [implementation](https://github.com/toptal/crystalball/tree/master/lib/crystalball/map_generator) of the default strategies for examples.
 
 Keep in mind that all the strategies configured for the map generator will run for each example of your test suite, so it may slow down the generation process considerably.
