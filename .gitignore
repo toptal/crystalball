@@ -8,6 +8,8 @@
 /spec/reports/
 /tmp/
 features/tmp/
+/features/fixtures/simple_app/log/
+
 execution_map.yml
 tables_map.yml
 

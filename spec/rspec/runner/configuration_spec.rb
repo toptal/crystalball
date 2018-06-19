@@ -19,7 +19,9 @@ describe Crystalball::RSpec::Runner::Configuration do
           'diff_from' => 'HEAD',
           'diff_to' => nil,
           'runner_class' => Crystalball::RSpec::Runner,
-          'runner_class_name' => 'Crystalball::RSpec::Runner'
+          'runner_class_name' => 'Crystalball::RSpec::Runner',
+          'log_level' => :info,
+          'log_file' => 'log/crystalball.log'
         )
     end
   end
@@ -61,6 +63,8 @@ describe Crystalball::RSpec::Runner::Configuration do
           'diff_from' => 'HEAD~3',
           'diff_to' => 'HEAD',
           'map_expiration_period' => 1,
+          'log_level' => :info,
+          'log_file' => 'log/crystalball.log',
           'custom' => 42
         )
     end

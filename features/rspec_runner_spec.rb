@@ -10,6 +10,16 @@ describe 'RSpec runner' do
   let(:important_class_path) { root.join('lib/important_class.rb') }
   let(:other_important_class_path) { root.join('lib/other_important_class.rb') }
 
+  before do
+    ENV['CRYSTALBALL_LOG_LEVEL'] = 'debug'
+    ENV['CRYSTALBALL_LOG_FILE'] = '/dev/null'
+  end
+
+  after do
+    ENV.delete('CRYSTALBALL_LOG_LEVEL')
+    ENV.delete('CRYSTALBALL_LOG_FILE')
+  end
+
   it 'predicts examples' do
     change class1_path
 

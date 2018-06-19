@@ -15,11 +15,11 @@ module Crystalball
         def run(args, err = $stderr, out = $stdout)
           return config['runner_class'].run(args, err, out) unless config['runner_class'] == self
 
-          out.puts "Crystalball starts to glow..."
-          prediction = build_prediction(out)
+          Crystalball.log :info, "Crystalball starts to glow..."
+          prediction = build_prediction
 
-          out.puts "Prediction: #{prediction.first(5).join(' ')}#{'...' if prediction.size > 5}"
-          out.puts "Starting RSpec."
+          Crystalball.log :debug, "Prediction: #{prediction.first(5).join(' ')}#{'...' if prediction.size > 5}"
+          Crystalball.log :info, "Starting RSpec."
 
           super(args + prediction, err, out)
         end
@@ -53,7 +53,7 @@ module Crystalball
         protected
 
         def load_execution_map
-          check_map($stdout)
+          check_map
           prediction_builder.execution_map
         end
 
@@ -67,13 +67,13 @@ module Crystalball
           file.exist? ? file : nil
         end
 
-        def build_prediction(out)
-          check_map(out)
-          prune_prediction_to_limit(prediction_builder.prediction.sort_by(&:length), out)
+        def build_prediction
+          check_map
+          prune_prediction_to_limit(prediction_builder.prediction.sort_by(&:length))
         end
 
-        def check_map(out)
-          out.puts 'Maps are outdated!' if prediction_builder.expired_map?
+        def check_map
+          Crystalball.log :warn, 'Maps are outdated!' if prediction_builder.expired_map?
         end
       end
 
@@ -84,8 +84,8 @@ module Crystalball
         Filtering.remove_unnecessary_filters(@configuration, @options.options[:files_or_directories_to_run])
 
         if reconfiguration_needed?
-          out.puts "Prediction examples size #{@world.example_count} is over the limit (#{examples_limit})"
-          out.puts "Prediction is pruned to fit the limit!"
+          Crystalball.log :warn, "Prediction examples size #{@world.example_count} is over the limit (#{examples_limit})"
+          Crystalball.log :warn, "Prediction is pruned to fit the limit!"
 
           reconfigure_to_limit
           @configuration.load_spec_files

@@ -21,7 +21,7 @@ describe 'Changing schema file' do
   it 'writes a warning for a table with no model files' do
     change schema_path, File.read(fixtures_path.join('schema', 'relation_table_changed.rb'))
 
-    expect(STDOUT).to receive(:puts).with(/WARNING: there are no model files for changed table `model1s_model2s`/)
+    expect(Crystalball).to receive(:log).with(:warn, /There are no model files for changed table `model1s_model2s`/)
     expect(forecast).to be_empty
   end
 end
