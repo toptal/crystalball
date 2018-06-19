@@ -30,14 +30,15 @@ module Crystalball
         @execution_detector = execution_detector
       end
 
-      # Adds to the affected files every file which contain the definition of the
+      # Adds to the used files every file which contain the definition of the
       # classes of the objects allocated during the spec execution.
-      # @param [Crystalball::CaseMap] case_map - object holding example metadata and affected files
-      def call(case_map, example)
+      # @param [Crystalball::ExampleGroupMap] example_map - object holding example metadata and used files
+      # @param [RSpec::Core::Example] example - a RSpec example
+      def call(example_map, example)
         classes = object_tracker.used_classes_during do
-          yield case_map, example
+          yield example_map, example
         end
-        case_map.push(*execution_detector.detect(classes))
+        example_map.push(*execution_detector.detect(classes))
       end
     end
   end

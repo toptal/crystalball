@@ -43,7 +43,7 @@ module Crystalball
 
     # Runs example and collects execution map for it
     def refresh_for_case(example)
-      map << strategies.run(CaseMap.new(example), example) { example.run }
+      map << strategies.run(ExampleGroupMap.new(example), example) { example.run }
       check_dump_threshold
     end
 

@@ -28,9 +28,9 @@ describe Crystalball::MapGenerator::AllocatedObjectsStrategy do
   end
 
   describe '#call' do
-    subject { strategy.call(case_map, 'example') {} }
+    subject { strategy.call(example_group_map, 'example') {} }
 
-    let(:case_map) { [] }
+    let(:example_group_map) { [] }
     let(:objects) { [] }
 
     before do
@@ -38,16 +38,16 @@ describe Crystalball::MapGenerator::AllocatedObjectsStrategy do
       allow(execution_detector).to receive(:detect).with(objects) { [1, 2, 3] }
     end
 
-    it 'yields case_map to a block' do
+    it 'yields example_group_map to a block' do
       expect do |b|
-        strategy.call(case_map, 'example', &b)
-      end.to yield_with_args(case_map, 'example')
+        strategy.call(example_group_map, 'example', &b)
+      end.to yield_with_args(example_group_map, 'example')
     end
 
-    it 'pushes affected files detected by detector to case map' do
+    it 'pushes used files detected by detector to example group map' do
       expect do
         subject
-      end.to change { case_map }.to [1, 2, 3]
+      end.to change { example_group_map }.to [1, 2, 3]
     end
   end
 end

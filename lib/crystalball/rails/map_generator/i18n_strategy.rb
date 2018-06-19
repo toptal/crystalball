@@ -34,12 +34,12 @@ module Crystalball
           SimplePatch.revert!
         end
 
-        # Adds to the case map the locale files used by the example
-        # @param [Crystalball::CaseMap] case_map - object holding example metadata and affected files
-        def call(case_map, _)
+        # Adds to the example group map the locale files used by the example
+        # @param [Crystalball::ExampleGroupMap] example_group_map - object holding example metadata and used files
+        def call(example_group_map, _)
           self.class.reset_locale_files
-          yield case_map
-          case_map.push(*filter(self.class.locale_files.compact))
+          yield example_group_map
+          example_group_map.push(*filter(self.class.locale_files.compact))
         end
       end
     end

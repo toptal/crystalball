@@ -10,12 +10,12 @@ module Crystalball
         @strategies = strategies
       end
 
-      # Calls every strategy on the given case map and returns the modified case map
-      # @param [Crystalball::CaseMap] case_map - initial case map
-      # @return [Crystalball::CaseMap] case map augmented by each strategy
-      def run(case_map, example, &block)
-        run_for_strategies(case_map, example, *_strategies.reverse, &block)
-        case_map
+      # Calls every strategy on the given example group map and returns the modified example group map
+      # @param [Crystalball::ExampleGroupMap] example_group_map - initial example group map
+      # @return [Crystalball::ExampleGroupMap] example group map augmented by each strategy
+      def run(example_group_map, example, &block)
+        run_for_strategies(example_group_map, example, *_strategies.reverse, &block)
+        example_group_map
       end
 
       def method_missing(method_name, *args, &block)
@@ -32,11 +32,11 @@ module Crystalball
         @strategies
       end
 
-      def run_for_strategies(case_map, example, *strats, &block)
-        return yield(case_map) if strats.empty?
+      def run_for_strategies(example_group_map, example, *strats, &block)
+        return yield(example_group_map) if strats.empty?
 
         strat = strats.shift
-        strat.call(case_map, example) { |c| run_for_strategies(c, example, *strats, &block) }
+        strat.call(example_group_map, example) { |c| run_for_strategies(c, example, *strats, &block) }
       end
     end
   end

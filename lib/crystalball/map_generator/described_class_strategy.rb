@@ -21,14 +21,14 @@ module Crystalball
         @execution_detector = execution_detector
       end
 
-      # @param [Crystalball::CaseMap] case_map - object holding example metadata and affected files
-      # @param [RSpec::Core::Example] example
-      def call(case_map, example)
-        yield case_map
+      # @param [Crystalball::ExampleGroupMap] example_map - object holding example metadata and used files
+      # @param [RSpec::Core::Example] example - a RSpec example
+      def call(example_map, example)
+        yield example_map, example
 
         described_class = example.metadata[:described_class]
 
-        case_map.push(*execution_detector.detect([described_class])) if described_class
+        example_map.push(*execution_detector.detect([described_class])) if described_class
       end
     end
   end

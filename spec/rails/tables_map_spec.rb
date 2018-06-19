@@ -4,9 +4,9 @@ require 'rails_helper'
 
 describe Crystalball::Rails::TablesMap do
   subject { described_class.new }
-  let(:affected_files) { instance_double(Array) }
+  let(:used_files) { instance_double(Array) }
 
-  before { allow(affected_files).to receive(:uniq) { affected_files } }
+  before { allow(used_files).to receive(:uniq) { used_files } }
 
   describe '#clear!' do
     before { subject['dummies'] = %w[models/dummy.rb] }

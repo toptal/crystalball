@@ -37,11 +37,11 @@ module Crystalball
       @metadata = Metadata.new(type: self.class.name, **metadata)
     end
 
-    # Adds case map to the list
+    # Adds example group map to the list
     #
-    # @param [Crystalball::CaseMap] case_map
-    def <<(case_map)
-      cases[case_map.uid] = case_map.affected_files.uniq
+    # @param [Crystalball::ExampleGroupMap] example_group_map
+    def <<(example_group_map)
+      cases[example_group_map.uid] = example_group_map.used_files.uniq
     end
 
     # Remove all cases
