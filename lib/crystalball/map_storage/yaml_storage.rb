@@ -17,11 +17,11 @@ module Crystalball
         # @param [String] path to map
         # @return [Crystalball::ExecutionMap]
         def load(path)
-          meta, cases = *read_files(path).transpose
+          meta, example_groups = *read_files(path).transpose
 
           guard_metadata_consistency(meta)
 
-          Object.const_get(meta.first[:type]).new(metadata: meta.first, cases: cases.inject(&:merge!))
+          Object.const_get(meta.first[:type]).new(metadata: meta.first, example_groups: example_groups.inject(&:merge!))
         end
 
         private
@@ -32,12 +32,12 @@ module Crystalball
           raise NoFilesFoundError, "No files or folder exists #{path}" unless paths.any?(&:exist?)
 
           paths.map do |file|
-            metadata, *cases = file.read.split("---\n").reject(&:empty?).map do |yaml|
+            metadata, *example_groups = file.read.split("---\n").reject(&:empty?).map do |yaml|
               YAML.safe_load(yaml, [Symbol])
             end
-            cases = cases.inject(&:merge!)
+            example_groups = example_groups.inject(&:merge!)
 
-            [metadata, cases]
+            [metadata, example_groups]
           end
         end
 

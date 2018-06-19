@@ -6,8 +6,8 @@ require 'crystalball/predictor_evaluator'
 describe Crystalball::PredictorEvaluator do
   subject(:evaluator) { described_class.new(predictor, actual_failures: actual_failures) }
   let(:predictor) { instance_double('Crystalball::Predictor', prediction: prediction, diff: git_diff, map: map) }
-  let(:map) { instance_double('Crystalball::ExecutionMap', cases: cases, size: cases.size) }
-  let(:cases) { {'./file1.rb[1:1]' => [], './file2.rb[1:1]' => [], './file2[1:2]' => []} }
+  let(:map) { instance_double('Crystalball::ExecutionMap', example_groups: example_groups, size: example_groups.size) }
+  let(:example_groups) { {'./file1.rb[1:1]' => [], './file2.rb[1:1]' => [], './file2[1:2]' => []} }
   let(:git_diff) { instance_double('Crystalball::SourceDiff', lines: 42) }
   let(:prediction) { Crystalball::Prediction.new(%w[./file1.rb[1:1] ./file2.rb[1:1]]) }
   let(:actual_failures) { %w[./file1.rb[1:1] ./file2.rb[1:2]] }
@@ -15,14 +15,14 @@ describe Crystalball::PredictorEvaluator do
   describe '#predicted_failures' do
     subject { evaluator.predicted_failures }
 
-    it 'returns all cases that present in actual failures and prediction' do
+    it 'returns all example_groups that present in actual failures and prediction' do
       is_expected.to eq %w[./file1.rb[1:1]]
     end
 
     context 'with prediction as full file' do
       let(:prediction) { %w[file2.rb] }
 
-      it 'returns all cases matching that file' do
+      it 'returns all example_groups matching that file' do
         is_expected.to eq %w[./file2.rb[1:2]]
       end
     end
@@ -31,7 +31,7 @@ describe Crystalball::PredictorEvaluator do
   describe '#unpredicted_failures' do
     subject { evaluator.unpredicted_failures }
 
-    it 'returns all cases that are present in actual failures but absent in prediction' do
+    it 'returns all example_groups that are present in actual failures but absent in prediction' do
       is_expected.to eq %w[./file2.rb[1:2]]
     end
   end

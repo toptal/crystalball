@@ -3,14 +3,14 @@
 module Crystalball
   module RSpec
     # This class is meant to remove the example filtering options
-    # for cases when a prediction contains a file path and the same file
+    # for example_groups when a prediction contains a file path and the same file
     # example id.
     #
     # For example, if a prediction contains `./spec/foo_spec.rb[1:1] ./spec/foo_spec.rb`,
     # only `./spec/foo_spec.rb[1:1]` would run, because of the way RSpec
     # filters are designed.
     #
-    # Therefore, we need to manually remove the filters from such cases.
+    # Therefore, we need to manually remove the filters from such example_groups.
     class Filtering
       # @param [RSpec::Core::Configuration] config
       # @param [Array<String>] paths

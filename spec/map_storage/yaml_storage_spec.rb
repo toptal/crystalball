@@ -14,11 +14,11 @@ describe Crystalball::MapStorage::YAMLStorage do
   describe '.load' do
     subject(:map) { described_class.load(path) }
 
-    it 'loads yaml metadata and cases from file if it exists' do
+    it 'loads yaml metadata and example_groups from file if it exists' do
       allow_path_exists true
       allow(path).to receive(:read).with(no_args).and_return({commit: '123', type: 'Crystalball::ExecutionMap'}.to_yaml + {'UID1' => %w[1 2 3]}.to_yaml + {'UID100' => %w[a b c]}.to_yaml)
       expect(map).to be_a Crystalball::ExecutionMap
-      expect(map.cases).to eq('UID1' => %w[1 2 3], 'UID100' => %w[a b c])
+      expect(map.example_groups).to eq('UID1' => %w[1 2 3], 'UID100' => %w[a b c])
       expect(map.commit).to eq '123'
     end
 
@@ -41,7 +41,7 @@ describe Crystalball::MapStorage::YAMLStorage do
 
       it 'load every file in directory' do
         expect(map).to be_a Crystalball::ExecutionMap
-        expect(map.cases).to eq('UID1' => %w[1 2 3], 'UID100' => %w[a b c])
+        expect(map.example_groups).to eq('UID1' => %w[1 2 3], 'UID100' => %w[a b c])
         expect(map.commit).to eq '123'
       end
 
@@ -86,12 +86,12 @@ describe Crystalball::MapStorage::YAMLStorage do
   end
 
   describe '#dump' do
-    let(:data) { {'metadata' => 'world', 'cases' => 'hello'} }
+    let(:data) { {'metadata' => 'world', 'example_groups' => 'hello'} }
     let(:file) { instance_double(File) }
 
     before { allow(path).to receive(:open).with('a').and_yield(file) }
     it 'appends map to file' do
-      expect(file).to receive(:write).with("---\nmetadata: world\ncases: hello\n")
+      expect(file).to receive(:write).with("---\nmetadata: world\nexample_groups: hello\n")
       subject.dump(data)
     end
   end

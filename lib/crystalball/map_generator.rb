@@ -52,7 +52,7 @@ module Crystalball
       return unless started
 
       strategies.each(&:before_finalize)
-      map_storage.dump(map.cases) if map.size.positive?
+      map_storage.dump(map.example_groups) if map.size.positive?
     end
 
     def map
@@ -72,7 +72,7 @@ module Crystalball
     def check_dump_threshold
       return unless dump_threshold.positive? && map.size >= dump_threshold
 
-      map_storage.dump(map.cases)
+      map_storage.dump(map.example_groups)
       map.clear!
     end
   end

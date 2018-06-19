@@ -13,16 +13,16 @@ describe Crystalball::ExecutionMap do
     it 'adds case to data' do
       expect do
         subject << example_group_map
-      end.to change { subject.cases }.to('file_spec.rb:1' => used_files)
+      end.to change { subject.example_groups }.to('file_spec.rb:1' => used_files)
     end
   end
 
   describe 'clear!' do
-    it 'wipes out all cases' do
+    it 'wipes out all example_groups' do
       subject << example_group_map
       expect do
         subject.clear!
-      end.to change { subject.cases.size }.by(-1)
+      end.to change { subject.example_groups.size }.by(-1)
     end
   end
 end

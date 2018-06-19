@@ -29,8 +29,8 @@ describe Crystalball::Rails::Predictor::ModifiedSchema do
       let(:repository) { Git::Base.new }
       let(:repository_lib) { spy }
       let(:schema_path) { 'db/schema.rb' }
-      let(:execution_map) { instance_double('Crystalball::MapGenerator::ExecutionMap', cases: cases) }
-      let(:cases) { {spec_file: [model_path]} }
+      let(:execution_map) { instance_double('Crystalball::MapGenerator::ExecutionMap', example_groups: example_groups) }
+      let(:example_groups) { {spec_file: [model_path]} }
       let(:model_path) { 'dummy.rb' }
 
       before do

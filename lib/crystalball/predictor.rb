@@ -29,7 +29,6 @@ module Crystalball
     def prediction
       Prediction.new(filter(raw_prediction(diff)))
     end
-    alias cases prediction
 
     def diff
       @diff ||= begin
@@ -48,11 +47,11 @@ module Crystalball
 
     attr_reader :repo
 
-    def filter(raw_cases)
-      raw_cases.compact.select { |example| example_to_file_path(example).exist? }.uniq
+    def filter(example_groups)
+      example_groups.compact.select { |example_group| extract_file_path(example_group).exist? }.uniq
     end
 
-    def example_to_file_path(example)
+    def extract_file_path(example)
       repo.repo_path.join(example.split('[').first).expand_path
     end
   end

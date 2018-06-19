@@ -166,7 +166,7 @@ describe Crystalball::MapGenerator do
       context 'with threshold' do
         let(:threshold) { 2 }
 
-        it 'dumps map cases and clears the map if map size is over threshold' do
+        it 'dumps map example_groups and clears the map if map size is over threshold' do
           allow(configuration.strategies).to receive(:run).with(kind_of(Crystalball::ExampleGroupMap), any_args)
                                                           .and_return(example_map('1'), example_map('2'), example_map('3'))
 
