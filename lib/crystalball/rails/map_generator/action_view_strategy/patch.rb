@@ -9,7 +9,7 @@ module Crystalball
         # Module to add new patched `compile!` method to ActionView::Template
         module Patch
           class << self
-            # Patches `ActionView::Template#compile!`. Renames original `compile!` to `old_compile!` and
+            # Patches `ActionView::Template#compile!`. Renames original `compile!` to `cb_original_compile!` and
             # replaces it with custom one
             def apply!
               ::ActionView::Template.class_eval do
