@@ -1,10 +1,19 @@
 # frozen_string_literal: true
 
-require_relative '../feature_helper'
+require_relative '../../feature_helper'
 
 describe 'Changing source file with a class method call' do
   include_context 'base forecast'
   include_context 'simple git repository'
+
+  map_generator_config do
+    <<~CONFIG
+      Crystalball::MapGenerator.start! do |c|
+        c.register Crystalball::MapGenerator::CoverageStrategy.new
+        c.register Crystalball::MapGenerator::ParserStrategy.new(pattern: %r{(lib/)})
+      end
+    CONFIG
+  end
 
   let(:strategies) { [Crystalball::Predictor::ModifiedExecutionPaths.new] }
 

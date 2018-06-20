@@ -10,6 +10,14 @@ describe 'RSpec runner' do
   let(:important_class_path) { root.join('lib/important_class.rb') }
   let(:other_important_class_path) { root.join('lib/other_important_class.rb') }
 
+  map_generator_config do
+    <<~CONFIG
+      Crystalball::MapGenerator.start! do |c|
+        c.register Crystalball::MapGenerator::CoverageStrategy.new
+      end
+    CONFIG
+  end
+
   before do
     ENV['CRYSTALBALL_LOG_LEVEL'] = 'debug'
     ENV['CRYSTALBALL_LOG_FILE'] = '/dev/null'

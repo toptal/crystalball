@@ -8,6 +8,14 @@ describe 'Changing support spec file' do
 
   let(:strategies) { [Crystalball::Predictor::ModifiedSupportSpecs.new] }
 
+  map_generator_config do
+    <<~CONFIG
+      Crystalball::MapGenerator.start! do |c|
+        c.register Crystalball::MapGenerator::CoverageStrategy.new
+      end
+    CONFIG
+  end
+
   it 'adds full spec to a prediction list' do
     change action_view_shared_context
 

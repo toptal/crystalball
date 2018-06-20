@@ -2,10 +2,29 @@
 
 require_relative '../feature_helper'
 
-describe 'Changing schema file' do
+RSpec.describe 'Changing schema file' do
   include_context 'simple git repository'
-  include_context 'model1 examples'
   include_context 'base forecast'
+  let(:schema_path) { root.join('db', 'schema.rb') }
+
+  map_generator_config do
+    <<~CONFIG
+      Crystalball::MapGenerator.start! do |c|
+        c.register Crystalball::MapGenerator::DescribedClassStrategy.new
+      end
+
+      Crystalball::Rails::TablesMapGenerator.start!
+    CONFIG
+  end
+
+  let(:model1_examples) do
+    [
+      './spec/models/model1_spec.rb[1:1:1]',
+      './spec/models/model1_spec.rb[1:2:1]',
+      './spec/models/model1_spec.rb[1:3:1]',
+      './spec/models/model1_spec.rb[1:4:1]'
+    ]
+  end
 
   let(:strategies) do
     [Crystalball::Rails::Predictor::ModifiedSchema.new(tables_map_path: root.join('tables_map.yml'))]

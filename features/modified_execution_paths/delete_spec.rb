@@ -7,6 +7,14 @@ describe 'Deleting source file' do
   include_context 'class1 examples'
   include_context 'base forecast'
 
+  map_generator_config do
+    <<~CONFIG
+      Crystalball::MapGenerator.start! do |c|
+        c.register Crystalball::MapGenerator::CoverageStrategy.new
+      end
+    CONFIG
+  end
+
   let(:strategies) do
     [Crystalball::Predictor::ModifiedExecutionPaths.new]
   end
