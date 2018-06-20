@@ -21,4 +21,8 @@ RSpec.configure do |config|
   config.mock_with :rspec do |mocks|
     mocks.verify_partial_doubles = true
   end
+
+  config.before(:suite) do
+    ENV['CRYSTALBALL_LOG_FILE'] = '/dev/null'
+  end
 end
