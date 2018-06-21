@@ -117,6 +117,17 @@ Crystalball::MapGenerator.start! do |config|
 end
 ```
 
+### FactoryBotStrategy
+
+Tracks which factories were used during the example and add files with corresponding definitions to the example group map.
+To use it, add to your config:
+```ruby
+Crystalball::MapGenerator.start! do |config|
+  #...
+  config.register Crystalball::MapGenerator::FactoryBotStrategy.new
+end
+```
+
 ### Custom strategies
 
 You can create your own strategy and use it with the map generator. Any object that responds to `#call(example_group_map, example)` (where `example_group_map` is a `Crystalball::ExampleGroupMap` and `example` a `RSpec::Core::Example`) and augmenting its list of used files using `example_group_map.push(*paths_to_files)`.
