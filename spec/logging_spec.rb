@@ -10,18 +10,23 @@ RSpec.describe 'Logger' do
   let!(:file_logger) { ::Logger.new(log_file_output_stream) }
   let(:configured_level) { 'warn' }
 
-  before do
+  around do |example|
+    Crystalball.reset_logger
+
+    old_log_file = ENV['CRYSTALBALL_LOG_FILE']
     ENV['CRYSTALBALL_LOG_LEVEL'] = configured_level
     ENV['CRYSTALBALL_LOG_FILE'] = log_file
 
-    allow(::Logger).to receive(:new).with(STDOUT).and_return(stdout_logger)
-    allow(::Logger).to receive(:new).with(log_file).and_return(file_logger)
+    example.run
+
+    ENV['CRYSTALBALL_LOG_FILE'] = old_log_file
+    ENV.delete('CRYSTALBALL_LOG_LEVEL')
+    Crystalball.reset_logger
   end
 
-  after do
-    ENV.delete('CRYSTALBALL_LOG_LEVEL')
-    ENV.delete('CRYSTALBALL_LOG_FILE')
-    Crystalball.reset_logger
+  before do
+    allow(::Logger).to receive(:new).with(STDOUT).and_return(stdout_logger)
+    allow(::Logger).to receive(:new).with(log_file).and_return(file_logger)
   end
 
   it 'logs everything to file' do

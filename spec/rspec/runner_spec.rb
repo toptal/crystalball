@@ -11,10 +11,7 @@ describe Crystalball::RSpec::Runner do
     described_class.reset!
     allow(Crystalball::MapStorage::YAMLStorage).to receive(:load).and_return(map)
     allow(RSpec::Core::ExampleGroup).to receive(:run)
-    ENV['CRYSTALBALL_LOG_FILE'] = '/dev/null'
   end
-
-  after { ENV.delete('CRYSTALBALL_LOG_FILE') }
 
   describe '.prepare' do
     let(:expected_config) { {'execution_map_path' => 'map.yml', 'map_expiration_period' => 0, 'prediction_builder_class_name' => 'Crystalball::RSpec::PredictionBuilder'} }
