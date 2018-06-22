@@ -12,17 +12,7 @@ require_relative '../../../../lib/crystalball/rails'
 require_relative '../../../../lib/crystalball/factory_bot'
 require_relative '../../../../lib/crystalball/map_generator/parser_strategy'
 
-Crystalball::MapGenerator.start! do |c|
-  c.register Crystalball::MapGenerator::CoverageStrategy.new
-  c.register Crystalball::MapGenerator::AllocatedObjectsStrategy.build(only: ['Object'])
-  c.register Crystalball::MapGenerator::DescribedClassStrategy.new
-  c.register Crystalball::Rails::MapGenerator::ActionViewStrategy.new
-  c.register Crystalball::Rails::MapGenerator::I18nStrategy.new
-  c.register Crystalball::MapGenerator::FactoryBotStrategy.new
-  c.register Crystalball::MapGenerator::ParserStrategy.new(pattern: %r{(lib/)})
-end
-
-Crystalball::Rails::TablesMapGenerator.start!
+# MAP_GENERATOR_CONFIG
 
 require_relative 'support/shared_examples/module1.rb'
 require_relative 'support/shared_contexts/action_view.rb'

@@ -9,6 +9,14 @@ describe 'Prediction evaluation' do
   end
   include_context 'simple git repository'
 
+  map_generator_config do
+    <<~CONFIG
+      Crystalball::MapGenerator.start! do |c|
+        c.register Crystalball::MapGenerator::CoverageStrategy.new
+      end
+    CONFIG
+  end
+
   let(:predictor) do
     Crystalball::Predictor.new(map, Crystalball::GitRepo.open(git.dir.path)) do |predictor|
       predictor.use Crystalball::Predictor::AssociatedSpecs.new from: %r{models/(?<file>.*).rb},
