@@ -17,7 +17,7 @@ RSpec.describe Crystalball::MapGenerator::ParserStrategy::Processor do
 
     context 'when it has a simple class definition' do
       let(:str) do
-        <<~STR
+        <<-STR
           require 'foo'
 
           class SomeClass
@@ -34,7 +34,7 @@ RSpec.describe Crystalball::MapGenerator::ParserStrategy::Processor do
 
     context 'when it has a simple module definition' do
       let(:str) do
-        <<~STR
+        <<-STR
           require 'foo'
 
           module SomeModule
@@ -51,7 +51,7 @@ RSpec.describe Crystalball::MapGenerator::ParserStrategy::Processor do
 
     context 'when it has a nested module definition' do
       let(:str) do
-        <<~STR
+        <<-STR
           require 'foo'
 
           module SomeModule
@@ -70,7 +70,7 @@ RSpec.describe Crystalball::MapGenerator::ParserStrategy::Processor do
 
     context 'when multiple constants are defined' do
       let(:str) do
-        <<~STR
+        <<-STR
           require 'foo'
 
           module SomeModule
@@ -92,7 +92,7 @@ RSpec.describe Crystalball::MapGenerator::ParserStrategy::Processor do
 
     context 'when it has a namespaced module definition' do
       let(:str) do
-        <<~STR
+        <<-STR
           require 'foo'
 
           module SomeModule::SomeOtherModule
@@ -109,7 +109,7 @@ RSpec.describe Crystalball::MapGenerator::ParserStrategy::Processor do
 
     context 'when it has a Class.new definition' do
       let(:str) do
-        <<~STR
+        <<-STR
           require 'foo'
 
           SomeModule::SomeClass = Class.new do
@@ -126,7 +126,7 @@ RSpec.describe Crystalball::MapGenerator::ParserStrategy::Processor do
 
     context 'when it has a constant assignment' do
       let(:str) do
-        <<~STR
+        <<-STR
           require 'foo'
 
           class MyClass < Foo
@@ -143,7 +143,7 @@ RSpec.describe Crystalball::MapGenerator::ParserStrategy::Processor do
 
     context 'when contains syntax error' do
       let(:str) do
-        <<~STR
+        <<-STR
           require 'foo'
 
           class MyClass < Foo
@@ -161,7 +161,7 @@ RSpec.describe Crystalball::MapGenerator::ParserStrategy::Processor do
 
     context 'when the call is on the top level' do
       let(:str) do
-        <<~STR
+        <<-STR
           SomeClass.method_name
         STR
       end
@@ -173,7 +173,7 @@ RSpec.describe Crystalball::MapGenerator::ParserStrategy::Processor do
 
     context 'when the call is on a class definition' do
       let(:str) do
-        <<~STR
+        <<-STR
           require 'some_class'
 
           # comment
@@ -191,7 +191,7 @@ RSpec.describe Crystalball::MapGenerator::ParserStrategy::Processor do
 
     context 'when a class subclasses another' do
       let(:str) do
-        <<~STR
+        <<-STR
           require 'bar/some_class'
 
           # comment

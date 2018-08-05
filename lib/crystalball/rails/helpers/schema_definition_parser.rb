@@ -15,7 +15,7 @@ module Crystalball
         # @param [String] schema - schema file content
         # @return [Hash] hash representation of schema
         def self.parse(schema)
-          return {} if schema&.empty?
+          return {} if schema.empty?
 
           new.instance_eval(schema)
         end

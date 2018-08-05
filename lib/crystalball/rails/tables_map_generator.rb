@@ -50,7 +50,7 @@ module Crystalball
         collect_tables_info
 
         object_sources_detector.before_finalize
-        map_storage.dump(map.example_groups) if map.size.positive?
+        map_storage.dump(map.example_groups) if map.size && map.size > 0
       end
 
       # @return [Crystalball::Rails::TablesMap]

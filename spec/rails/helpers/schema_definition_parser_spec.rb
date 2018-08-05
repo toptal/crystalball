@@ -5,7 +5,7 @@ require 'rails_helper'
 describe Crystalball::Rails::Helpers::SchemaDefinitionParser do
   subject(:parser) { described_class.new }
 
-  let(:schema) { <<~RUBY }
+  let(:schema) { <<-RUBY }
     ActiveRecord::Schema.define do
       create_table 'users', force: :cascade do |t|
         t.string 'name', null: false

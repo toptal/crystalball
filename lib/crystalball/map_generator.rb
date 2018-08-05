@@ -52,11 +52,17 @@ module Crystalball
       return unless started
 
       strategies.each(&:before_finalize)
-      map_storage.dump(map.example_groups) if map.size.positive?
+      map_storage.dump(map.example_groups) if map.size && map.size > 0
     end
 
     def map
-      @map ||= map_class.new(metadata: {commit: configuration.commit&.sha, timestamp: configuration.commit&.date&.to_i, version: configuration.version})
+      @map ||= map_class.new(
+        metadata: {
+          commit: configuration.commit.sha,
+          timestamp: configuration.commit.date.to_i,
+          version: configuration.version
+        }
+      )
     end
 
     private
@@ -70,7 +76,7 @@ module Crystalball
     end
 
     def check_dump_threshold
-      return unless dump_threshold.positive? && map.size >= dump_threshold
+      return unless (dump_threshold && dump_threshold > 0) && map.size >= dump_threshold
 
       map_storage.dump(map.example_groups)
       map.clear!

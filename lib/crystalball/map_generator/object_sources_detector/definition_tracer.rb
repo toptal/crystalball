@@ -18,7 +18,7 @@ module Crystalball
             mod = tp.self
             path = tp.path
 
-            next unless path&.start_with?(root_path)
+            next if path.nil? || !path.start_with?(root_path)
 
             constants_definition_paths[mod] ||= []
             constants_definition_paths[mod] << path
@@ -26,11 +26,11 @@ module Crystalball
         end
 
         def stop
-          trace_point&.disable
+          trace_point.disable if trace_point.respond_to?(:disable)
           self.trace_point = nil
         end
 
-        private
+        protected
 
         attr_writer :trace_point, :constants_definition_paths
       end

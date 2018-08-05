@@ -35,7 +35,7 @@ module Crystalball
 
           files = changed_tables.flat_map do |table_name|
             files = tables_map[table_name]
-            Crystalball.log :warn, "There are no model files for changed table `#{table_name}`. Check https://github.com/toptal/crystalball#warning for detailed description" unless files&.any?
+            Crystalball.log :warn, "There are no model files for changed table `#{table_name}`. Check https://github.com/toptal/crystalball#warning for detailed description" unless files.try(:any?)
             files
           end.compact
           detect_examples(files, map)
