@@ -58,7 +58,7 @@ module Crystalball
         def add_examples(group, resulting_set)
           limit_diff = limit - resulting_set.size
 
-          return unless limit_diff.positive?
+          return if !limit_diff || limit_diff <= 0
 
           group.filtered_examples.first(limit_diff).each do |example|
             resulting_set.add(example.id)

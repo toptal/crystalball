@@ -32,7 +32,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'git'
 
-  spec.required_ruby_version = '> 2.3.0'
+  spec.required_ruby_version = '>= 2.1.7'
 
   spec.add_development_dependency 'actionview'
   spec.add_development_dependency 'activerecord'
@@ -47,6 +47,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rubocop', ">= 0.56"
   spec.add_development_dependency 'rubocop-rspec'
   spec.add_development_dependency 'simplecov'
+  spec.add_development_dependency 'coverage_peek'
   spec.add_development_dependency 'sqlite3'
   spec.add_development_dependency 'yard'
 end

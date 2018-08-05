@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'coverage'
+require 'coverage_peek'
 require 'crystalball/map_generator/base_strategy'
 require 'crystalball/map_generator/coverage_strategy/execution_detector'
 

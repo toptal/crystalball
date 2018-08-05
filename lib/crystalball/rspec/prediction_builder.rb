@@ -19,7 +19,7 @@ module Crystalball
 
       def expired_map?
         expiration_period = config['map_expiration_period'].to_i
-        return false unless expiration_period.positive?
+        return false if !expiration_period || expiration_period <= 0
 
         execution_map.timestamp.to_i <= Time.now.to_i - config['map_expiration_period']
       end

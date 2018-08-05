@@ -19,7 +19,7 @@ module Crystalball
         private
 
         def prune_prediction_to_limit(prediction)
-          return prediction if !examples_limit.positive? || prediction.size <= examples_limit
+          return prediction if !examples_limit || examples_limit <= 0 || prediction.size <= examples_limit
 
           Crystalball.log :warn, "Prediction size #{prediction.size} is over the limit (#{examples_limit})"
           Crystalball.log :warn, "Prediction is pruned to fit the limit!"
@@ -36,7 +36,7 @@ module Crystalball
       end
 
       def reconfiguration_needed?
-        examples_limit.positive? && @world.example_count > examples_limit
+        examples_limit > 0 && @world.example_count > examples_limit
       end
 
       def reconfigure_to_limit
