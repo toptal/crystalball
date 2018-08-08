@@ -10,7 +10,7 @@ describe Crystalball::RSpec::Runner::Configuration do
     specify do
       expect(config.to_h)
         .to match(
-          'execution_map_path' => Pathname('crystalball.yml'),
+          'execution_map_path' => Pathname('execution_map.yml'),
           'map_expiration_period' => 86_400,
           'repo_path' => Pathname(Dir.pwd),
           'prediction_builder_class_name' => 'Crystalball::RSpec::StandardPredictionBuilder',
