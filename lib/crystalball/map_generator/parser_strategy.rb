@@ -37,6 +37,7 @@ module Crystalball
         yield example_map, example
         example_map.each do |path|
           next unless path.end_with?('.rb')
+
           used_consts = processor.consts_interacted_with_in(path)
           paths.push(*used_files(used_consts))
         end

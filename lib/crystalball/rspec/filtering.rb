@@ -38,6 +38,7 @@ module Crystalball
       def remove_unecessary_filters_from_files(files)
         files.select { |f| ::RSpec::Core::Example.parse_id(f).last.nil? }.each do |file|
           next remove_unecessary_filters(fd) if File.directory?(file)
+
           path = ::RSpec::Core::Metadata.relative_path(File.expand_path(file))
           configuration.filter_manager.inclusions[:ids]&.delete(path)
         end

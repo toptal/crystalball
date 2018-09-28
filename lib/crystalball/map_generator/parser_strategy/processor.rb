@@ -31,6 +31,7 @@ module Crystalball
         def on_send(node)
           const = filtered_children(node).detect { |c| c.type == :const }
           return unless const
+
           add_constant_interacted(qualified_name_from_node(const), nil)
         end
 
@@ -63,6 +64,7 @@ module Crystalball
 
         def filtered_children(node)
           return [] unless node.is_a?(Parser::AST::Node)
+
           node.children.grep(Parser::AST::Node)
         end
 
@@ -109,13 +111,16 @@ module Crystalball
         #   For example, `Foo::Bar` is represented as `s(:const, s(:const, nil, :Foo), :Bar)`
         def qualified_name_from_node(node)
           return unless node.is_a?(Parser::AST::Node)
+
           scope, name = node.to_a
           return name.to_s unless scope
+
           qualified_name(name, qualified_name_from_node(scope))
         end
 
         def qualified_name(name, scope = nil)
           return "#{scope.sub(/\A::/, '')}::#{name}" if scope
+
           name.to_s
         end
       end

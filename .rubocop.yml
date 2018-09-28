@@ -16,8 +16,6 @@ Layout/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
 Naming/UncommunicativeMethodParamName:
   Enabled: false
-Lint/SplatKeywordArguments:
-  Enabled: false
 Style/MethodMissingSuper:
   Enabled: false
 Lint/AmbiguousBlockAssociation:

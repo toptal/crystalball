@@ -35,6 +35,7 @@ module Crystalball
           @trace_point ||= TracePoint.new(:c_call) do |tp|
             next unless tp.method_id == :new || tp.method_id == :allocate
             next unless whitelisted_constants.any? { |c| tp.self <= c }
+
             created_object_classes << tp.self
           end
         end
