@@ -24,7 +24,7 @@ describe 'Prediction evaluation' do
     end
   end
 
-  let(:map) { Crystalball::MapStorage::YAMLStorage.load(root.join('execution_map.yml')) }
+  let(:map) { Crystalball::MapStorage::YAMLStorage.load(root.join('tmp/crystalball_data.yml')) }
 
   let(:actual_failures) do
     %w[./spec/models/model1_spec.rb ./spec/class1_spec.rb]

@@ -10,7 +10,7 @@ describe Crystalball::RSpec::PredictionBuilder do
   let(:repo) { double }
 
   before do
-    allow(Crystalball::MapStorage::YAMLStorage).to receive(:load).with(Pathname('tmp/execution_map.yml')).and_return(map)
+    allow(Crystalball::MapStorage::YAMLStorage).to receive(:load).with(Pathname('tmp/crystalball_data.yml')).and_return(map)
     allow(Crystalball::GitRepo).to receive(:open).with(Pathname('test')).and_return(repo)
   end
 

@@ -1,5 +1,5 @@
-# Custom path to your execution map. Can be file or folder. Default: `tmp/execution_map.yml`
-execution_map_path: 'execution_map.yml'
+# Custom path to your execution map. Can be file or folder. Default: `tmp/crystalball_data.yml`
+execution_map_path: 'crystalball_data.yml'
 # Maximum amount of examples which will be run automatically. Default: no limit.
 # If prediction size is over the limit Crystalball will prune prediction to fit the limit.
 examples_limit: 1

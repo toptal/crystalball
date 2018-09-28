@@ -26,7 +26,7 @@ module Crystalball
   # Prints the list of specs which might fail
   #
   # @param [String] workdir - path to the root directory of repository (usually contains .git folder inside). Default: current directory
-  # @param [String] map_path - path to the execution map. Default: execution_map.yml
+  # @param [String] map_path - path to the execution map. Default: crystalball_data.yml
   # @param [Proc] block - used to configure predictors
   #
   # @example
@@ -34,7 +34,7 @@ module Crystalball
   #     predictor.use Crystalball::Predictor::ModifiedExecutionPaths.new
   #     predictor.use Crystalball::Predictor::ModifiedSpecs.new
   #   end
-  def self.foresee(workdir: '.', map_path: 'execution_map.yml', &block)
+  def self.foresee(workdir: '.', map_path: 'crystalball_data.yml', &block)
     map = MapStorage::YAMLStorage.load(Pathname(map_path))
     Predictor.new(map, GitRepo.open(Pathname(workdir)), from: map.commit, &block).prediction.compact
   end

@@ -32,8 +32,11 @@ module Crystalball
     end
 
     def log_file_output_stream
-      @log_file_output_stream ||= ::Logger.new(config['log_file']).tap do |logger|
+      @log_file_output_stream ||= begin
+        config['log_file'].dirname.mkpath
+        ::Logger.new(config['log_file']).tap do |logger|
         logger.level = ::Logger::DEBUG
+        end
       end
     end
 

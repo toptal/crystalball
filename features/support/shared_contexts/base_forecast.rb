@@ -8,7 +8,7 @@ shared_context 'base forecast' do
     end
   end
   let(:strategies) { [] } # to be overridden
-  let(:execution_map) { Crystalball::MapStorage::YAMLStorage.load(Pathname.new(root.join('execution_map.yml'))) }
+  let(:execution_map) { Crystalball::MapStorage::YAMLStorage.load(Pathname.new(root.join('tmp/crystalball_data.yml'))) }
   let(:repo) { Crystalball::GitRepo.open(Pathname.new(workdir)) }
   let(:workdir) { root }
 end

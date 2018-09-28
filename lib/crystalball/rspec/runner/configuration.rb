@@ -9,7 +9,7 @@ module Crystalball
       class Configuration
         def initialize(config = {}) # rubocop:disable Metrics/MethodLength
           @values = {
-            'execution_map_path' => 'tmp/execution_map.yml',
+            'execution_map_path' => 'tmp/crystalball_data.yml',
             'map_expiration_period' => 86_400,
             'repo_path' => Dir.pwd,
             'requires' => [],
@@ -63,6 +63,10 @@ module Crystalball
 
         def repo_path
           @repo_path ||= Pathname.new(raw_value('repo_path'))
+        end
+
+        def log_file
+          @log_file ||= Pathname.new(raw_value('log_file'))
         end
 
         attr_reader :values

@@ -23,7 +23,7 @@ module Crystalball
       end
 
       def map_storage_path
-        @map_storage_path ||= Pathname('execution_map.yml')
+        @map_storage_path ||= Pathname('tmp/crystalball_data.yml')
       end
 
       def map_storage_path=(value)

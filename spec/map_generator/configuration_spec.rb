@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 describe Crystalball::MapGenerator::Configuration do
-  let(:default_map_path) { Pathname('execution_map.yml') }
+  let(:default_map_path) { Pathname('tmp/crystalball_data.yml') }
 
   it 'has default configuration' do
     is_expected.to have_attributes(

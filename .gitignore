@@ -10,7 +10,7 @@
 features/tmp/
 /features/fixtures/simple_app/log/
 
-execution_map.yml
+crystalball_data.yml
 tables_map.yml
 
 # rspec failure tracking

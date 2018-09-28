@@ -10,7 +10,7 @@ describe Crystalball::RSpec::Runner::Configuration do
     specify do
       expect(config.to_h)
         .to match(
-          'execution_map_path' => Pathname('tmp/execution_map.yml'),
+          'execution_map_path' => Pathname('tmp/crystalball_data.yml'),
           'map_expiration_period' => 86_400,
           'repo_path' => Pathname(Dir.pwd),
           'prediction_builder_class_name' => 'Crystalball::RSpec::StandardPredictionBuilder',
@@ -21,7 +21,7 @@ describe Crystalball::RSpec::Runner::Configuration do
           'runner_class' => Crystalball::RSpec::Runner,
           'runner_class_name' => 'Crystalball::RSpec::Runner',
           'log_level' => :info,
-          'log_file' => 'log/crystalball.log'
+          'log_file' => Pathname('/dev/null')
         )
     end
   end
@@ -64,7 +64,7 @@ describe Crystalball::RSpec::Runner::Configuration do
           'diff_to' => 'HEAD',
           'map_expiration_period' => 1,
           'log_level' => :info,
-          'log_file' => 'log/crystalball.log',
+          'log_file' => Pathname('/dev/null'),
           'custom' => 42
         )
     end
