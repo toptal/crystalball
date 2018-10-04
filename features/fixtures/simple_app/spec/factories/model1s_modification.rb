@@ -2,7 +2,7 @@
 
 FactoryBot.modify do
   factory :model1 do
-    name 'John Doe'
-    field 'value'
+    name { 'John Doe' }
+    field { 'value' }
   end
 end
