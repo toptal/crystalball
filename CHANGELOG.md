@@ -1,5 +1,7 @@
 ## master (not released yet)
 
+## Version 0.6.0
+
 - Add ModifiedSupportSpecs predictor
 - add support of schema changes for Rails apps via TablesMapGenerator
 - add ParserStrategy
