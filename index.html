@@ -413,15 +413,17 @@ Its main purpose is to select a minimal subset of your test suite which should b
 <ol>
 <li>
 <p>Start MapGenerator in your <code>spec_helper</code> before you loaded any file of your app. E.g.</p>
-<div class="codehilite"><pre><span></span>Crystalball::MapGenerator.start! do |config|
-  config.register Crystalball::MapGenerator::CoverageStrategy.new
+<div class="codehilite"><pre><span></span>if ENV[&#39;CRYSTALBALL&#39;] == &#39;true&#39; do
+  Crystalball::MapGenerator.start! do |config|
+    config.register Crystalball::MapGenerator::CoverageStrategy.new
+  end
 end
 </pre></div>
 
 
 </li>
 <li>
-<p>Run your test suite on clean master branch with green build. This step will generate file <code>execution_map.yml</code> in your project root. This file contains useful profiling data for Crystalball.</p>
+<p>Run your test suite with Crystaball enabled on clean master branch with green build. <code>CRYSTALBALL=true bundle exec rspec .</code> This step will generate file <code>tmp/crystalball_data.yml</code> in your project root. This file contains useful profiling data for Crystalball.</p>
 </li>
 <li>Make some changes to your app code</li>
 <li>Run <code>bundle exec crystalball</code> to build a prediction and run RSpec with it. Check out <a href="runner/">RSpec runner section</a> for customization details.</li>

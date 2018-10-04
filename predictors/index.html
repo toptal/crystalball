@@ -533,12 +533,12 @@ to what we have in <a href="https://github.com/toptal/crystalball/blob/master/li
 
 
 <p>will add <code>./spec/models/foo_spec.rb</code> to prediction when <code>models/foo.rb</code> changes.
-This strategy does not depend on a previously generated case map.</p>
+This strategy does not depend on a previously generated example group map.</p>
 <h4 id="modifiedexecutionpaths">ModifiedExecutionPaths<a class="headerlink" href="#modifiedexecutionpaths" title="Permanent link">&para;</a></h4>
-<p>Checks the case map and the diff to see which specs are affected by the new or modified files.</p>
+<p>Checks the example group map and the diff to see which specs are affected by the new or modified files.</p>
 <h4 id="modifiedspecs">ModifiedSpecs<a class="headerlink" href="#modifiedspecs" title="Permanent link">&para;</a></h4>
 <p>As the name implies, checks for modified specs. The scope can be modified by passing a regex as argument, which defaults to <code>%r{spec/.*_spec\.rb\z}</code>.
-This strategy does not depend on a previously generated case map.</p>
+This strategy does not depend on a previously generated example group map.</p>
 <h4 id="modifiedsupportspecs">ModifiedSupportSpecs<a class="headerlink" href="#modifiedsupportspecs" title="Permanent link">&para;</a></h4>
 <p>Checks for modified support files used in specs and predicts full spec file. The scope can be modified by passing a regex as argument, which defaults to <code>%r{spec/support/.*\.rb\z}</code>.
 Mostly usable for shared_contexts and shared_examples.</p>
@@ -552,7 +552,7 @@ Mostly usable for shared_contexts and shared_examples.</p>
 
 <p><em><strong>Note</strong></em>: You may meet a warning like "WARNING: there are no model files for changed table ...". Usually, such tables are leftovers or a relation table for <code>has-and-belongs-to-many</code> associations. For the first case - nothing to worry about. For the second case - it means you want to change the default relation table.</p>
 <h3 id="custom-strategies">Custom strategies<a class="headerlink" href="#custom-strategies" title="Permanent link">&para;</a></h3>
-<p>As with the map generator you may define custom strategies for prediction. It must be an object that responds to <code>#call(diff, case_map)</code> (where <code>diff</code> is a <code>Crystalball::SourceDiff</code> and <code>case_map</code> is a <code>Crystalball::CaseMap</code>) and returns an array of paths.</p>
+<p>As with the map generator you may define custom strategies for prediction. It must be an object that responds to <code>#call(diff, example_group_map)</code> (where <code>diff</code> is a <code>Crystalball::SourceDiff</code> and <code>example_group_map</code> is a <code>Crystalball::ExampleGroupMap</code>) and returns an array of paths.</p>
 <p>Check out <a href="https://github.com/toptal/crystalball/tree/master/lib/crystalball/predictor">default strategies implementation</a> for examples.</p>
                 
                   

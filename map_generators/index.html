@@ -332,6 +332,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#factorybotstrategy" title="FactoryBotStrategy" class="md-nav__link">
+    FactoryBotStrategy
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#custom-strategies" title="Custom strategies" class="md-nav__link">
     Custom strategies
   </a>
@@ -463,6 +470,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#factorybotstrategy" title="FactoryBotStrategy" class="md-nav__link">
+    FactoryBotStrategy
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#custom-strategies" title="Custom strategies" class="md-nav__link">
     Custom strategies
   </a>
@@ -546,7 +560,7 @@ Here's an example that tracks allocation of <code>ActiveRecord::Base</code> obje
 <p>The initialization takes two keyword arguments: <code>execution_detector</code> and <code>object_tracker</code>.
 <code>execution_detector</code> must be an object that responds to <code>#detect</code> receiving a list of objects and returning the paths affected by said objects. <code>object_tracker</code> is something that responds to <code>#used_classes_during</code> which yields to the caller and returns the array of classes of objects allocated during the execution of the block.</p>
 <h3 id="describedclassstrategy">DescribedClassStrategy<a class="headerlink" href="#describedclassstrategy" title="Permanent link">&para;</a></h3>
-<p>This strategy will take each example that has a <code>described_class</code> (i.e. examples inside <code>describe</code> blocks of classes and not strings) and add the paths where the described class and its ancestors are defined to the case map of the example;</p>
+<p>This strategy will take each example that has a <code>described_class</code> (i.e. examples inside <code>describe</code> blocks of classes and not strings) and add the paths where the described class and its ancestors are defined to the example group map of the example;</p>
 <p>To use it, add to your <code>Crystalball::MapGenerator.start!</code> block:</p>
 <div class="codehilite"><pre><span></span><span class="no">Crystalball</span><span class="o">::</span><span class="no">MapGenerator</span><span class="o">.</span><span class="n">start!</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
   <span class="c1">#...</span>
@@ -566,7 +580,7 @@ Here's an example that tracks allocation of <code>ActiveRecord::Base</code> obje
 <h3 id="parserstrategy">ParserStrategy<a class="headerlink" href="#parserstrategy" title="Permanent link">&para;</a></h3>
 <p>The <code>ParserStrategy</code>, as the name suggests parses the files in order to detect which files are affected by an example.
 It works by first parsing all (<code>.rb</code>) files that match the given pattern under the configured root directory (defaults to current directory) to collect the constants definition paths.
-Then, when each example is executed, the affected files of the current case map are parsed to check for method calls to those constants. For that reason, <code>ParserStrategy</code> <strong>only works when used with other strategies and is placed at the end of the strategies list</strong>.</p>
+Then, when each example is executed, the used files of the current example group map are parsed to check for method calls to those constants. For that reason, <code>ParserStrategy</code> <strong>only works when used with other strategies and is placed at the end of the strategies list</strong>.</p>
 <p>To use it, add the <code>parser</code> gem to your <code>Gemfile</code> and:</p>
 <div class="codehilite"><pre><span></span><span class="nb">require</span> <span class="s1">&#39;crystalball/map_generator/parser_strategy&#39;</span>
 <span class="no">Crystalball</span><span class="o">::</span><span class="no">MapGenerator</span><span class="o">.</span><span class="n">start!</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
@@ -588,7 +602,7 @@ This strategy patches <code>ActionView::Template#compile!</code> to map the exam
 
 <h3 id="i18nstrategy">I18nStrategy<a class="headerlink" href="#i18nstrategy" title="Permanent link">&para;</a></h3>
 <p>To use Rails specific strategies you must first <code>require 'crystalball/rails'</code>.
-Patches I18n to have access to the path where the locales are defined, so that those paths can be added to the case map.
+Patches I18n to have access to the path where the locales are defined, so that those paths can be added to the example group map.
 To use it, add to your config:</p>
 <div class="codehilite"><pre><span></span><span class="no">Crystalball</span><span class="o">::</span><span class="no">MapGenerator</span><span class="o">.</span><span class="n">start!</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
   <span class="c1">#...</span>
@@ -597,8 +611,18 @@ To use it, add to your config:</p>
 </pre></div>
 
 
+<h3 id="factorybotstrategy">FactoryBotStrategy<a class="headerlink" href="#factorybotstrategy" title="Permanent link">&para;</a></h3>
+<p>Tracks which factories were used during the example and add files with corresponding definitions to the example group map.
+To use it, add to your config:</p>
+<div class="codehilite"><pre><span></span><span class="no">Crystalball</span><span class="o">::</span><span class="no">MapGenerator</span><span class="o">.</span><span class="n">start!</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+  <span class="c1">#...</span>
+  <span class="n">config</span><span class="o">.</span><span class="n">register</span> <span class="no">Crystalball</span><span class="o">::</span><span class="no">MapGenerator</span><span class="o">::</span><span class="no">FactoryBotStrategy</span><span class="o">.</span><span class="n">new</span>
+<span class="k">end</span>
+</pre></div>
+
+
 <h3 id="custom-strategies">Custom strategies<a class="headerlink" href="#custom-strategies" title="Permanent link">&para;</a></h3>
-<p>You can create your own strategy and use it with the map generator. Any object that responds to <code>#call(case_map, example)</code> (where <code>case_map</code> is a <code>Crystalball::CaseMap</code> and <code>example</code> a <code>RSpec::Core::Example</code>) and augmenting its list of affected files using <code>case_map.push(*paths_to_files)</code>.
+<p>You can create your own strategy and use it with the map generator. Any object that responds to <code>#call(example_group_map, example)</code> (where <code>example_group_map</code> is a <code>Crystalball::ExampleGroupMap</code> and <code>example</code> a <code>RSpec::Core::Example</code>) and augmenting its list of used files using <code>example_group_map.push(*paths_to_files)</code>.
 Check out the <a href="https://github.com/toptal/crystalball/tree/master/lib/crystalball/map_generator">implementation</a> of the default strategies for examples.</p>
 <p>Keep in mind that all the strategies configured for the map generator will run for each example of your test suite, so it may slow down the generation process considerably.</p>
 <h2 id="tablesmapgenerator">TablesMapGenerator<a class="headerlink" href="#tablesmapgenerator" title="Permanent link">&para;</a></h2>
