@@ -11,7 +11,7 @@ Please check our [installation instructions](https://github.com/toptal/crystalba
 
 1. Start MapGenerator in your `spec_helper` before you loaded any file of your app. E.g.
 
-        if ENV['CRYSTALBALL'] == 'true' do
+        if ENV['CRYSTALBALL'] == 'true'
           Crystalball::MapGenerator.start! do |config|
             config.register Crystalball::MapGenerator::CoverageStrategy.new
           end
