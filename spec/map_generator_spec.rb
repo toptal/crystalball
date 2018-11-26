@@ -75,6 +75,7 @@ describe Crystalball::MapGenerator do
       configuration.map_storage = storage
       configuration.register dummy_strategy
       configuration.version = 1.0
+      configuration.compact_map = false
     end
 
     describe '#start!' do
@@ -120,6 +121,16 @@ describe Crystalball::MapGenerator do
         allow_any_instance_of(map_class).to receive(:size).and_return(10)
         expect(storage).to receive(:dump).with({})
         subject.finalize!
+      end
+
+      context 'when compacting enabled' do
+        it 'compacts the map before dumping' do
+          allow_any_instance_of(map_class).to receive(:size).and_return(10)
+          configuration.compact_map = true
+          allow(Crystalball::MapCompactor).to receive(:compact_map!).and_return(double(example_groups: 'example_groups'))
+          expect(storage).to receive(:dump).with('example_groups')
+          subject.finalize!
+        end
       end
 
       it 'calls before_finalize for each registered strategy' do
@@ -175,6 +186,17 @@ describe Crystalball::MapGenerator do
           subject.refresh_for_case(rspec_example('1'))
           subject.refresh_for_case(rspec_example('2'))
           subject.refresh_for_case(rspec_example('3'))
+        end
+
+        context 'with compacting' do
+          before { configuration.compact_map = true }
+
+          it 'does nothing' do
+            expect(storage).not_to receive(:dump)
+            subject.refresh_for_case(rspec_example('1'))
+            subject.refresh_for_case(rspec_example('2'))
+            subject.refresh_for_case(rspec_example('3'))
+          end
         end
       end
     end
