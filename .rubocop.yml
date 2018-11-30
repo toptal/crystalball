@@ -20,3 +20,5 @@ Style/MethodMissingSuper:
   Enabled: false
 Lint/AmbiguousBlockAssociation:
   Enabled: false
+Style/DoubleNegation:
+  Enabled: false

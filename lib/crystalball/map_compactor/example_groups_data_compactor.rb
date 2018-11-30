@@ -29,7 +29,7 @@ module Crystalball
         @compact_data = {}
       end
 
-      def compact_context!(context) # rubocop:disable Metric/MethodLength
+      def compact_context!(context) # rubocop:disable Metrics/MethodLength
         result = nil
         plain_data.each do |example_uid, used_files|
           next unless context.include?(example_uid)

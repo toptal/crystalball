@@ -24,9 +24,9 @@ describe 'Changing source file' do
       change model1_factory_path
 
       expect(forecast).to include_rspec_examples(
-                                        './spec/models/model1_spec.rb[1:3:1]',
-                                        './spec/models/model1_spec.rb[1:4:1]'
-                          )
+        './spec/models/model1_spec.rb[1:3:1]',
+        './spec/models/model1_spec.rb[1:4:1]'
+      )
     end
 
     it 'adds mapped examples to a prediction list for Model1 factory modification' do
@@ -34,9 +34,9 @@ describe 'Changing source file' do
       change model1_factory_modification_path
 
       expect(forecast).to include_rspec_examples(
-                                        './spec/models/model1_spec.rb[1:3:1]',
-                                        './spec/models/model1_spec.rb[1:4:1]'
-                                      )
+        './spec/models/model1_spec.rb[1:3:1]',
+        './spec/models/model1_spec.rb[1:4:1]'
+      )
     end
   end
 end

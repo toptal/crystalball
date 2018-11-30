@@ -11,7 +11,7 @@ describe Crystalball::MapCompactor do
     it 'compacts a map per file and stores it in new map' do
       expect(described_class)
         .to receive(:compact_examples!).with(example_groups)
-              .and_return('file1_spec.rb[context1]' => ['value1'], 'file2_spec.rb[context2]' => ['value2'])
+                                       .and_return('file1_spec.rb[context1]' => ['value1'], 'file2_spec.rb[context2]' => ['value2'])
 
       expect(subject.metadata.to_h).to eq map.metadata.to_h
       expect(subject.example_groups)

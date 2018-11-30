@@ -53,10 +53,10 @@ module Crystalball
 
       strategies.each(&:before_finalize)
 
-      if map.size.positive?
-        example_groups = (configuration.compact_map? ? MapCompactor.compact_map!(map) : map).example_groups
-        map_storage.dump(example_groups)
-      end
+      return unless map.size.positive?
+
+      example_groups = (configuration.compact_map? ? MapCompactor.compact_map!(map) : map).example_groups
+      map_storage.dump(example_groups)
     end
 
     def map

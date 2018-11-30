@@ -20,6 +20,6 @@ describe 'Deleting support spec file' do
     delete action_view_shared_context
 
     expect(forecast).to include_rspec_examples('./spec/views/index.html.erb_spec.rb',
-                                      './spec/views/show.html.erb_spec.rb')
+                                               './spec/views/show.html.erb_spec.rb')
   end
 end
