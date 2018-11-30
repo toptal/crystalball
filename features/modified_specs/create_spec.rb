@@ -19,6 +19,6 @@ describe 'Creating spec file' do
     RUBY
     git.add(new_spec_path.to_s)
 
-    expect(forecast).to match_array(%w[./spec/new_spec.rb])
+    expect(forecast).to include_rspec_examples('./spec/new_spec.rb')
   end
 end

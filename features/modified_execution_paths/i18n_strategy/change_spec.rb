@@ -26,7 +26,7 @@ describe 'Changing source file' do
     it 'adds mapped examples to a prediction list for name locale' do
       change name_locale_path
 
-      expect(forecast).to include(
+      expect(forecast).to include_rspec_examples(
         './spec/class1_spec.rb[1:3:1]',
         './spec/class2_spec.rb[1:3:1]'
       )
@@ -35,7 +35,7 @@ describe 'Changing source file' do
     it 'adds mapped examples to a prediction list for value locale' do
       change value_locale_path
 
-      expect(forecast).to include(
+      expect(forecast).to include_rspec_examples(
         './spec/class2_spec.rb[1:6:1]'
       )
     end

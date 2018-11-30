@@ -11,6 +11,6 @@ describe 'Moving spec file' do
   it 'adds it to a prediction list' do
     move(class1_spec_path)
 
-    expect(forecast).to match_array(%w[./spec/moved_class1_spec.rb])
+    expect(forecast).to include_rspec_examples('./spec/moved_class1_spec.rb')
   end
 end

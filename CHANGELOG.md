@@ -1,5 +1,7 @@
 ## master (not released yet)
 
+- Map storing structure reworked. Map size should be times smaller.
+
 ## Version 0.6.0
 
 - Add ModifiedSupportSpecs predictor

@@ -135,6 +135,16 @@ Check out the [implementation](https://github.com/toptal/crystalball/tree/master
 
 Keep in mind that all the strategies configured for the map generator will run for each example of your test suite, so it may slow down the generation process considerably.
 
+### Debugging
+
+By default MapGenerator generates compact map. In case you need plain and easily readable map add to your config:
+```ruby
+Crystalball::MapGenerator.start! do |config|
+  #...
+  config.compact_map = false
+end
+``` 
+
 ## TablesMapGenerator
 
 TablesMapGenerator is a separate map generator for Rails applications. It collects information about tables-to-models mapping and stores it in a file. The file is used by `Crystalball::Rails::Predictor::ModifiedSchema`.
@@ -147,3 +157,5 @@ Crystalball::TablesMapGenerator.start! do |config|
   config.map_storage_path = 'my_custom_tables_map_name.yml'
 end
 ```
+
+

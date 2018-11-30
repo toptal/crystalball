@@ -38,6 +38,7 @@ describe 'Changing source file in a branch' do
   end
 
   it 'adds mapped examples to a prediction list for model1 only' do
-    expect(forecast).to match_array(model1_examples)
+    expect(forecast).to include_rspec_examples(*model1_examples)
+    expect(forecast).not_to include_rspec_examples('./spec/models/model2_spec.rb[1:1:1]')
   end
 end

@@ -52,7 +52,11 @@ module Crystalball
       return unless started
 
       strategies.each(&:before_finalize)
-      map_storage.dump(map.example_groups) if map.size.positive?
+
+      return unless map.size.positive?
+
+      example_groups = (configuration.compact_map? ? MapCompactor.compact_map!(map) : map).example_groups
+      map_storage.dump(example_groups)
     end
 
     def map
@@ -70,6 +74,7 @@ module Crystalball
     end
 
     def check_dump_threshold
+      return if configuration.compact_map
       return unless dump_threshold.positive? && map.size >= dump_threshold
 
       map_storage.dump(map.example_groups)
