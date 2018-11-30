@@ -42,11 +42,11 @@ describe 'Prediction evaluation' do
       predicted_failures: %w[./spec/models/model1_spec.rb],
       unpredicted_failures: %w[./spec/class1_spec.rb],
       diff_size: 10,
-      prediction_to_diff_ratio: 4.0 / 10,
-      prediction_scale: 4.0 / 31,
+      prediction_to_diff_ratio: 3.0 / 10,
+      prediction_scale: 3.0 / 22,
       prediction_rate: 0.5,
-      prediction_size: 4,
-      map_size: 31
+      prediction_size: 3,
+      map_size: 22
     )
   end
 end

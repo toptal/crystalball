@@ -22,6 +22,6 @@ describe 'Moving source file' do
   it 'adds mapped examples to a prediction list' do
     move class1_path
 
-    expect(forecast).to include(*class1_examples)
+    expect(forecast).to include_rspec_examples(*class1_examples)
   end
 end

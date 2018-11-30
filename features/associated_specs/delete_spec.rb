@@ -16,6 +16,7 @@ describe 'Deleting associated source file' do
   it 'adds matched spec to a prediction list' do
     delete model1_path
 
-    expect(forecast).to match_array(%w[./spec/models/model1_spec.rb])
+    expect(forecast).to include_rspec_examples('./spec/models/model1_spec.rb')
+    expect(forecast).not_to include_rspec_examples('./spec/models/model2_spec.rb')
   end
 end

@@ -24,7 +24,7 @@ describe 'Changing source file' do
     it 'adds mapped examples to a prediction list for _item view' do
       change item_view_path
 
-      expect(forecast).to include(
+      expect(forecast).to include_rspec_examples(
         './spec/views/index.html.erb_spec.rb[1:1]',
         './spec/views/index.html.erb_spec.rb[1:2]',
         './spec/views/index.html.erb_spec.rb[1:3]',

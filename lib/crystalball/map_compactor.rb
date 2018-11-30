@@ -28,7 +28,7 @@ module Crystalball
           compact_data = ExampleGroupsDataCompactor.compact!(examples.to_h)
 
           compact_data.each do |context_address, used_files|
-            result["#{filename}[#{context_address}]"] = used_files
+            result["#{filename}[#{context_address}]"] = used_files unless used_files.empty?
           end
         end
         result

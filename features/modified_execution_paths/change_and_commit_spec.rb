@@ -24,6 +24,6 @@ describe 'Changing and commiting a source file' do
     git.add class1_path.to_s
     git.commit 'Second commit'
 
-    expect(forecast).to include(*class1_examples)
+    expect(forecast).to include_rspec_examples(*class1_examples)
   end
 end

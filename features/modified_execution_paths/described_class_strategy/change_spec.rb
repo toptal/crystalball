@@ -33,20 +33,20 @@ describe 'Changing source file' do
   it 'adds mapped examples to a prediction list for Class1 definition' do
     change class1_path
 
-    expect(forecast).to include(*class1_examples)
+    expect(forecast).to include_rspec_examples(*class1_examples)
   end
 
   it 'adds mapped examples to a prediction list for Class1 reopen' do
     class1_reopen_path = lib_path.join('class1_reopen.rb')
     change class1_reopen_path
 
-    expect(forecast).to include(*class1_examples)
+    expect(forecast).to include_rspec_examples(*class1_examples)
   end
 
   it 'adds mapped examples to a prediction list for Class2 definition' do
     change class2_path
 
-    expect(forecast).to include(
+    expect(forecast).to include_rspec_examples(
       './spec/class2_spec.rb[1:1:1]',
       './spec/class2_spec.rb[1:1:2:1]',
       './spec/class2_spec.rb[1:1:3:1]',
@@ -63,7 +63,7 @@ describe 'Changing source file' do
     module1_path = lib_path.join('module1.rb')
     change module1_path
 
-    expect(forecast).to include(
+    expect(forecast).to include_rspec_examples(
       './spec/class1_spec.rb[1:1:1]',
       './spec/class1_spec.rb[1:1:2:1]',
       './spec/class1_spec.rb[1:1:3:1]',
@@ -83,7 +83,7 @@ describe 'Changing source file' do
     module2_path = lib_path.join('module2.rb')
     change module2_path
 
-    expect(forecast).to include(
+    expect(forecast).to include_rspec_examples(
       './spec/class2_spec.rb[1:1:1]',
       './spec/class2_spec.rb[1:1:2:1]',
       './spec/class2_spec.rb[1:1:3:1]',
@@ -98,7 +98,7 @@ describe 'Changing source file' do
   it 'adds mapped examples to a prediction list for Model1 definition' do
     change model1_path
 
-    expect(forecast).to include(
+    expect(forecast).to include_rspec_examples(
       './spec/models/model1_spec.rb[1:2:1]',
       './spec/models/model1_spec.rb[1:3:1]',
       './spec/models/model1_spec.rb[1:4:1]'

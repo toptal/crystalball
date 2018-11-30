@@ -20,7 +20,7 @@ describe 'Changing source file with a class method call' do
   it 'adds class2 example when class1 changes' do
     change class1_path
 
-    expect(forecast).to include(
+    expect(forecast).to include_rspec_examples(
       './spec/class2_spec.rb[1:4:1]'
     )
   end

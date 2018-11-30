@@ -11,6 +11,6 @@ describe 'Deleting spec file' do
   it 'does not add it to a prediction list' do
     delete class1_spec_path
 
-    expect(forecast).to match_array([])
+    expect(forecast).to be_empty
   end
 end
