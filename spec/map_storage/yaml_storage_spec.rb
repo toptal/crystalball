@@ -45,6 +45,14 @@ describe Crystalball::MapStorage::YAMLStorage do
         expect(map.commit).to eq '123'
       end
 
+      context 'when one file has no example groups' do
+        let(:file_content2) { {commit: '123', type: 'Crystalball::ExecutionMap'}.to_yaml }
+
+        it 'ignores that file' do
+          expect(map.example_groups).to eq('UID1' => %w[1 2 3])
+        end
+      end
+
       context 'when metadata info is inconsistent' do
         let(:file_content2) do
           {commit: '456', type: 'Crystalball::ExecutionMap'}.to_yaml + {'UID100' => %w[a b c]}.to_yaml

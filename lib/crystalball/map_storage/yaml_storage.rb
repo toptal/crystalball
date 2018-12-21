@@ -21,7 +21,7 @@ module Crystalball
 
           guard_metadata_consistency(meta)
 
-          Object.const_get(meta.first[:type]).new(metadata: meta.first, example_groups: example_groups.inject(&:merge!))
+          Object.const_get(meta.first[:type]).new(metadata: meta.first, example_groups: example_groups.compact.inject(&:merge!))
         end
 
         private
