@@ -2,6 +2,7 @@
 
 require 'crystalball/source_diff/file_diff'
 require 'crystalball/source_diff/formatting_checker'
+require 'forwardable'
 
 module Crystalball
   # Wrapper class representing Git source diff for given repo
