@@ -36,7 +36,6 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency 'actionview'
   spec.add_development_dependency 'activerecord'
-  spec.add_development_dependency "bundler", "~> 1.14"
   spec.add_development_dependency 'factory_bot'
   spec.add_development_dependency 'i18n'
   spec.add_development_dependency 'parser'
