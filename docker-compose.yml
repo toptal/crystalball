@@ -1,0 +1,23 @@
+version: '3.4'
+
+services:
+  crystalball:
+    command: bash -c "bundle install --no-binstubs && bin/guard start --force-polling --watchdir ${SPEC_DIRS:-.}"
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+      args:
+        BUNDLER_VERSION: '2.0.2'
+        RUBY_VERSION: '2.4.4'
+    image: crystalball
+    environment:
+      - EDITOR=micro
+      - HISTFILE=/crystalball/log/.bash_history
+    stdin_open: true
+    tty: true
+    volumes:
+      - .:/crystalball:cached
+      - bundle:/bundle
+
+volumes:
+  bundle:
