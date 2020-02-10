@@ -9,9 +9,20 @@ describe Crystalball::MapGenerator::CoverageStrategy do
   include_examples 'base strategy'
 
   describe '#after_register' do
-    it 'starts coverage' do
-      expect(Coverage).to receive(:start)
-      subject.after_register
+    context 'when Coverage is already running' do
+      it 'does nothing' do
+        allow(Coverage).to receive(:running?).and_return(true)
+        expect(Coverage).not_to receive(:start)
+        subject.after_register
+      end
+    end
+
+    context 'when Coverage is not running' do
+      it 'starts coverage' do
+        allow(Coverage).to receive(:running?).and_return(false)
+        expect(Coverage).to receive(:start)
+        subject.after_register
+      end
     end
   end
 
