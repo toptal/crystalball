@@ -38,7 +38,7 @@ module Crystalball
         self.map = nil
         map_storage.clear!
 
-        map_storage.dump(map.metadata.to_h)
+        map_storage.dump_metadata(map.metadata.to_h)
 
         self.started = true
       end

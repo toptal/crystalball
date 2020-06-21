@@ -35,7 +35,7 @@ module Crystalball
     def start!
       self.map = nil
       map_storage.clear!
-      map_storage.dump(map.metadata.to_h)
+      map_storage.dump_metadata(map.metadata.to_h)
 
       strategies.reverse.each(&:after_start)
       self.started = true

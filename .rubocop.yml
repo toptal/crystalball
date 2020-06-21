@@ -20,5 +20,7 @@ Style/MethodMissingSuper:
   Enabled: false
 Lint/AmbiguousBlockAssociation:
   Enabled: false
+Lint/SplatKeywordArguments:
+  Enabled: false
 Style/DoubleNegation:
   Enabled: false

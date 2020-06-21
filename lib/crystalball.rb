@@ -3,6 +3,7 @@
 require 'crystalball/logging'
 require 'crystalball/git_repo'
 require 'crystalball/extensions/git'
+require 'crystalball/map_data_sources/hash_data_source'
 require 'crystalball/rspec/prediction_builder'
 require 'crystalball/rspec/runner'
 require 'crystalball/prediction'

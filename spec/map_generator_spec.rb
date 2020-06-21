@@ -38,7 +38,7 @@ describe Crystalball::MapGenerator do
   let(:map_class) { configuration.map_class }
   let(:threshold) { 0 }
   let(:detector) { instance_double('Crystalball::ExecutionDetector') }
-  let(:storage) { instance_double('Crystalball::MapStorage::YAMLStorage', clear!: true, dump: true) }
+  let(:storage) { instance_double('Crystalball::MapStorage::YAMLStorage', clear!: true, dump: true, dump_metadata: true) }
 
   describe '#configuration' do
     describe '.commit' do
@@ -81,13 +81,11 @@ describe Crystalball::MapGenerator do
     describe '#start!' do
       it 'wipes the map and clears storage' do
         expect(storage).to receive :clear!
-        expect do
-          subject.start!
-        end.to(change { subject.map.object_id })
+        subject.start!
       end
 
       it 'dump new map metadata to storage' do
-        expect(storage).to receive(:dump).with(type: map_class.to_s, commit: 'abc', timestamp: 1234, version: 1.0)
+        expect(storage).to receive(:dump_metadata).with(type: map_class.to_s, commit: 'abc', timestamp: 1234, version: 1.0)
         subject.start!
       end
 

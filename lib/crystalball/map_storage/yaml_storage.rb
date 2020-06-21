@@ -21,7 +21,9 @@ module Crystalball
 
           guard_metadata_consistency(meta)
 
-          Object.const_get(meta.first[:type]).new(metadata: meta.first, example_groups: example_groups.compact.inject(&:merge!))
+          data_source = MapDataSources::HashDataSource.new(example_groups: example_groups.compact.inject(&:merge!))
+
+          Object.const_get(meta.first[:type]).new(metadata: meta.first, map_data_source: data_source)
         end
 
         private
@@ -64,6 +66,7 @@ module Crystalball
         path.dirname.mkpath
         path.open('a') { |f| f.write YAML.dump(data) }
       end
+      alias dump_metadata dump
     end
   end
 end

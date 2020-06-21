@@ -5,7 +5,8 @@ require 'spec_helper'
 describe Crystalball::MapCompactor do
   describe '.compact_map!' do
     subject { described_class.compact_map!(map) }
-    let(:map) { Crystalball::ExecutionMap.new(example_groups: example_groups) }
+    let(:map) { Crystalball::ExecutionMap.new(map_data_source: map_data_source) }
+    let(:map_data_source) { Crystalball::MapDataSources::HashDataSource.new(example_groups: example_groups) }
     let(:example_groups) { {} }
 
     it 'compacts a map per file and stores it in new map' do

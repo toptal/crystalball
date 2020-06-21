@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 describe Crystalball::Rails::TablesMap do
-  subject { described_class.new }
+  subject { described_class.new(map_data_source: Crystalball::MapDataSources::HashDataSource.new) }
   let(:used_files) { instance_double(Array) }
 
   before { allow(used_files).to receive(:uniq) { used_files } }
@@ -14,7 +14,7 @@ describe Crystalball::Rails::TablesMap do
     it 'wipes out all example_groups' do
       expect do
         subject.clear!
-      end.to change { subject.example_groups.size }.by(-1)
+      end.to change { subject.map_data_source.size }.by(-1)
     end
   end
 

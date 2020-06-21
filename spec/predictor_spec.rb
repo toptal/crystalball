@@ -3,8 +3,7 @@
 require 'spec_helper'
 
 describe Crystalball::Predictor do
-  subject(:predictor) { described_class.new(instance_double('Crystalball::ExecutionMap', example_groups: example_groups), repository) }
-  let(:example_groups) { {spec_file: %w[file1.rb]} }
+  subject(:predictor) { described_class.new(map, repository) }
   let(:repository) { double('Crystalball::GitRepo', merge_base: double(sha: nil), repo_path: Pathname('.')) }
   let(:map) { instance_double('Crystalball::MapGenerator::ExecutionMap', example_groups: example_groups) }
   let(:example_groups) { {'spec_file' => %w[file1.rb]} }

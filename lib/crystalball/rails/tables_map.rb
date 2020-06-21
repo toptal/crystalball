@@ -22,32 +22,27 @@ module Crystalball
         end
       end
 
-      attr_reader :example_groups, :metadata
+      attr_reader :map_data_source, :metadata
 
       delegate %i[commit version] => :metadata
-      delegate %i[size [] []=] => :example_groups
+      delegate %i[clear! size [] []= example_groups] => :map_data_source
 
       # @param [Hash] metadata - add or override metadata of execution map
-      # @param [Hash] example_groups - initial list of tables
-      def initialize(metadata: {}, example_groups: {})
+      # @param [#[]] map_data_source - initial list of tables
+      def initialize(metadata: {}, map_data_source: Crystalball::MapDataSources::HashDataSource.new)
         @metadata = Metadata.new(**metadata)
-        @example_groups = example_groups
-      end
-
-      # Remove all example_groups
-      def clear!
-        self.example_groups = {}
+        @map_data_source = map_data_source
       end
 
       def add(files:, for_table:)
-        example_groups[for_table] ||= []
-        example_groups[for_table] += files
-        example_groups[for_table].uniq!
+        map_data_source[for_table] ||= []
+        map_data_source[for_table] += files
+        map_data_source[for_table].uniq!
       end
 
       private
 
-      attr_writer :example_groups, :metadata
+      attr_writer :metadata
     end
   end
 end

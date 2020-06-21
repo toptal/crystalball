@@ -24,15 +24,15 @@ module Crystalball
       end
     end
 
-    attr_reader :example_groups, :metadata
+    attr_reader :map_data_source, :metadata
 
     delegate %i[commit version timestamp] => :metadata
-    delegate %i[size] => :example_groups
+    delegate %i[clear! size example_groups] => :map_data_source
 
     # @param [Hash] metadata - add or override metadata of execution map
-    # @param [Hash] example_groups - initial list of example groups data
-    def initialize(metadata: {}, example_groups: {})
-      @example_groups = example_groups
+    # @param [#[]] map_data_source - initial list of example groups data
+    def initialize(metadata: {}, map_data_source: Crystalball::MapDataSources::HashDataSource.new)
+      @map_data_source = map_data_source
 
       @metadata = Metadata.new(type: self.class.name, **metadata)
     end
@@ -41,16 +41,11 @@ module Crystalball
     #
     # @param [Crystalball::ExampleGroupMap] example_group_map
     def <<(example_group_map)
-      example_groups[example_group_map.uid] = example_group_map.used_files.uniq
-    end
-
-    # Remove all example_groups
-    def clear!
-      self.example_groups = {}
+      map_data_source[example_group_map.uid] = example_group_map.used_files.uniq
     end
 
     private
 
-    attr_writer :example_groups, :metadata
+    attr_writer :metadata
   end
 end
