@@ -8,7 +8,8 @@ describe Crystalball::Predictor::ModifiedExecutionPaths do
   let(:path1) { 'file1.rb' }
   let(:file_diff1) { Crystalball::SourceDiff::FileDiff.new(Git::Diff::DiffFile.new(repository, path: path1)) }
   let(:diff) { [file_diff1] }
-  let(:map) { instance_double('Crystalball::MapGenerator::ExecutionMap', example_groups: example_groups) }
+  let(:map) { Crystalball::ExecutionMap.new(map_data_source: map_data_source) }
+  let(:map_data_source) { Crystalball::MapDataSources::HashDataSource.new(example_groups: example_groups) }
   let(:example_groups) { {'spec_file' => [path1]} }
   let(:path1) { 'file1.rb' }
 

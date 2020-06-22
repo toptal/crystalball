@@ -44,6 +44,14 @@ module Crystalball
       map_data_source[example_group_map.uid] = example_group_map.used_files.uniq
     end
 
+    # Returns the affected examples for a given list of files
+    #
+    # @param [Array<String>] files - the list of files to check
+    # @return [Array<String>] related examples
+    def affected_examples(files: files)
+      map_data_source.affected_examples_for(files)
+    end
+
     private
 
     attr_writer :metadata

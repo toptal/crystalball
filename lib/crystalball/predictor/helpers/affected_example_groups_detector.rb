@@ -10,9 +10,7 @@ module Crystalball
         # @param [Crystalball::ExecutionMap] map - execution map with examples
         # @return [Array<String>] list of affected examples
         def detect_examples(files, map)
-          map.example_groups.map do |uid, example_group_map|
-            uid if files.any? { |file| example_group_map.include?(file) }
-          end.compact
+          map.affected_examples(files: files)
         end
       end
     end

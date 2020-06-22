@@ -29,8 +29,8 @@ describe Crystalball::Rails::Predictor::ModifiedSchema do
       let(:repository) { Git::Base.new }
       let(:repository_lib) { spy }
       let(:schema_path) { 'db/schema.rb' }
-      let(:execution_map) { instance_double('Crystalball::MapGenerator::ExecutionMap', example_groups: example_groups) }
-      let(:example_groups) { {spec_file: [model_path]} }
+      let(:execution_map) { instance_double('Crystalball::MapGenerator::ExecutionMap', affected_examples: example_groups) }
+      let(:example_groups) { ['spec_file'] }
       let(:model_path) { 'dummy.rb' }
 
       before do
@@ -46,7 +46,7 @@ describe Crystalball::Rails::Predictor::ModifiedSchema do
       end
 
       it 'predicts example' do
-        is_expected.to eq [:spec_file]
+        is_expected.to eq ['spec_file']
       end
 
       context 'localy' do
@@ -57,7 +57,7 @@ describe Crystalball::Rails::Predictor::ModifiedSchema do
         end
 
         it 'predicts example' do
-          is_expected.to eq [:spec_file]
+          is_expected.to eq ['spec_file']
         end
       end
     end
