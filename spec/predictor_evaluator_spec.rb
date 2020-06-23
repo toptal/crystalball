@@ -6,7 +6,8 @@ require 'crystalball/predictor_evaluator'
 describe Crystalball::PredictorEvaluator do
   subject(:evaluator) { described_class.new(predictor, actual_failures: actual_failures) }
   let(:predictor) { instance_double('Crystalball::Predictor', prediction: prediction, diff: git_diff, map: map) }
-  let(:map) { instance_double('Crystalball::ExecutionMap', example_groups: example_groups, size: example_groups.size) }
+  let(:map) { Crystalball::ExecutionMap.new(map_data_source: map_data_source) }
+  let(:map_data_source) { Crystalball::MapDataSources::HashDataSource.new(example_groups: example_groups) }
   let(:example_groups) { {'./file1.rb[1:1]' => [], './file2.rb[1:1]' => [], './file2[1:2]' => []} }
   let(:git_diff) { instance_double('Crystalball::SourceDiff', lines: 42) }
   let(:prediction) { Crystalball::Prediction.new(%w[./file1.rb[1:1] ./file2.rb[1:1]]) }

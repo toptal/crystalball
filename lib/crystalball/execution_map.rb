@@ -48,7 +48,7 @@ module Crystalball
     #
     # @param [Array<String>] files - the list of files to check
     # @return [Array<String>] related examples
-    def affected_examples(files: files)
+    def affected_examples(files:)
       map_data_source.affected_examples_for(files)
     end
 

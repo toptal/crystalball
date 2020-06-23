@@ -28,6 +28,10 @@ module Crystalball
         self.example_groups = {}
       end
 
+      def examples
+        keys
+      end
+
       private
 
       attr_writer :example_groups

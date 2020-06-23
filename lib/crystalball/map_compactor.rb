@@ -13,7 +13,8 @@ module Crystalball
       # @param [Crystalball::ExecutionMap] map execution map to be compacted
       # @return [Crystalball::ExecutionMap] compact map
       def compact_map!(map)
-        new_map = Crystalball::ExecutionMap.new(metadata: map.metadata.to_h)
+        new_map = Crystalball::ExecutionMap.new(metadata: map.metadata.to_h, map_data_source: map.map_data_source.dup)
+        new_map.clear!
 
         compact_examples!(map.example_groups).each do |context, used_files|
           new_map << ExampleGroupMap.new(OpenStruct.new(id: context, file_path: example_filename(context)), used_files)

@@ -18,7 +18,8 @@ describe Crystalball::MapStorage::YAMLStorage do
       allow_path_exists true
       allow(path).to receive(:read).with(no_args).and_return({commit: '123', type: 'Crystalball::ExecutionMap'}.to_yaml + {'UID1' => %w[1 2 3]}.to_yaml + {'UID100' => %w[a b c]}.to_yaml)
       expect(map).to be_a Crystalball::ExecutionMap
-      expect(map.example_groups).to eq('UID1' => %w[1 2 3], 'UID100' => %w[a b c])
+      expect(map.map_data_source['UID1']).to eq(%w[1 2 3])
+      expect(map.map_data_source['UID100']).to eq(%w[a b c])
       expect(map.commit).to eq '123'
     end
 
@@ -41,7 +42,8 @@ describe Crystalball::MapStorage::YAMLStorage do
 
       it 'load every file in directory' do
         expect(map).to be_a Crystalball::ExecutionMap
-        expect(map.example_groups).to eq('UID1' => %w[1 2 3], 'UID100' => %w[a b c])
+        expect(map.map_data_source['UID1']).to eq(%w[1 2 3])
+        expect(map.map_data_source['UID100']).to eq(%w[a b c])
         expect(map.commit).to eq '123'
       end
 
@@ -49,7 +51,7 @@ describe Crystalball::MapStorage::YAMLStorage do
         let(:file_content2) { {commit: '123', type: 'Crystalball::ExecutionMap'}.to_yaml }
 
         it 'ignores that file' do
-          expect(map.example_groups).to eq('UID1' => %w[1 2 3])
+          expect(map.map_data_source['UID1']).to eq(%w[1 2 3])
         end
       end
 

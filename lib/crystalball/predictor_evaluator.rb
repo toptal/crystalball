@@ -38,8 +38,9 @@ module Crystalball
       actual_failures.empty? ? 1.0 : predicted_failures.size.to_f / actual_failures.size
     end
 
+    # TODO: This is a highly inefficient way to calculate it
     def prediction_size
-      @prediction_size ||= predictor.map.example_groups.keys.select { |example| prediction.any? { |p| example.include?(p) } }.size
+      @prediction_size ||= predictor.map.map_data_source.examples.select { |example| prediction.any? { |p| example.include?(p) } }.size
     end
 
     def map_size
