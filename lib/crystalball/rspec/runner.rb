@@ -17,11 +17,21 @@ module Crystalball
 
           Crystalball.log :info, "Crystalball starts to glow..."
           prediction = build_prediction
-
+          dry_prediction(prediction)
+          
           Crystalball.log :debug, "Prediction: #{prediction.first(5).join(' ')}#{'...' if prediction.size > 5}"
           Crystalball.log :info, "Starting RSpec."
 
           super(args + prediction, err, out)
+        end
+
+        def dry_prediction (prediction)
+          args = Hash[ ARGV.flat_map{|s| s.scan(/--?([^=\s]+)(?:=(\S+))?/) } ]
+          if args.key?('dry-prediction')
+            array = prediction.to_a 
+            File.write('./crystalball_spec_list.txt', array.join(","))
+            exit
+          end
         end
 
         def reset!
