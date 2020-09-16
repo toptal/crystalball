@@ -26,7 +26,6 @@ module Crystalball
         end
 
         def dry_run?(prediction)
-          puts "Testing lib import"
           args = Hash[ ARGV.flat_map{|s| s.scan(/--?([^=\s]+)(?:=(\S+))?/) } ]
           if args.key?('dry-run')
             puts prediction.to_a
