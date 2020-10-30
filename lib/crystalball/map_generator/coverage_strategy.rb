@@ -17,7 +17,7 @@ module Crystalball
       end
 
       def after_register
-        Coverage.start
+        Coverage.start unless Coverage.running?
       end
 
       # Adds to the example_map's used files the ones the ones in which
