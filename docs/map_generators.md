@@ -100,7 +100,7 @@ This strategy patches `ActionView::Template#compile!` to map the examples to aff
 ```ruby
 Crystalball::MapGenerator.start! do |config|
   #...
-  config.register Crystalball::MapGenerator::ActionViewStrategy.new
+  config.register Crystalball::Rails::MapGenerator::ActionViewStrategy.new
 end 
 ```
 
