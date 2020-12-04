@@ -6,6 +6,11 @@ module Crystalball
       # Helper module to filter file paths
       module PathFilter
         attr_reader :root_path
+        attr_writer :exclude_sources
+
+        def exclude_sources
+          @exclude_sources || []
+        end
 
         # @param [String] root_path - absolute path to root folder of repository
         def initialize(root_path = Dir.pwd)
@@ -18,6 +23,8 @@ module Crystalball
           paths
             .select { |file_name| file_name.start_with?(root_path) }
             .map { |file_name| file_name.sub("#{root_path}/", '') }
+            .reject { |file_name| exclude_sources.any? do |pattern| pattern.match?(file_name) end }
+
         end
       end
     end

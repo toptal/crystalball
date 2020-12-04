@@ -30,7 +30,7 @@ describe Crystalball::MapGenerator::Configuration do
   end
 
   describe '#register' do
-    let(:strategy) { double(after_register: true) }
+    let(:strategy) { double(after_register: true, 'exclude_sources=' => []) }
     it 'adds a strategy to collection' do
       expect do
         subject.register strategy

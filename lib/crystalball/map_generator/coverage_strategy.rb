@@ -11,9 +11,15 @@ module Crystalball
       include BaseStrategy
 
       attr_reader :execution_detector
+      attr_reader :exclude_sources
 
       def initialize(execution_detector = ExecutionDetector.new)
         @execution_detector = execution_detector
+      end
+
+      def exclude_sources=(value)
+        @exclude_sources = value
+        @execution_detector.exclude_sources = value
       end
 
       def after_register

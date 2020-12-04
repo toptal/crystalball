@@ -12,8 +12,10 @@ module Crystalball
       attr_accessor :commit, :version, :compact_map
 
       attr_reader :strategies
+      attr_reader :exclude_sources
 
-      def initialize
+      def initialize(exclude_sources: [])
+        @exclude_sources = exclude_sources
         @strategies = StrategiesCollection.new
         @compact_map = true
       end
@@ -50,6 +52,7 @@ module Crystalball
       #
       # @param [Crystalball::MapGenerator::BaseStrategy] strategy
       def register(strategy)
+        strategy.exclude_sources = exclude_sources
         @strategies.push strategy
         strategy.after_register
       end

@@ -12,8 +12,8 @@ module Crystalball
       # Registers Crystalball handlers to generate execution map during specs execution
       #
       # @param [Proc] block to configure MapGenerator and Register strategies
-      def start!(&block)
-        generator = new(&block)
+      def start!(exclude_sources: [], &block)
+        generator = new(exclude_sources: exclude_sources, &block)
 
         ::RSpec.configure do |c|
           c.before(:suite) { generator.start! }
@@ -25,8 +25,8 @@ module Crystalball
       end
     end
 
-    def initialize
-      @configuration = Configuration.new
+    def initialize(exclude_sources: [])
+      @configuration = Configuration.new(exclude_sources: exclude_sources)
       @configuration.commit = repo.gcommit('HEAD') if repo
       yield @configuration if block_given?
     end
