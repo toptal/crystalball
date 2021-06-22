@@ -17,11 +17,20 @@ module Crystalball
 
           Crystalball.log :info, "Crystalball starts to glow..."
           prediction = build_prediction
-
+          dry_run?(prediction)
+          
           Crystalball.log :debug, "Prediction: #{prediction.first(5).join(' ')}#{'...' if prediction.size > 5}"
           Crystalball.log :info, "Starting RSpec."
 
           super(args + prediction, err, out)
+        end
+
+        def dry_run?(prediction)
+          args = Hash[ ARGV.flat_map{|s| s.scan(/--?([^=\s]+)(?:=(\S+))?/) } ]
+          if args.key?('dry-run')
+            puts prediction.to_a
+            exit
+          end
         end
 
         def reset!
