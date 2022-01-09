@@ -24,7 +24,7 @@ describe Crystalball::RSpec::Runner do
     end
 
     context 'with CRYSTALBALL_CONFIG env variable set' do
-      let(:expected_config) { YAML.safe_load(Pathname('spec/fixtures/crystalball.yml').read) }
+      let(:expected_config) { YAML.safe_load(Pathname('spec/fixtures/crystalball.yml').read, permitted_classes: [Symbol]) }
 
       around do |example|
         ENV['CRYSTALBALL_CONFIG'] = 'spec/fixtures/crystalball.yml'
