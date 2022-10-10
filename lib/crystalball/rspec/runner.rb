@@ -79,6 +79,7 @@ module Crystalball
 
       def setup(err, out)
         configure(err, out)
+        @configuration.dry_run = true # FIXME: pass the real crystalball option here
         @configuration.load_spec_files
 
         Filtering.remove_unnecessary_filters(@configuration, @options.options[:files_or_directories_to_run])
