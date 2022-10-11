@@ -79,6 +79,7 @@ module Crystalball
 
       def setup(err, out)
         configure(err, out)
+        puts "\n==!!=========== crystalball dry run ====================!!==\n\n"
         @configuration.dry_run = true # FIXME: pass the real crystalball option here
         @configuration.load_spec_files
 
