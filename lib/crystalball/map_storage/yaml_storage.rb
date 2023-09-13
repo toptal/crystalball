@@ -33,7 +33,7 @@ module Crystalball
 
           paths.map do |file|
             metadata, *example_groups = file.read.split("---\n").reject(&:empty?).map do |yaml|
-              YAML.safe_load(yaml, [Symbol])
+              YAML.safe_load(yaml, permitted_classes: [Symbol])
             end
             example_groups = example_groups.inject(&:merge!)
 

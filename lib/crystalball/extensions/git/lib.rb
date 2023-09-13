@@ -11,8 +11,9 @@ module Git
       opts = args.last.is_a?(Hash) ? args.pop : {}
 
       arg_opts = opts.map { |k, v| "--#{k}" if v }.compact + args
+      command_args = ['merge-base'] + arg_opts.flatten
 
-      command('merge-base', arg_opts)
+      command(*command_args)
     end
   end
 end

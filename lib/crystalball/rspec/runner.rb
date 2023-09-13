@@ -41,7 +41,7 @@ module Crystalball
           @config ||= begin
             config_src = if config_file
                            require 'yaml'
-                           YAML.safe_load(config_file.read)
+                           YAML.safe_load(config_file.read, permitted_classes: [Symbol])
                          else
                            {}
                          end
